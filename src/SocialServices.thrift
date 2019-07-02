@@ -3,7 +3,16 @@
 	Project Friend Services
 */
 
-// Structure for containing basic user's information
+// -- Define error codes return by services
+enum ErrorCode {
+	SUCCESS = 0,
+	USER_NOT_FOUND = 1,
+	INVALID_PARAMETER = 2,
+	INVALID_SERVICE = 3,
+	INTERNAL_ERROR = 4,
+	DUPLICATED_REQUEST = 5,
+	OUT_OF_RANGE = 6
+}
 
 // USER PROFILE STRUCT
 struct UserProfile{
@@ -69,17 +78,7 @@ struct FriendData { // simplify version of User - hinding sensitive data
 //		Services exposed by server            //
 ////////////////////////////////////////////////////////
 
-// Define enum type
-// -- Define enum error code	
-enum ErrorCode {
-	SUCCESS = 0,
-	USER_NOT_FOUND = 1,
-	INVALID_PARAMETER = 2,
-	INVALID_SERVICE = 3,
-	INTERNAL_ERROR = 4,
-	DUPLICATED_REQUEST = 5,
-	OUT_OF_RANGE = 6
-}
+
 
 // Define data structure for services
 

@@ -14,15 +14,35 @@
 #ifndef HANDLERFRIENDSERVICES_H
 #define HANDLERFRIENDSERVICES_H
 
-#include "../src/gen-cpp/FriendServices.h"
+#include "Poco/Util/Application.h"
+#include "Poco/Logger.h"
+#include "Poco/Timestamp.h"
 
-class HandlerFriendServices {
+#include <vector>
+#include <thrift/TToString.h>
+
+#include "../src/gen-cpp/FriendServices.h"
+#include "../db/SubKC.h"
+#include "../util/Converter.h"
+
+class HandlerFriendServices : public FriendServicesIf {
 public:
 	HandlerFriendServices();
 	HandlerFriendServices(const HandlerFriendServices& orig);
-	virtual ~HandlerFriendServices();
-private:
+	~HandlerFriendServices();
+	
+	// Friend function API
+	void checkRequest(pingResult& _return, const int32_t id);
+	ErrorCode::type addFriend(const FriendRequest& request);
+	ErrorCode::type acceptRequest(const int32_t curId, const int32_t requestId);
+	ErrorCode::type declineRequest(const int32_t curId, const int32_t requestId);
+	ErrorCode::type removeFriend(const int32_t curId, const int32_t friendId);
+	void viewFriendList(listFriendResult& _return, const int32_t id, const int32_t index, const int32_t size);
 
+private:
+	// variables add later
+	SubKC& _kc = Poco::Util::Application::instance().getSubsystem<SubKC>();
+	
 };
 
 #endif /* HANDLERFRIENDSERVICES_H */

@@ -47,25 +47,27 @@ void SubHandler::initialize(Poco::Util::Application& app){
 		boost::shared_ptr<TMultiplexedProcessor> processors(new TMultiplexedProcessor());
 		
 		// adding processor
-		processors->registerProcessor("FriendServices", std::shared_ptr<TProcessor>(new FriendServicesProcessor(std::shared_ptr<FriendServicesHandler>(new HandlerFriendServices))));
+		processors->registerProcessor("FriendServices", 
+			boost::shared_ptr<TProcessor>(new FriendServicesProcessor(
+				boost::shared_ptr<HandlerFriendServices>(new HandlerFriendServices))));
 		
-		processors->registerProcessor("ProfileServices", 
-			std::shared_ptr<TProcessor>(new FriendServicesProcessor(
-				std::shared_ptr<FriendServicesHandler>(new HandlerProfileServices))));
+//		processors->registerProcessor("ProfileServices", 
+//			boost::shared_ptr<TProcessor>(new FriendServicesProcessor(
+//				boost::shared_ptr<HandlerProfileServices>(new HandlerProfileServices))));
 		
 		// create Nonblocking server
 		// transport , transport factory & protocol factory
-		std::shared_ptr<TProtocolFactory> protocolFactory (new TBinaryProtocolFactory());
+		boost::shared_ptr<TProtocolFactory> protocolFactory (new TBinaryProtocolFactory());
 		
 		// create thread manager
-		std::shared_ptr<PosixThreadFactory> threadFactory =
-			std::shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
+		boost::shared_ptr<PosixThreadFactory> threadFactory =
+			boost::shared_ptr<PosixThreadFactory>(new PosixThreadFactory());
 		
-		std::shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(_maxThread, _maxPendingTask);
+		boost::shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(_maxThread, _maxPendingTask);
 		threadManager->threadFactory(threadFactory);
 		threadManager->start();
 		
-		std::shared_ptr<TNonblockingServer> core(
+		boost::shared_ptr<TNonblockingServer> core(
 			new TNonblockingServer(processors, protocolFactory, _port, threadManager));
 		
 		core->setNumIOThreads(_maxIOThread);

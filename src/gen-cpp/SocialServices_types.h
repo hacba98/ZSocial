@@ -210,12 +210,12 @@ class CreateUserResult {
   }
 
   virtual ~CreateUserResult() throw();
-  ErrorCode errorCode;
+  ErrorCode::type errorCode;
   int32_t id;
 
   _CreateUserResult__isset __isset;
 
-  void __set_errorCode(const ErrorCode val);
+  void __set_errorCode(const ErrorCode::type val);
 
   void __set_id(const int32_t val);
 
@@ -262,12 +262,12 @@ class GetUserResult {
   }
 
   virtual ~GetUserResult() throw();
-  ErrorCode errorCode;
+  ErrorCode::type errorCode;
   UserProfile profile;
 
   _GetUserResult__isset __isset;
 
-  void __set_errorCode(const ErrorCode val);
+  void __set_errorCode(const ErrorCode::type val);
 
   void __set_profile(const UserProfile& val);
 
@@ -314,12 +314,12 @@ class ListProfileResult {
   }
 
   virtual ~ListProfileResult() throw();
-  ErrorCode errorCode;
+  ErrorCode::type errorCode;
   std::vector<SimpleProfile>  profiles;
 
   _ListProfileResult__isset __isset;
 
-  void __set_errorCode(const ErrorCode val);
+  void __set_errorCode(const ErrorCode::type val);
 
   void __set_profiles(const std::vector<SimpleProfile> & val);
 

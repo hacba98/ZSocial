@@ -69,7 +69,7 @@ private:
 	int _maxPendingTask;
 	
 	bool _running = false;
-	std::shared_ptr<apache::thrift::server::TNonblockingServer> _core;	
+	boost::shared_ptr<apache::thrift::server::TNonblockingServer> _core;	
 };
 
 #endif /* SUBHANDLER_H */

@@ -370,7 +370,7 @@ CreateUserResult::~CreateUserResult() throw() {
 }
 
 
-void CreateUserResult::__set_errorCode(const ErrorCode val) {
+void CreateUserResult::__set_errorCode(const ErrorCode::type val) {
   this->errorCode = val;
 }
 
@@ -478,7 +478,7 @@ GetUserResult::~GetUserResult() throw() {
 }
 
 
-void GetUserResult::__set_errorCode(const ErrorCode val) {
+void GetUserResult::__set_errorCode(const ErrorCode::type val) {
   this->errorCode = val;
 }
 
@@ -586,7 +586,7 @@ ListProfileResult::~ListProfileResult() throw() {
 }
 
 
-void ListProfileResult::__set_errorCode(const ErrorCode val) {
+void ListProfileResult::__set_errorCode(const ErrorCode::type val) {
   this->errorCode = val;
 }
 
