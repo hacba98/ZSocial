@@ -27,7 +27,7 @@ HandlerFriendServices::~HandlerFriendServices() {
 }
 
 // ----- Implement services
-void FriendServicesHandler::checkRequest(pingResult& _return, const int32_t id) {
+void HandlerFriendServices::checkRequest(pingResult& _return, const int32_t id) {
 //	Application::instance().logger().information("Checking friend pending request.");
 //
 //	// check user existed
@@ -72,7 +72,7 @@ void FriendServicesHandler::checkRequest(pingResult& _return, const int32_t id) 
 	return;
 }
 
-ErrorCode::type FriendServicesHandler::addFriend(const FriendRequest& request) {
+ErrorCode::type HandlerFriendServices::addFriend(const FriendRequest& request) {
 //	Application::instance().logger().information("Incoming add friend request");
 //
 //	// check user existed
@@ -138,7 +138,7 @@ ErrorCode::type FriendServicesHandler::addFriend(const FriendRequest& request) {
 //	return ErrorCode::type::SUCCESS;
 }
 
-ErrorCode::type FriendServicesHandler::acceptRequest(const int32_t curId, const int32_t requestId) {
+ErrorCode::type HandlerFriendServices::acceptRequest(const int32_t curId, const int32_t requestId) {
 //	Application::instance().logger().information("Add friend request");
 //
 //	// check user existed
@@ -187,7 +187,7 @@ ErrorCode::type FriendServicesHandler::acceptRequest(const int32_t curId, const 
 
 // copy from above code except code that store to Friend List DB
 
-ErrorCode::type FriendServicesHandler::declineRequest(const int32_t curId, const int32_t requestId) {
+ErrorCode::type HandlerFriendServices::declineRequest(const int32_t curId, const int32_t requestId) {
 //	Application::instance().logger().information("Add friend request");
 //
 //	// check user existed
@@ -230,11 +230,11 @@ ErrorCode::type FriendServicesHandler::declineRequest(const int32_t curId, const
 	return ErrorCode::SUCCESS;
 }
 
-ErrorCode::type FriendServicesHandler::removeFriend(const int32_t curId, const int32_t friendId) {
+ErrorCode::type HandlerFriendServices::removeFriend(const int32_t curId, const int32_t friendId) {
 	return ErrorCode::SUCCESS;
 }
 
-void FriendServicesHandler::viewFriendList(listFriendResult& _return, const int32_t id, const int32_t index, const int32_t size) {
+void HandlerFriendServices::viewFriendList(listFriendResult& _return, const int32_t id, const int32_t index, const int32_t size) {
 //	Application::instance().logger().information("Incoming view friend list request");
 //
 //	try {

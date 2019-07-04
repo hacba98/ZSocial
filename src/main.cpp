@@ -21,6 +21,8 @@
 #include <string>
 #include <vector>
 
+#include "../http/SubHTTPServer.h"
+
 using namespace std;
 using namespace Poco;
 using namespace Poco::Util;
@@ -43,11 +45,12 @@ public:
 
 class SocialServer : public ServerApplication {
 public:
-	FriendServicesServer() : _helpRequested(false) {
+	SocialServer() : _helpRequested(false) {
 		// must register sub-systems in here to make daemon runnable 
+		this->addSubsystem(new SubHTTPServer);
 	}
 	
-	~FriendServicesServer() {
+	~SocialServer() {
 	}
 	
 protected:
@@ -83,9 +86,9 @@ protected:
 			_helpRequested = true;
 			stopOptionsProcessing();
 		} else if (name == "configuration-file"){
-			Poco::Path pXML(value);
-			if (Application::findFile(pXML)) {
-				loadConfiguration(pXML.getFileName(), 0);
+			Poco::Path pConfig(value);
+			if (Application::findFile(pConfig)) {
+				loadConfiguration(pConfig.getFileName(), 0);
 			} else {
 				throw Poco::Exception("Cannot find configuration file.");
 			}
