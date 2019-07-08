@@ -66,6 +66,14 @@ void UserProfile::__set_phoneNumber(const int64_t val) {
   this->phoneNumber = val;
 }
 
+void UserProfile::__set_join_date(const int32_t val) {
+  this->join_date = val;
+}
+
+void UserProfile::__set_last_active_time(const int32_t val) {
+  this->last_active_time = val;
+}
+
 uint32_t UserProfile::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
@@ -143,6 +151,22 @@ uint32_t UserProfile::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->join_date);
+          this->__isset.join_date = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->last_active_time);
+          this->__isset.last_active_time = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -188,6 +212,14 @@ uint32_t UserProfile::write(::apache::thrift::protocol::TProtocol* oprot) const 
   xfer += oprot->writeI64(this->phoneNumber);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("join_date", ::apache::thrift::protocol::T_I32, 8);
+  xfer += oprot->writeI32(this->join_date);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("last_active_time", ::apache::thrift::protocol::T_I32, 9);
+  xfer += oprot->writeI32(this->last_active_time);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -202,6 +234,8 @@ void swap(UserProfile &a, UserProfile &b) {
   swap(a.username, b.username);
   swap(a.password, b.password);
   swap(a.phoneNumber, b.phoneNumber);
+  swap(a.join_date, b.join_date);
+  swap(a.last_active_time, b.last_active_time);
   swap(a.__isset, b.__isset);
 }
 
@@ -213,6 +247,8 @@ UserProfile::UserProfile(const UserProfile& other0) {
   username = other0.username;
   password = other0.password;
   phoneNumber = other0.phoneNumber;
+  join_date = other0.join_date;
+  last_active_time = other0.last_active_time;
   __isset = other0.__isset;
 }
 UserProfile& UserProfile::operator=(const UserProfile& other1) {
@@ -223,6 +259,8 @@ UserProfile& UserProfile::operator=(const UserProfile& other1) {
   username = other1.username;
   password = other1.password;
   phoneNumber = other1.phoneNumber;
+  join_date = other1.join_date;
+  last_active_time = other1.last_active_time;
   __isset = other1.__isset;
   return *this;
 }
@@ -236,6 +274,8 @@ void UserProfile::printTo(std::ostream& out) const {
   out << ", " << "username=" << to_string(username);
   out << ", " << "password=" << to_string(password);
   out << ", " << "phoneNumber=" << to_string(phoneNumber);
+  out << ", " << "join_date=" << to_string(join_date);
+  out << ", " << "last_active_time=" << to_string(last_active_time);
   out << ")";
 }
 
@@ -254,6 +294,10 @@ void SimpleProfile::__set_name(const std::string& val) {
 
 void SimpleProfile::__set_gender(const bool val) {
   this->gender = val;
+}
+
+void SimpleProfile::__set_last_active_time(const int32_t val) {
+  this->last_active_time = val;
 }
 
 uint32_t SimpleProfile::read(::apache::thrift::protocol::TProtocol* iprot) {
@@ -301,6 +345,14 @@ uint32_t SimpleProfile::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->last_active_time);
+          this->__isset.last_active_time = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -330,6 +382,10 @@ uint32_t SimpleProfile::write(::apache::thrift::protocol::TProtocol* oprot) cons
   xfer += oprot->writeBool(this->gender);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("last_active_time", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->last_active_time);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -340,6 +396,7 @@ void swap(SimpleProfile &a, SimpleProfile &b) {
   swap(a.id, b.id);
   swap(a.name, b.name);
   swap(a.gender, b.gender);
+  swap(a.last_active_time, b.last_active_time);
   swap(a.__isset, b.__isset);
 }
 
@@ -347,12 +404,14 @@ SimpleProfile::SimpleProfile(const SimpleProfile& other2) {
   id = other2.id;
   name = other2.name;
   gender = other2.gender;
+  last_active_time = other2.last_active_time;
   __isset = other2.__isset;
 }
 SimpleProfile& SimpleProfile::operator=(const SimpleProfile& other3) {
   id = other3.id;
   name = other3.name;
   gender = other3.gender;
+  last_active_time = other3.last_active_time;
   __isset = other3.__isset;
   return *this;
 }
@@ -362,6 +421,7 @@ void SimpleProfile::printTo(std::ostream& out) const {
   out << "id=" << to_string(id);
   out << ", " << "name=" << to_string(name);
   out << ", " << "gender=" << to_string(gender);
+  out << ", " << "last_active_time=" << to_string(last_active_time);
   out << ")";
 }
 
@@ -370,7 +430,7 @@ CreateUserResult::~CreateUserResult() throw() {
 }
 
 
-void CreateUserResult::__set_errorCode(const ErrorCode val) {
+void CreateUserResult::__set_errorCode(const ErrorCode::type val) {
   this->errorCode = val;
 }
 
@@ -478,7 +538,7 @@ GetUserResult::~GetUserResult() throw() {
 }
 
 
-void GetUserResult::__set_errorCode(const ErrorCode val) {
+void GetUserResult::__set_errorCode(const ErrorCode::type val) {
   this->errorCode = val;
 }
 
@@ -586,7 +646,7 @@ ListProfileResult::~ListProfileResult() throw() {
 }
 
 
-void ListProfileResult::__set_errorCode(const ErrorCode val) {
+void ListProfileResult::__set_errorCode(const ErrorCode::type val) {
   this->errorCode = val;
 }
 

@@ -5,6 +5,23 @@
 
 // Structure for containing basic user's information
 
+////////////////////////////////////////////////////////
+//		Services exposed by server            //
+////////////////////////////////////////////////////////
+
+// Define enum type
+// -- Define enum error code	
+enum ErrorCode {
+	SUCCESS = 0,
+	USER_NOT_FOUND = 1,
+	INVALID_PARAMETER = 2,
+	INVALID_SERVICE = 3,
+	INTERNAL_ERROR = 4,
+	DUPLICATED_REQUEST = 5,
+	OUT_OF_RANGE = 6
+}
+
+
 // USER PROFILE STRUCT
 struct UserProfile{
 	1:i32 id,	
@@ -14,15 +31,15 @@ struct UserProfile{
 	5:string username,
 	6:string password,
 	7:i64 phoneNumber,
-	// join date
-	// last active time
+	8:i32 join_date
+	9:i32 last_active_time
 }
 
 struct SimpleProfile {
 	1:i32 id,
 	2:string name,
 	3:bool gender,
-	// last active time
+	4:i32 last_active_time,
 }
 
 struct CreateUserResult {
@@ -65,21 +82,6 @@ struct FriendData { // simplify version of User - hinding sensitive data
 	3: bool isMale
 }
 
-////////////////////////////////////////////////////////
-//		Services exposed by server            //
-////////////////////////////////////////////////////////
-
-// Define enum type
-// -- Define enum error code	
-enum ErrorCode {
-	SUCCESS = 0,
-	USER_NOT_FOUND = 1,
-	INVALID_PARAMETER = 2,
-	INVALID_SERVICE = 3,
-	INTERNAL_ERROR = 4,
-	DUPLICATED_REQUEST = 5,
-	OUT_OF_RANGE = 6
-}
 
 // Define data structure for services
 
@@ -98,12 +100,12 @@ struct listFriendResult {
 	4: ErrorCode code
 }
 
-service ProfileServices {
+service SocialServices{
 	// API For Proifle
 
 	// Login / Logout
 	i32 Login(1:string username, 2:string password),
-	ErrorCode Logout(1:i32 userId), 
+	ErrorCode Logout(1: i32 userId), 
 
 	// Create new user
 	CreateUserResult CreateProfile(1:UserProfile profile),
@@ -131,9 +133,7 @@ service ProfileServices {
 
 	// Get UserId from username
 	i32 GetIdByName(1:string username),
-}
 
-service FriendServices {
 
 	// -- API for friend function
 	// Check for new friend request

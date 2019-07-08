@@ -1,127 +1,128 @@
-// Starting point of server
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-#include "Poco/Util/Util.h"
+/* 
+ * File:   PocoServer.h
+ * Author: cpu02331
+ *
+ * Created on June 11, 2019, 4:10 PM
+ */
+
+#ifndef POCOSERVER_H
+#define POCOSERVER_H
+
+#include "Poco/ThreadPool.h"
 #include "Poco/Util/ServerApplication.h"
+#include "Poco/Util/Option.h"
+#include "Poco/Util/OptionSet.h"
 #include "Poco/Util/HelpFormatter.h"
-#include "Poco/Util/OptionCallback.h"
-#include "Poco/Util/IntValidator.h"
-#include "Poco/Util/Subsystem.h"
-#include "Poco/Process.h"
-#include "Poco/AutoPtr.h"
-#include "Poco/Logger.h"
-#include "Poco/LogFile.h"
-#include "Poco/FileChannel.h"
-#include "Poco/TaskManager.h"
+#include "LruCache.h"
 #include "Poco/Task.h"
-#include "Poco/TaskNotification.h"
-#include "Poco/Exception.h"
-#include "Poco/Path.h"
-
+#include "Poco/TaskManager.h"
+#include "Poco/FileChannel.h"
+#include "Poco/Util/LoggingConfigurator.h"
+#include "Poco/ThreadPool.h"
+#include "SocialServiceHandler.h"
+#include <thrift/protocol/TBinaryProtocol.h>
+#include <thrift/protocol/TJSONProtocol.h>
+#include <thrift/server/TSimpleServer.h>
+#include <thrift/server/TThreadedServer.h>
+#include <thrift/server/TThreadPoolServer.h>
+#include <thrift/server/TNonblockingServer.h>
+#include <thrift/transport/TServerSocket.h>
+#include <thrift/transport/TNonblockingServerSocket.h>
+#include <thrift/concurrency/PosixThreadFactory.h>
+#include <thrift/transport/TBufferTransports.h>
 #include <iostream>
-#include <string>
+#include <mutex>
 #include <vector>
+#include <kchashdb.h>
+#include <unistd.h>
 
-using namespace std;
-using namespace Poco;
-using namespace Poco::Util;
+using Poco::Util::ServerApplication;
+using Poco::Util::Application;
+using Poco::Util::Option;
+using Poco::Util::OptionSet;
+using Poco::Util::OptionCallback;
+using Poco::Util::HelpFormatter;
 
-class RunTask : public Poco::Task {
+using namespace ::apache::thrift;
+using namespace ::apache::thrift::protocol;
+using namespace ::apache::thrift::transport;
+using namespace ::apache::thrift::server;
+using ::apache::thrift::stdcxx::shared_ptr;
+
+class userProfileTask : public Poco::Task {
 public:
+    void startSimpleServer(shared_ptr<TProcessor> processor,
+            shared_ptr<TServerTransport> serverTransport,
+            shared_ptr<TTransportFactory> transportFactory,
+            shared_ptr<TProtocolFactory> protocolFactory);
+    void startThreadedServer(shared_ptr<TProcessor> processor,
+            shared_ptr<TServerTransport> serverTransport,
+            shared_ptr<TTransportFactory> transportFactory,
+            shared_ptr<TProtocolFactory> protocolFactory);
+    void startThreadPoolServer(shared_ptr<TProcessor> processor,
+            shared_ptr<TServerTransport> serverTransport,
+            shared_ptr<TTransportFactory> transportFactory,
+            shared_ptr<TProtocolFactory> protocolFactory);
+    void startNonBlockingServer(shared_ptr<TProcessor> processor,
+            shared_ptr<TProtocolFactory> protocolFactory);
 
-	RunTask(std::string name) : Poco::Task(name) {
-	}
-
-	void runTask() {
-		// implement this for server starting process
-	}
-
-	void cancel() {
-		// implement this for server shutting down process
-	}
-	
+    userProfileTask(int sR,int p,int nST,int nIOT,shared_ptr<SocialServiceHandler> h) : 
+        Task("SampleTask"),_serverRequested(sR),port(p),numServerThread(nST),numIOThread(nIOT),handler(h){
+    }
+    
+    void runTask();
+    void cancel();
+    
+    int _serverRequested;
+    int port;
+    int numServerThread;
+    int numIOThread;
+    shared_ptr<SocialServiceHandler> handler;
+    Poco::SharedPtr<TSimpleServer> simpleServer;
+    Poco::SharedPtr<TThreadedServer> threadedServer;
+    Poco::SharedPtr<TThreadPoolServer> threadPoolServer;
+    Poco::SharedPtr<TNonblockingServer> nonBlockingServer;
 };
 
-class SocialServer : public ServerApplication {
+class userProfileServer : public Poco::Util::ServerApplication {
 public:
-	FriendServicesServer() : _helpRequested(false) {
-		// must register sub-systems in here to make daemon runnable 
-	}
-	
-	~FriendServicesServer() {
-	}
-	
+
+    userProfileServer();
+
+    ~userProfileServer() {
+    }
+
 protected:
-	void initialize(Application& self) {
-		// implement this for subsystem initialize
-		ServerApplication::initialize(self);
-	}
-	
-	void uninitialize(){
-		// implement this for subsystem un-initialize
-		ServerApplication::uninitialize();	
-	}
-	
-	void defineOptions(OptionSet& options) {
-		ServerApplication::defineOptions(options);
+    
+    void initialize(Application& self) ;
 
-		options.addOption(
-			Option("help", "h", "display help information")
-			.required(false)
-			.repeatable(false));
+    void uninitialize() ;
 
-		options.addOption(
-			Option("configuration-file", "f", "load configuration data from a file")
-			.required(true)
-			.repeatable(true)
-			.argument("file"));
-	}
-	
-	void handleOption(const std::string& name, const std::string& value) {
-		ServerApplication::handleOption(name, value);
+    void defineOptions(OptionSet& options) ;
 
-		if (name == "help") {
-			_helpRequested = true;
-			stopOptionsProcessing();
-		} else if (name == "configuration-file"){
-			Poco::Path pXML(value);
-			if (Application::findFile(pXML)) {
-				loadConfiguration(pXML.getFileName(), 0);
-			} else {
-				throw Poco::Exception("Cannot find configuration file.");
-			}
-		}
-	}
-	
-	void displayHelp() {
-		HelpFormatter helpFormatter(options());
-		helpFormatter.setCommand(commandName());
-		helpFormatter.setUsage("OPTIONS");
-		helpFormatter.setHeader("This is Server for project ZSocial");
-		helpFormatter.format(std::cout);
-	}
-	
-	int main(const std::vector<string>& args) {
-		if (_helpRequested) {
-			displayHelp();
-		} else {
-			// Task manager version
-			Poco::ThreadPool serverPool;
-			Poco::TaskManager tm(serverPool);
-			tm.start(new RunTask("application"));
-			waitForTerminationRequest();
-			tm.cancelAll();
-			tm.joinAll();
-		}
-		return Application::EXIT_OK;
-	}
-	
+    void handleHelp(const std::string& name,
+            const std::string& value) ;
+
+    void handleServer(const std::string& name,
+            const std::string& value);
+    int main(const std::vector<std::string>& args) ;
+
 private:
-	bool _helpRequested;
+    bool _helpRequested;
+    int _serverRequested;
+    int port;
+    int numServerThread;
+    int numIOThread;
+    shared_ptr<SocialServiceHandler> _handler;
 };
 
-typedef SocialServer _SocialNetwork_;
+POCO_SERVER_MAIN(userProfileServer)
 
-int main(int argc, char** argv) {
-	_SocialNetwork_ application;
-	return application.run(argc, argv);
-}
+#endif /* POCOSERVER_H */
+
