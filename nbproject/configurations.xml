@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="friend_services"
+                   displayName="friend_services"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="gen-cpp" displayName="gen-cpp" projectFiles="true">
+      <itemPath>gen-cpp/FriendServices.cpp</itemPath>
+      <itemPath>gen-cpp/FriendServices.h</itemPath>
+      <itemPath>gen-cpp/ProfileServices.cpp</itemPath>
+      <itemPath>gen-cpp/ProfileServices.h</itemPath>
+      <itemPath>gen-cpp/SocialServices_constants.cpp</itemPath>
+      <itemPath>gen-cpp/SocialServices_constants.h</itemPath>
+      <itemPath>gen-cpp/SocialServices_types.cpp</itemPath>
+      <itemPath>gen-cpp/SocialServices_types.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="http" displayName="http" projectFiles="true">
+      <itemPath>http/Connection.cpp</itemPath>
+      <itemPath>http/Connection.h</itemPath>
+      <itemPath>http/SubHTTPServer.cpp</itemPath>
+      <itemPath>http/SubHTTPServer.h</itemPath>
+      <itemPath>http/ZRequestHandler.cpp</itemPath>
+      <itemPath>http/ZRequestHandler.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="profile_services"
+                   displayName="profile_services"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/index.html</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>config.properties</itemPath>
+    <itemPath>main.cpp</itemPath>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>profile_services</Elem>
+    <Elem>friend_services</Elem>
+    <Elem>http</Elem>
+    <Elem>gen-cpp</Elem>
+    <Elem>src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <standard>3</standard>
+        </cTool>
+        <ccTool>
+          <standard>8</standard>
+          <incDir>
+            <pElem>../Thrift</pElem>
+            <pElem>../Poco/include</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>../Poco</pElem>
+            <pElem>../Thrift</pElem>
+          </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../Poco"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="false"
+                            WD="../Poco"
+                            BC="${MAKE} -j 6 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j 6 -f Makefile CONF=Debug clean"
+                            OP="libpoco.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../Thrift"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="false"
+                            WD="../Thrift"
+                            BC="${MAKE} -j 6 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j 6 -f Makefile CONF=Debug clean"
+                            OP="libthrift.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibLibItem>boost_system-gcc5-mt-x64-1_70</linkerLibLibItem>
+            <linkerLibLibItem>boost_thread-gcc5-mt-x64-1_70</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-pthread</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="config.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/Connection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/Connection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/index.html" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="config.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/Connection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/Connection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/index.html" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
