@@ -30,7 +30,6 @@
 #include "Poco/Util/OptionSet.h"
 #include "Poco/Util/HelpFormatter.h"
 #include "Poco/URI.h"
-#include "userProfileService.h"
 #include <iostream>
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/protocol/TJSONProtocol.h>
@@ -67,7 +66,7 @@ using namespace std;
 class UPRequestHandlerFactory : public HTTPRequestHandlerFactory {
 public:
 
-    UPRequestHandlerFactory(std::shared_ptr<TProtocol> protocol) : RPCClient(protocol) {
+    UPRequestHandlerFactory(boost::shared_ptr<TProtocol> protocol) : RPCClient(protocol) {
     }
 
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) {
@@ -86,7 +85,7 @@ public:
         }
     }
 private:
-    userProfileServiceClient RPCClient;
+    ProfileServicesClient RPCClient;
 };
 
 class HTTPUPServer : public Poco::Util::ServerApplication {
@@ -141,16 +140,16 @@ protected:
             string host = config().getString("host","localhost");
             int backendPort = config().getInt("backendPort",9090);
             int _transport = config().getInt("Btrans",1);
-            std::shared_ptr<TTransport> socket(new TSocket(host, backendPort));
+            boost::shared_ptr<TTransport> socket(new TSocket(host, backendPort));
             
-            std::shared_ptr<TTransport> transport;
+            boost::shared_ptr<TTransport> transport;
             if(_transport == 1){
-                transport = std::shared_ptr<TTransport>(new TBufferedTransport(socket));
+                transport = boost::shared_ptr<TTransport>(new TBufferedTransport(socket));
             }else{        
-                transport = std::shared_ptr<TTransport>(new TFramedTransport(socket));
+                transport = boost::shared_ptr<TTransport>(new TFramedTransport(socket));
             }
             
-            std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
+            boost::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
             transport->open();
             int port = config().getInt("httpPort", 9980);
 
