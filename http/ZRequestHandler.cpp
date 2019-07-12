@@ -15,6 +15,7 @@
 
 boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
+boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_friends;
 
 using namespace std;
 using namespace Poco;
@@ -32,6 +33,10 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
 	} else if (url == "/friend"){
 		FriendConnection *borrowObj;
 		while(!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
+		return new FriendRequestHandler(borrowObj);
+	} else if (url == "/newsfeed"){
+		NewsFeedConnection *borrowObj;
+		while(!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 		return new FriendRequestHandler(borrowObj);
 	} else {
 		return new NoServicesInvokeHandler;

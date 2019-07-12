@@ -74,5 +74,31 @@ private:
 	boost::shared_ptr<FriendServicesClient> _client;
 };
 
+#include "../gen-cpp/NewsFeedService.h"
+class NewsFeedConnection{
+public:
+	NewsFeedConnection(){
+		int profile_services_port = Poco::Util::Application::instance().config().getInt("services.friend.port", 4040);
+		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", profile_services_port));
+		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
+		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
+		
+		transport->open();
+		boost::shared_ptr<FriendServicesClient> client(new FriendServicesClient(protocol));
+		_client = client;
+	}
+	
+	~NewsFeedConnection(){
+		_client->getInputProtocol()->getTransport()->close();
+	}
+	
+	NewsFeedServiceClient * client(){
+		return _client.get();
+	}
+	
+private:
+	boost::shared_ptr<NewsFeedServiceClient> _client;
+};
+
 #endif /* CONNECTION_H */
 

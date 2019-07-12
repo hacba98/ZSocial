@@ -1510,11 +1510,7 @@ uint32_t listFriendResult::read(::apache::thrift::protocol::TProtocol* iprot) {
             uint32_t _i53;
             for (_i53 = 0; _i53 < _size49; ++_i53)
             {
-<<<<<<< HEAD
-              xfer += iprot->readI32(this->friendList[_i53]);
-=======
               xfer += this->friendList[_i53].read(iprot);
->>>>>>> 0a22f0241ab0dfa5948c585028038c813591580f
             }
             xfer += iprot->readListEnd();
           }
@@ -1560,19 +1556,11 @@ uint32_t listFriendResult::write(::apache::thrift::protocol::TProtocol* oprot) c
 
   xfer += oprot->writeFieldBegin("friendList", ::apache::thrift::protocol::T_LIST, 3);
   {
-<<<<<<< HEAD
-    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->friendList.size()));
-    std::vector<int32_t> ::const_iterator _iter55;
-    for (_iter55 = this->friendList.begin(); _iter55 != this->friendList.end(); ++_iter55)
-    {
-      xfer += oprot->writeI32((*_iter55));
-=======
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->friendList.size()));
     std::vector<FriendData> ::const_iterator _iter55;
     for (_iter55 = this->friendList.begin(); _iter55 != this->friendList.end(); ++_iter55)
     {
       xfer += (*_iter55).write(oprot);
->>>>>>> 0a22f0241ab0dfa5948c585028038c813591580f
     }
     xfer += oprot->writeListEnd();
   }
@@ -1726,6 +1714,1286 @@ void loginResult::printTo(std::ostream& out) const {
   out << "loginResult(";
   out << "code=" << to_string(code);
   out << ", " << "profile=" << to_string(profile);
+  out << ")";
+}
+
+
+PostList::~PostList() throw() {
+}
+
+
+void PostList::__set_id(const int32_t val) {
+  this->id = val;
+}
+
+void PostList::__set_count(const int32_t val) {
+  this->count = val;
+}
+
+void PostList::__set_listFeed(const std::vector<int32_t> & val) {
+  this->listFeed = val;
+}
+
+uint32_t PostList::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->count);
+          this->__isset.count = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->listFeed.clear();
+            uint32_t _size61;
+            ::apache::thrift::protocol::TType _etype64;
+            xfer += iprot->readListBegin(_etype64, _size61);
+            this->listFeed.resize(_size61);
+            uint32_t _i65;
+            for (_i65 = 0; _i65 < _size61; ++_i65)
+            {
+              xfer += iprot->readI32(this->listFeed[_i65]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.listFeed = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t PostList::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("PostList");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->count);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("listFeed", ::apache::thrift::protocol::T_LIST, 3);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->listFeed.size()));
+    std::vector<int32_t> ::const_iterator _iter66;
+    for (_iter66 = this->listFeed.begin(); _iter66 != this->listFeed.end(); ++_iter66)
+    {
+      xfer += oprot->writeI32((*_iter66));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(PostList &a, PostList &b) {
+  using ::std::swap;
+  swap(a.id, b.id);
+  swap(a.count, b.count);
+  swap(a.listFeed, b.listFeed);
+  swap(a.__isset, b.__isset);
+}
+
+PostList::PostList(const PostList& other67) {
+  id = other67.id;
+  count = other67.count;
+  listFeed = other67.listFeed;
+  __isset = other67.__isset;
+}
+PostList& PostList::operator=(const PostList& other68) {
+  id = other68.id;
+  count = other68.count;
+  listFeed = other68.listFeed;
+  __isset = other68.__isset;
+  return *this;
+}
+void PostList::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "PostList(";
+  out << "id=" << to_string(id);
+  out << ", " << "count=" << to_string(count);
+  out << ", " << "listFeed=" << to_string(listFeed);
+  out << ")";
+}
+
+
+NewsFeed::~NewsFeed() throw() {
+}
+
+
+void NewsFeed::__set_id(const int32_t val) {
+  this->id = val;
+}
+
+void NewsFeed::__set_owner(const int32_t val) {
+  this->owner = val;
+}
+
+void NewsFeed::__set_content(const std::string& val) {
+  this->content = val;
+}
+
+void NewsFeed::__set_edit_time(const int32_t val) {
+  this->edit_time = val;
+}
+
+void NewsFeed::__set_status(const int8_t val) {
+  this->status = val;
+}
+
+uint32_t NewsFeed::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->owner);
+          this->__isset.owner = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->content);
+          this->__isset.content = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->edit_time);
+          this->__isset.edit_time = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_BYTE) {
+          xfer += iprot->readByte(this->status);
+          this->__isset.status = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t NewsFeed::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("NewsFeed");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->owner);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->content);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("edit_time", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->edit_time);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_BYTE, 5);
+  xfer += oprot->writeByte(this->status);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(NewsFeed &a, NewsFeed &b) {
+  using ::std::swap;
+  swap(a.id, b.id);
+  swap(a.owner, b.owner);
+  swap(a.content, b.content);
+  swap(a.edit_time, b.edit_time);
+  swap(a.status, b.status);
+  swap(a.__isset, b.__isset);
+}
+
+NewsFeed::NewsFeed(const NewsFeed& other69) {
+  id = other69.id;
+  owner = other69.owner;
+  content = other69.content;
+  edit_time = other69.edit_time;
+  status = other69.status;
+  __isset = other69.__isset;
+}
+NewsFeed& NewsFeed::operator=(const NewsFeed& other70) {
+  id = other70.id;
+  owner = other70.owner;
+  content = other70.content;
+  edit_time = other70.edit_time;
+  status = other70.status;
+  __isset = other70.__isset;
+  return *this;
+}
+void NewsFeed::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "NewsFeed(";
+  out << "id=" << to_string(id);
+  out << ", " << "owner=" << to_string(owner);
+  out << ", " << "content=" << to_string(content);
+  out << ", " << "edit_time=" << to_string(edit_time);
+  out << ", " << "status=" << to_string(status);
+  out << ")";
+}
+
+
+FeedCreateResult::~FeedCreateResult() throw() {
+}
+
+
+void FeedCreateResult::__set_exitCode(const int32_t val) {
+  this->exitCode = val;
+}
+
+void FeedCreateResult::__set_message(const std::string& val) {
+  this->message = val;
+}
+
+void FeedCreateResult::__set_result(const int32_t val) {
+  this->result = val;
+}
+
+uint32_t FeedCreateResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->exitCode);
+          this->__isset.exitCode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->message);
+          this->__isset.message = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->result);
+          this->__isset.result = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t FeedCreateResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("FeedCreateResult");
+
+  xfer += oprot->writeFieldBegin("exitCode", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->exitCode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->message);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("result", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->result);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(FeedCreateResult &a, FeedCreateResult &b) {
+  using ::std::swap;
+  swap(a.exitCode, b.exitCode);
+  swap(a.message, b.message);
+  swap(a.result, b.result);
+  swap(a.__isset, b.__isset);
+}
+
+FeedCreateResult::FeedCreateResult(const FeedCreateResult& other71) {
+  exitCode = other71.exitCode;
+  message = other71.message;
+  result = other71.result;
+  __isset = other71.__isset;
+}
+FeedCreateResult& FeedCreateResult::operator=(const FeedCreateResult& other72) {
+  exitCode = other72.exitCode;
+  message = other72.message;
+  result = other72.result;
+  __isset = other72.__isset;
+  return *this;
+}
+void FeedCreateResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "FeedCreateResult(";
+  out << "exitCode=" << to_string(exitCode);
+  out << ", " << "message=" << to_string(message);
+  out << ", " << "result=" << to_string(result);
+  out << ")";
+}
+
+
+FeedUpdateResult::~FeedUpdateResult() throw() {
+}
+
+
+void FeedUpdateResult::__set_exitCode(const int32_t val) {
+  this->exitCode = val;
+}
+
+void FeedUpdateResult::__set_message(const std::string& val) {
+  this->message = val;
+}
+
+uint32_t FeedUpdateResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->exitCode);
+          this->__isset.exitCode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->message);
+          this->__isset.message = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t FeedUpdateResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("FeedUpdateResult");
+
+  xfer += oprot->writeFieldBegin("exitCode", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->exitCode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->message);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(FeedUpdateResult &a, FeedUpdateResult &b) {
+  using ::std::swap;
+  swap(a.exitCode, b.exitCode);
+  swap(a.message, b.message);
+  swap(a.__isset, b.__isset);
+}
+
+FeedUpdateResult::FeedUpdateResult(const FeedUpdateResult& other73) {
+  exitCode = other73.exitCode;
+  message = other73.message;
+  __isset = other73.__isset;
+}
+FeedUpdateResult& FeedUpdateResult::operator=(const FeedUpdateResult& other74) {
+  exitCode = other74.exitCode;
+  message = other74.message;
+  __isset = other74.__isset;
+  return *this;
+}
+void FeedUpdateResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "FeedUpdateResult(";
+  out << "exitCode=" << to_string(exitCode);
+  out << ", " << "message=" << to_string(message);
+  out << ")";
+}
+
+
+FeedDeleteResult::~FeedDeleteResult() throw() {
+}
+
+
+void FeedDeleteResult::__set_exitCode(const int32_t val) {
+  this->exitCode = val;
+}
+
+void FeedDeleteResult::__set_message(const std::string& val) {
+  this->message = val;
+}
+
+uint32_t FeedDeleteResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->exitCode);
+          this->__isset.exitCode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->message);
+          this->__isset.message = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t FeedDeleteResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("FeedDeleteResult");
+
+  xfer += oprot->writeFieldBegin("exitCode", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->exitCode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->message);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(FeedDeleteResult &a, FeedDeleteResult &b) {
+  using ::std::swap;
+  swap(a.exitCode, b.exitCode);
+  swap(a.message, b.message);
+  swap(a.__isset, b.__isset);
+}
+
+FeedDeleteResult::FeedDeleteResult(const FeedDeleteResult& other75) {
+  exitCode = other75.exitCode;
+  message = other75.message;
+  __isset = other75.__isset;
+}
+FeedDeleteResult& FeedDeleteResult::operator=(const FeedDeleteResult& other76) {
+  exitCode = other76.exitCode;
+  message = other76.message;
+  __isset = other76.__isset;
+  return *this;
+}
+void FeedDeleteResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "FeedDeleteResult(";
+  out << "exitCode=" << to_string(exitCode);
+  out << ", " << "message=" << to_string(message);
+  out << ")";
+}
+
+
+FeedResult::~FeedResult() throw() {
+}
+
+
+void FeedResult::__set_exitCode(const int32_t val) {
+  this->exitCode = val;
+}
+
+void FeedResult::__set_message(const std::string& val) {
+  this->message = val;
+}
+
+void FeedResult::__set_result(const NewsFeed& val) {
+  this->result = val;
+}
+
+uint32_t FeedResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->exitCode);
+          this->__isset.exitCode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->message);
+          this->__isset.message = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->result.read(iprot);
+          this->__isset.result = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t FeedResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("FeedResult");
+
+  xfer += oprot->writeFieldBegin("exitCode", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->exitCode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->message);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("result", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->result.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(FeedResult &a, FeedResult &b) {
+  using ::std::swap;
+  swap(a.exitCode, b.exitCode);
+  swap(a.message, b.message);
+  swap(a.result, b.result);
+  swap(a.__isset, b.__isset);
+}
+
+FeedResult::FeedResult(const FeedResult& other77) {
+  exitCode = other77.exitCode;
+  message = other77.message;
+  result = other77.result;
+  __isset = other77.__isset;
+}
+FeedResult& FeedResult::operator=(const FeedResult& other78) {
+  exitCode = other78.exitCode;
+  message = other78.message;
+  result = other78.result;
+  __isset = other78.__isset;
+  return *this;
+}
+void FeedResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "FeedResult(";
+  out << "exitCode=" << to_string(exitCode);
+  out << ", " << "message=" << to_string(message);
+  out << ", " << "result=" << to_string(result);
+  out << ")";
+}
+
+
+Item::~Item() throw() {
+}
+
+
+void Item::__set_post(const int32_t val) {
+  this->post = val;
+}
+
+void Item::__set_id(const int32_t val) {
+  this->id = val;
+}
+
+uint32_t Item::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->post);
+          this->__isset.post = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Item::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Item");
+
+  xfer += oprot->writeFieldBegin("post", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->post);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(Item &a, Item &b) {
+  using ::std::swap;
+  swap(a.post, b.post);
+  swap(a.id, b.id);
+  swap(a.__isset, b.__isset);
+}
+
+Item::Item(const Item& other79) {
+  post = other79.post;
+  id = other79.id;
+  __isset = other79.__isset;
+}
+Item& Item::operator=(const Item& other80) {
+  post = other80.post;
+  id = other80.id;
+  __isset = other80.__isset;
+  return *this;
+}
+void Item::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "Item(";
+  out << "post=" << to_string(post);
+  out << ", " << "id=" << to_string(id);
+  out << ")";
+}
+
+
+FeedCountResult::~FeedCountResult() throw() {
+}
+
+
+void FeedCountResult::__set_exitCode(const int32_t val) {
+  this->exitCode = val;
+}
+
+void FeedCountResult::__set_message(const std::string& val) {
+  this->message = val;
+}
+
+void FeedCountResult::__set_result(const Item& val) {
+  this->result = val;
+}
+
+uint32_t FeedCountResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->exitCode);
+          this->__isset.exitCode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->message);
+          this->__isset.message = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->result.read(iprot);
+          this->__isset.result = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t FeedCountResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("FeedCountResult");
+
+  xfer += oprot->writeFieldBegin("exitCode", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->exitCode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->message);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("result", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->result.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(FeedCountResult &a, FeedCountResult &b) {
+  using ::std::swap;
+  swap(a.exitCode, b.exitCode);
+  swap(a.message, b.message);
+  swap(a.result, b.result);
+  swap(a.__isset, b.__isset);
+}
+
+FeedCountResult::FeedCountResult(const FeedCountResult& other81) {
+  exitCode = other81.exitCode;
+  message = other81.message;
+  result = other81.result;
+  __isset = other81.__isset;
+}
+FeedCountResult& FeedCountResult::operator=(const FeedCountResult& other82) {
+  exitCode = other82.exitCode;
+  message = other82.message;
+  result = other82.result;
+  __isset = other82.__isset;
+  return *this;
+}
+void FeedCountResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "FeedCountResult(";
+  out << "exitCode=" << to_string(exitCode);
+  out << ", " << "message=" << to_string(message);
+  out << ", " << "result=" << to_string(result);
+  out << ")";
+}
+
+
+ListFeed::~ListFeed() throw() {
+}
+
+
+void ListFeed::__set_count(const int32_t val) {
+  this->count = val;
+}
+
+void ListFeed::__set_feedlist(const std::vector<NewsFeed> & val) {
+  this->feedlist = val;
+}
+
+void ListFeed::__set_nex(const Item& val) {
+  this->nex = val;
+}
+
+uint32_t ListFeed::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->count);
+          this->__isset.count = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->feedlist.clear();
+            uint32_t _size83;
+            ::apache::thrift::protocol::TType _etype86;
+            xfer += iprot->readListBegin(_etype86, _size83);
+            this->feedlist.resize(_size83);
+            uint32_t _i87;
+            for (_i87 = 0; _i87 < _size83; ++_i87)
+            {
+              xfer += this->feedlist[_i87].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.feedlist = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->nex.read(iprot);
+          this->__isset.nex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ListFeed::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ListFeed");
+
+  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->count);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("feedlist", ::apache::thrift::protocol::T_LIST, 2);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->feedlist.size()));
+    std::vector<NewsFeed> ::const_iterator _iter88;
+    for (_iter88 = this->feedlist.begin(); _iter88 != this->feedlist.end(); ++_iter88)
+    {
+      xfer += (*_iter88).write(oprot);
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("nex", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->nex.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(ListFeed &a, ListFeed &b) {
+  using ::std::swap;
+  swap(a.count, b.count);
+  swap(a.feedlist, b.feedlist);
+  swap(a.nex, b.nex);
+  swap(a.__isset, b.__isset);
+}
+
+ListFeed::ListFeed(const ListFeed& other89) {
+  count = other89.count;
+  feedlist = other89.feedlist;
+  nex = other89.nex;
+  __isset = other89.__isset;
+}
+ListFeed& ListFeed::operator=(const ListFeed& other90) {
+  count = other90.count;
+  feedlist = other90.feedlist;
+  nex = other90.nex;
+  __isset = other90.__isset;
+  return *this;
+}
+void ListFeed::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "ListFeed(";
+  out << "count=" << to_string(count);
+  out << ", " << "feedlist=" << to_string(feedlist);
+  out << ", " << "nex=" << to_string(nex);
+  out << ")";
+}
+
+
+ListFeedResult::~ListFeedResult() throw() {
+}
+
+
+void ListFeedResult::__set_exitCode(const int32_t val) {
+  this->exitCode = val;
+}
+
+void ListFeedResult::__set_message(const std::string& val) {
+  this->message = val;
+}
+
+void ListFeedResult::__set_result(const ListFeed& val) {
+  this->result = val;
+}
+
+uint32_t ListFeedResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->exitCode);
+          this->__isset.exitCode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->message);
+          this->__isset.message = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->result.read(iprot);
+          this->__isset.result = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ListFeedResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ListFeedResult");
+
+  xfer += oprot->writeFieldBegin("exitCode", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->exitCode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->message);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("result", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->result.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(ListFeedResult &a, ListFeedResult &b) {
+  using ::std::swap;
+  swap(a.exitCode, b.exitCode);
+  swap(a.message, b.message);
+  swap(a.result, b.result);
+  swap(a.__isset, b.__isset);
+}
+
+ListFeedResult::ListFeedResult(const ListFeedResult& other91) {
+  exitCode = other91.exitCode;
+  message = other91.message;
+  result = other91.result;
+  __isset = other91.__isset;
+}
+ListFeedResult& ListFeedResult::operator=(const ListFeedResult& other92) {
+  exitCode = other92.exitCode;
+  message = other92.message;
+  result = other92.result;
+  __isset = other92.__isset;
+  return *this;
+}
+void ListFeedResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "ListFeedResult(";
+  out << "exitCode=" << to_string(exitCode);
+  out << ", " << "message=" << to_string(message);
+  out << ", " << "result=" << to_string(result);
   out << ")";
 }
 

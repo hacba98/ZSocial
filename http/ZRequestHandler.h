@@ -26,11 +26,13 @@
 #include "Poco/Net/HTMLForm.h"
 #include "Poco/DateTime.h"
 #include "Poco/DateTimeParser.h"
+#include "Poco/FileStream.h"
 
 #include "../gen-cpp/ProfileServices.h"
+#include "../gen-cpp/FriendServices.h"
+#include "../gen-cpp/NewsFeedService.h"
 
 #include "Connection.h"
-#include "../gen-cpp/ProfileServices.h"
 
 #include <iostream>
 #include <string>
@@ -43,19 +45,23 @@ public:
 		
 		boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > pool_profiles(new Poco::ObjectPool<ProfileConnection>(poolCapacity, poolPeakCapacity));
 		boost::shared_ptr<Poco::ObjectPool<FriendConnection> > pool_friends(new Poco::ObjectPool<FriendConnection>(poolCapacity, poolPeakCapacity));
+		boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > pool_newsfeed(new Poco::ObjectPool<NewsFeedConnection>(poolCapacity, poolPeakCapacity));		
 		
 		ZRequestHandlerFactory::_pool_profiles = pool_profiles;
 		ZRequestHandlerFactory::_pool_friends = pool_friends;	
+		ZRequestHandlerFactory::_pool_newsfeed = pool_newsfeed;
 	}
 	
 	virtual Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest &req);
 	
 	static Poco::ObjectPool<ProfileConnection> * profilePool(){return ZRequestHandlerFactory::_pool_profiles.get();}
 	static Poco::ObjectPool<FriendConnection> * friendPool(){ return ZRequestHandlerFactory::_pool_friends.get();}
+	static Poco::ObjectPool<NewsFeedConnection> * newsfeedPool(){ return ZRequestHandlerFactory::_pool_newsfeed.get();}	
 	
 private:
 	static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
 	static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
+	static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
 };
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
@@ -106,6 +112,16 @@ public:
 	
 private:
 	FriendConnection *_conn;
+};
+
+class NewsFeedRequestHandler : public Poco::Net::HTTPRequestHandler{
+public:
+	NewsFeedRequestHandler(NewsFeedConnection *borrow): _conn(borrow){}
+	~NewsFeedRequestHandler(){
+		ZRequestHandlerFactory::newsfeedPool()->returnObject(_conn);
+	}
+private:
+	NewsFeedConnection *_conn;
 };
 
 class TOOL {

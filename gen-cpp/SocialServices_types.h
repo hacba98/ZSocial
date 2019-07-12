@@ -57,6 +57,26 @@ class listFriendResult;
 
 class loginResult;
 
+class PostList;
+
+class NewsFeed;
+
+class FeedCreateResult;
+
+class FeedUpdateResult;
+
+class FeedDeleteResult;
+
+class FeedResult;
+
+class Item;
+
+class FeedCountResult;
+
+class ListFeed;
+
+class ListFeedResult;
+
 typedef struct _UserProfile__isset {
   _UserProfile__isset() : id(false), name(false), birth(false), gender(false), username(false), password(false), phoneNumber(false), join_date(false), last_active_time(false) {}
   bool id :1;
@@ -766,6 +786,580 @@ class loginResult {
 void swap(loginResult &a, loginResult &b);
 
 inline std::ostream& operator<<(std::ostream& out, const loginResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _PostList__isset {
+  _PostList__isset() : id(false), count(false), listFeed(false) {}
+  bool id :1;
+  bool count :1;
+  bool listFeed :1;
+} _PostList__isset;
+
+class PostList {
+ public:
+
+  PostList(const PostList&);
+  PostList& operator=(const PostList&);
+  PostList() : id(0), count(0) {
+  }
+
+  virtual ~PostList() throw();
+  int32_t id;
+  int32_t count;
+  std::vector<int32_t>  listFeed;
+
+  _PostList__isset __isset;
+
+  void __set_id(const int32_t val);
+
+  void __set_count(const int32_t val);
+
+  void __set_listFeed(const std::vector<int32_t> & val);
+
+  bool operator == (const PostList & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(count == rhs.count))
+      return false;
+    if (!(listFeed == rhs.listFeed))
+      return false;
+    return true;
+  }
+  bool operator != (const PostList &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const PostList & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(PostList &a, PostList &b);
+
+inline std::ostream& operator<<(std::ostream& out, const PostList& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _NewsFeed__isset {
+  _NewsFeed__isset() : id(false), owner(false), content(false), edit_time(false), status(false) {}
+  bool id :1;
+  bool owner :1;
+  bool content :1;
+  bool edit_time :1;
+  bool status :1;
+} _NewsFeed__isset;
+
+class NewsFeed {
+ public:
+
+  NewsFeed(const NewsFeed&);
+  NewsFeed& operator=(const NewsFeed&);
+  NewsFeed() : id(0), owner(0), content(), edit_time(0), status(0) {
+  }
+
+  virtual ~NewsFeed() throw();
+  int32_t id;
+  int32_t owner;
+  std::string content;
+  int32_t edit_time;
+  int8_t status;
+
+  _NewsFeed__isset __isset;
+
+  void __set_id(const int32_t val);
+
+  void __set_owner(const int32_t val);
+
+  void __set_content(const std::string& val);
+
+  void __set_edit_time(const int32_t val);
+
+  void __set_status(const int8_t val);
+
+  bool operator == (const NewsFeed & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(owner == rhs.owner))
+      return false;
+    if (!(content == rhs.content))
+      return false;
+    if (!(edit_time == rhs.edit_time))
+      return false;
+    if (!(status == rhs.status))
+      return false;
+    return true;
+  }
+  bool operator != (const NewsFeed &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const NewsFeed & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(NewsFeed &a, NewsFeed &b);
+
+inline std::ostream& operator<<(std::ostream& out, const NewsFeed& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _FeedCreateResult__isset {
+  _FeedCreateResult__isset() : exitCode(false), message(false), result(false) {}
+  bool exitCode :1;
+  bool message :1;
+  bool result :1;
+} _FeedCreateResult__isset;
+
+class FeedCreateResult {
+ public:
+
+  FeedCreateResult(const FeedCreateResult&);
+  FeedCreateResult& operator=(const FeedCreateResult&);
+  FeedCreateResult() : exitCode(0), message(), result(0) {
+  }
+
+  virtual ~FeedCreateResult() throw();
+  int32_t exitCode;
+  std::string message;
+  int32_t result;
+
+  _FeedCreateResult__isset __isset;
+
+  void __set_exitCode(const int32_t val);
+
+  void __set_message(const std::string& val);
+
+  void __set_result(const int32_t val);
+
+  bool operator == (const FeedCreateResult & rhs) const
+  {
+    if (!(exitCode == rhs.exitCode))
+      return false;
+    if (!(message == rhs.message))
+      return false;
+    if (!(result == rhs.result))
+      return false;
+    return true;
+  }
+  bool operator != (const FeedCreateResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const FeedCreateResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(FeedCreateResult &a, FeedCreateResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const FeedCreateResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _FeedUpdateResult__isset {
+  _FeedUpdateResult__isset() : exitCode(false), message(false) {}
+  bool exitCode :1;
+  bool message :1;
+} _FeedUpdateResult__isset;
+
+class FeedUpdateResult {
+ public:
+
+  FeedUpdateResult(const FeedUpdateResult&);
+  FeedUpdateResult& operator=(const FeedUpdateResult&);
+  FeedUpdateResult() : exitCode(0), message() {
+  }
+
+  virtual ~FeedUpdateResult() throw();
+  int32_t exitCode;
+  std::string message;
+
+  _FeedUpdateResult__isset __isset;
+
+  void __set_exitCode(const int32_t val);
+
+  void __set_message(const std::string& val);
+
+  bool operator == (const FeedUpdateResult & rhs) const
+  {
+    if (!(exitCode == rhs.exitCode))
+      return false;
+    if (!(message == rhs.message))
+      return false;
+    return true;
+  }
+  bool operator != (const FeedUpdateResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const FeedUpdateResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(FeedUpdateResult &a, FeedUpdateResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const FeedUpdateResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _FeedDeleteResult__isset {
+  _FeedDeleteResult__isset() : exitCode(false), message(false) {}
+  bool exitCode :1;
+  bool message :1;
+} _FeedDeleteResult__isset;
+
+class FeedDeleteResult {
+ public:
+
+  FeedDeleteResult(const FeedDeleteResult&);
+  FeedDeleteResult& operator=(const FeedDeleteResult&);
+  FeedDeleteResult() : exitCode(0), message() {
+  }
+
+  virtual ~FeedDeleteResult() throw();
+  int32_t exitCode;
+  std::string message;
+
+  _FeedDeleteResult__isset __isset;
+
+  void __set_exitCode(const int32_t val);
+
+  void __set_message(const std::string& val);
+
+  bool operator == (const FeedDeleteResult & rhs) const
+  {
+    if (!(exitCode == rhs.exitCode))
+      return false;
+    if (!(message == rhs.message))
+      return false;
+    return true;
+  }
+  bool operator != (const FeedDeleteResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const FeedDeleteResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(FeedDeleteResult &a, FeedDeleteResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const FeedDeleteResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _FeedResult__isset {
+  _FeedResult__isset() : exitCode(false), message(false), result(false) {}
+  bool exitCode :1;
+  bool message :1;
+  bool result :1;
+} _FeedResult__isset;
+
+class FeedResult {
+ public:
+
+  FeedResult(const FeedResult&);
+  FeedResult& operator=(const FeedResult&);
+  FeedResult() : exitCode(0), message() {
+  }
+
+  virtual ~FeedResult() throw();
+  int32_t exitCode;
+  std::string message;
+  NewsFeed result;
+
+  _FeedResult__isset __isset;
+
+  void __set_exitCode(const int32_t val);
+
+  void __set_message(const std::string& val);
+
+  void __set_result(const NewsFeed& val);
+
+  bool operator == (const FeedResult & rhs) const
+  {
+    if (!(exitCode == rhs.exitCode))
+      return false;
+    if (!(message == rhs.message))
+      return false;
+    if (!(result == rhs.result))
+      return false;
+    return true;
+  }
+  bool operator != (const FeedResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const FeedResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(FeedResult &a, FeedResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const FeedResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _Item__isset {
+  _Item__isset() : post(false), id(false) {}
+  bool post :1;
+  bool id :1;
+} _Item__isset;
+
+class Item {
+ public:
+
+  Item(const Item&);
+  Item& operator=(const Item&);
+  Item() : post(0), id(0) {
+  }
+
+  virtual ~Item() throw();
+  int32_t post;
+  int32_t id;
+
+  _Item__isset __isset;
+
+  void __set_post(const int32_t val);
+
+  void __set_id(const int32_t val);
+
+  bool operator == (const Item & rhs) const
+  {
+    if (!(post == rhs.post))
+      return false;
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const Item &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Item & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(Item &a, Item &b);
+
+inline std::ostream& operator<<(std::ostream& out, const Item& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _FeedCountResult__isset {
+  _FeedCountResult__isset() : exitCode(false), message(false), result(false) {}
+  bool exitCode :1;
+  bool message :1;
+  bool result :1;
+} _FeedCountResult__isset;
+
+class FeedCountResult {
+ public:
+
+  FeedCountResult(const FeedCountResult&);
+  FeedCountResult& operator=(const FeedCountResult&);
+  FeedCountResult() : exitCode(0), message() {
+  }
+
+  virtual ~FeedCountResult() throw();
+  int32_t exitCode;
+  std::string message;
+  Item result;
+
+  _FeedCountResult__isset __isset;
+
+  void __set_exitCode(const int32_t val);
+
+  void __set_message(const std::string& val);
+
+  void __set_result(const Item& val);
+
+  bool operator == (const FeedCountResult & rhs) const
+  {
+    if (!(exitCode == rhs.exitCode))
+      return false;
+    if (!(message == rhs.message))
+      return false;
+    if (!(result == rhs.result))
+      return false;
+    return true;
+  }
+  bool operator != (const FeedCountResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const FeedCountResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(FeedCountResult &a, FeedCountResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const FeedCountResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _ListFeed__isset {
+  _ListFeed__isset() : count(false), feedlist(false), nex(false) {}
+  bool count :1;
+  bool feedlist :1;
+  bool nex :1;
+} _ListFeed__isset;
+
+class ListFeed {
+ public:
+
+  ListFeed(const ListFeed&);
+  ListFeed& operator=(const ListFeed&);
+  ListFeed() : count(0) {
+  }
+
+  virtual ~ListFeed() throw();
+  int32_t count;
+  std::vector<NewsFeed>  feedlist;
+  Item nex;
+
+  _ListFeed__isset __isset;
+
+  void __set_count(const int32_t val);
+
+  void __set_feedlist(const std::vector<NewsFeed> & val);
+
+  void __set_nex(const Item& val);
+
+  bool operator == (const ListFeed & rhs) const
+  {
+    if (!(count == rhs.count))
+      return false;
+    if (!(feedlist == rhs.feedlist))
+      return false;
+    if (!(nex == rhs.nex))
+      return false;
+    return true;
+  }
+  bool operator != (const ListFeed &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ListFeed & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(ListFeed &a, ListFeed &b);
+
+inline std::ostream& operator<<(std::ostream& out, const ListFeed& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _ListFeedResult__isset {
+  _ListFeedResult__isset() : exitCode(false), message(false), result(false) {}
+  bool exitCode :1;
+  bool message :1;
+  bool result :1;
+} _ListFeedResult__isset;
+
+class ListFeedResult {
+ public:
+
+  ListFeedResult(const ListFeedResult&);
+  ListFeedResult& operator=(const ListFeedResult&);
+  ListFeedResult() : exitCode(0), message() {
+  }
+
+  virtual ~ListFeedResult() throw();
+  int32_t exitCode;
+  std::string message;
+  ListFeed result;
+
+  _ListFeedResult__isset __isset;
+
+  void __set_exitCode(const int32_t val);
+
+  void __set_message(const std::string& val);
+
+  void __set_result(const ListFeed& val);
+
+  bool operator == (const ListFeedResult & rhs) const
+  {
+    if (!(exitCode == rhs.exitCode))
+      return false;
+    if (!(message == rhs.message))
+      return false;
+    if (!(result == rhs.result))
+      return false;
+    return true;
+  }
+  bool operator != (const ListFeedResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ListFeedResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(ListFeedResult &a, ListFeedResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const ListFeedResult& obj)
 {
   obj.printTo(out);
   return out;

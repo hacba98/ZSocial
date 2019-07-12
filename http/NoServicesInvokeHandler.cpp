@@ -48,8 +48,16 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		res.setContentType("text/html");
 		
 		try {
-			url = "./src/dashboard.html";
-			res.sendFile(url, "text/html");
+			Poco::FileInputStream htmlFile("./src/dashboard.html");
+			string dashboardString;
+			htmlFile >> dashboardString;
+			
+			// retrieve list friend's newsfeed
+			FeedResult feedRet;
+			NewsFeedConnection *feedConn;
+			while(!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
+			//feedConn->client()->getFeed(feedRet, i32);
+			
 		} catch (Exception e){
 			cout << e.message() << endl;
 		}
