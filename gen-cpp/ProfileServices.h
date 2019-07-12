@@ -24,7 +24,6 @@ class ProfileServicesIf {
   virtual void Login(loginResult& _return, const std::string& username, const std::string& password) = 0;
   virtual ErrorCode::type Logout(const int32_t userId) = 0;
   virtual void CreateProfile(CreateUserResult& _return, const UserProfile& profile) = 0;
-  virtual bool CheckUserExisted(const int32_t userId) = 0;
   virtual void GetProfile(GetUserResult& _return, const int32_t userId) = 0;
   virtual ErrorCode::type UpdateProfile(const UserProfile& profile, const int32_t userId) = 0;
   virtual ErrorCode::type DeleteProfile(const int32_t userId) = 0;
@@ -33,6 +32,7 @@ class ProfileServicesIf {
   virtual ErrorCode::type ansyDeleteProfile(const int32_t userId) = 0;
   virtual void getList(ListProfileResult& _return, const std::vector<int32_t> & ids) = 0;
   virtual int32_t GetIdByName(const std::string& username) = 0;
+  virtual bool chechExist(const int32_t userId) = 0;
 };
 
 class ProfileServicesIfFactory {
@@ -72,10 +72,6 @@ class ProfileServicesNull : virtual public ProfileServicesIf {
   void CreateProfile(CreateUserResult& /* _return */, const UserProfile& /* profile */) {
     return;
   }
-  bool CheckUserExisted(const int32_t /* userId */) {
-    bool _return = false;
-    return _return;
-  }
   void GetProfile(GetUserResult& /* _return */, const int32_t /* userId */) {
     return;
   }
@@ -103,6 +99,10 @@ class ProfileServicesNull : virtual public ProfileServicesIf {
   }
   int32_t GetIdByName(const std::string& /* username */) {
     int32_t _return = 0;
+    return _return;
+  }
+  bool chechExist(const int32_t /* userId */) {
+    bool _return = false;
     return _return;
   }
 };
@@ -421,110 +421,6 @@ class ProfileServices_CreateProfile_presult {
   CreateUserResult* success;
 
   _ProfileServices_CreateProfile_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _ProfileServices_CheckUserExisted_args__isset {
-  _ProfileServices_CheckUserExisted_args__isset() : userId(false) {}
-  bool userId :1;
-} _ProfileServices_CheckUserExisted_args__isset;
-
-class ProfileServices_CheckUserExisted_args {
- public:
-
-  ProfileServices_CheckUserExisted_args(const ProfileServices_CheckUserExisted_args&);
-  ProfileServices_CheckUserExisted_args& operator=(const ProfileServices_CheckUserExisted_args&);
-  ProfileServices_CheckUserExisted_args() : userId(0) {
-  }
-
-  virtual ~ProfileServices_CheckUserExisted_args() throw();
-  int32_t userId;
-
-  _ProfileServices_CheckUserExisted_args__isset __isset;
-
-  void __set_userId(const int32_t val);
-
-  bool operator == (const ProfileServices_CheckUserExisted_args & rhs) const
-  {
-    if (!(userId == rhs.userId))
-      return false;
-    return true;
-  }
-  bool operator != (const ProfileServices_CheckUserExisted_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ProfileServices_CheckUserExisted_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ProfileServices_CheckUserExisted_pargs {
- public:
-
-
-  virtual ~ProfileServices_CheckUserExisted_pargs() throw();
-  const int32_t* userId;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ProfileServices_CheckUserExisted_result__isset {
-  _ProfileServices_CheckUserExisted_result__isset() : success(false) {}
-  bool success :1;
-} _ProfileServices_CheckUserExisted_result__isset;
-
-class ProfileServices_CheckUserExisted_result {
- public:
-
-  ProfileServices_CheckUserExisted_result(const ProfileServices_CheckUserExisted_result&);
-  ProfileServices_CheckUserExisted_result& operator=(const ProfileServices_CheckUserExisted_result&);
-  ProfileServices_CheckUserExisted_result() : success(0) {
-  }
-
-  virtual ~ProfileServices_CheckUserExisted_result() throw();
-  bool success;
-
-  _ProfileServices_CheckUserExisted_result__isset __isset;
-
-  void __set_success(const bool val);
-
-  bool operator == (const ProfileServices_CheckUserExisted_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    return true;
-  }
-  bool operator != (const ProfileServices_CheckUserExisted_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ProfileServices_CheckUserExisted_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ProfileServices_CheckUserExisted_presult__isset {
-  _ProfileServices_CheckUserExisted_presult__isset() : success(false) {}
-  bool success :1;
-} _ProfileServices_CheckUserExisted_presult__isset;
-
-class ProfileServices_CheckUserExisted_presult {
- public:
-
-
-  virtual ~ProfileServices_CheckUserExisted_presult() throw();
-  bool* success;
-
-  _ProfileServices_CheckUserExisted_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1376,6 +1272,110 @@ class ProfileServices_GetIdByName_presult {
 
 };
 
+typedef struct _ProfileServices_chechExist_args__isset {
+  _ProfileServices_chechExist_args__isset() : userId(false) {}
+  bool userId :1;
+} _ProfileServices_chechExist_args__isset;
+
+class ProfileServices_chechExist_args {
+ public:
+
+  ProfileServices_chechExist_args(const ProfileServices_chechExist_args&);
+  ProfileServices_chechExist_args& operator=(const ProfileServices_chechExist_args&);
+  ProfileServices_chechExist_args() : userId(0) {
+  }
+
+  virtual ~ProfileServices_chechExist_args() throw();
+  int32_t userId;
+
+  _ProfileServices_chechExist_args__isset __isset;
+
+  void __set_userId(const int32_t val);
+
+  bool operator == (const ProfileServices_chechExist_args & rhs) const
+  {
+    if (!(userId == rhs.userId))
+      return false;
+    return true;
+  }
+  bool operator != (const ProfileServices_chechExist_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ProfileServices_chechExist_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ProfileServices_chechExist_pargs {
+ public:
+
+
+  virtual ~ProfileServices_chechExist_pargs() throw();
+  const int32_t* userId;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ProfileServices_chechExist_result__isset {
+  _ProfileServices_chechExist_result__isset() : success(false) {}
+  bool success :1;
+} _ProfileServices_chechExist_result__isset;
+
+class ProfileServices_chechExist_result {
+ public:
+
+  ProfileServices_chechExist_result(const ProfileServices_chechExist_result&);
+  ProfileServices_chechExist_result& operator=(const ProfileServices_chechExist_result&);
+  ProfileServices_chechExist_result() : success(0) {
+  }
+
+  virtual ~ProfileServices_chechExist_result() throw();
+  bool success;
+
+  _ProfileServices_chechExist_result__isset __isset;
+
+  void __set_success(const bool val);
+
+  bool operator == (const ProfileServices_chechExist_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ProfileServices_chechExist_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ProfileServices_chechExist_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ProfileServices_chechExist_presult__isset {
+  _ProfileServices_chechExist_presult__isset() : success(false) {}
+  bool success :1;
+} _ProfileServices_chechExist_presult__isset;
+
+class ProfileServices_chechExist_presult {
+ public:
+
+
+  virtual ~ProfileServices_chechExist_presult() throw();
+  bool* success;
+
+  _ProfileServices_chechExist_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class ProfileServicesClient : virtual public ProfileServicesIf {
  public:
   ProfileServicesClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1410,9 +1410,6 @@ class ProfileServicesClient : virtual public ProfileServicesIf {
   void CreateProfile(CreateUserResult& _return, const UserProfile& profile);
   void send_CreateProfile(const UserProfile& profile);
   void recv_CreateProfile(CreateUserResult& _return);
-  bool CheckUserExisted(const int32_t userId);
-  void send_CheckUserExisted(const int32_t userId);
-  bool recv_CheckUserExisted();
   void GetProfile(GetUserResult& _return, const int32_t userId);
   void send_GetProfile(const int32_t userId);
   void recv_GetProfile(GetUserResult& _return);
@@ -1437,6 +1434,9 @@ class ProfileServicesClient : virtual public ProfileServicesIf {
   int32_t GetIdByName(const std::string& username);
   void send_GetIdByName(const std::string& username);
   int32_t recv_GetIdByName();
+  bool chechExist(const int32_t userId);
+  void send_chechExist(const int32_t userId);
+  bool recv_chechExist();
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1455,7 +1455,6 @@ class ProfileServicesProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_Login(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Logout(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_CreateProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_CheckUserExisted(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_GetProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_UpdateProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_DeleteProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1464,13 +1463,13 @@ class ProfileServicesProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_ansyDeleteProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getList(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_GetIdByName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_chechExist(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ProfileServicesProcessor(boost::shared_ptr<ProfileServicesIf> iface) :
     iface_(iface) {
     processMap_["Login"] = &ProfileServicesProcessor::process_Login;
     processMap_["Logout"] = &ProfileServicesProcessor::process_Logout;
     processMap_["CreateProfile"] = &ProfileServicesProcessor::process_CreateProfile;
-    processMap_["CheckUserExisted"] = &ProfileServicesProcessor::process_CheckUserExisted;
     processMap_["GetProfile"] = &ProfileServicesProcessor::process_GetProfile;
     processMap_["UpdateProfile"] = &ProfileServicesProcessor::process_UpdateProfile;
     processMap_["DeleteProfile"] = &ProfileServicesProcessor::process_DeleteProfile;
@@ -1479,6 +1478,7 @@ class ProfileServicesProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["ansyDeleteProfile"] = &ProfileServicesProcessor::process_ansyDeleteProfile;
     processMap_["getList"] = &ProfileServicesProcessor::process_getList;
     processMap_["GetIdByName"] = &ProfileServicesProcessor::process_GetIdByName;
+    processMap_["chechExist"] = &ProfileServicesProcessor::process_chechExist;
   }
 
   virtual ~ProfileServicesProcessor() {}
@@ -1534,15 +1534,6 @@ class ProfileServicesMultiface : virtual public ProfileServicesIf {
     }
     ifaces_[i]->CreateProfile(_return, profile);
     return;
-  }
-
-  bool CheckUserExisted(const int32_t userId) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->CheckUserExisted(userId);
-    }
-    return ifaces_[i]->CheckUserExisted(userId);
   }
 
   void GetProfile(GetUserResult& _return, const int32_t userId) {
@@ -1620,6 +1611,15 @@ class ProfileServicesMultiface : virtual public ProfileServicesIf {
     return ifaces_[i]->GetIdByName(username);
   }
 
+  bool chechExist(const int32_t userId) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->chechExist(userId);
+    }
+    return ifaces_[i]->chechExist(userId);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -1659,9 +1659,6 @@ class ProfileServicesConcurrentClient : virtual public ProfileServicesIf {
   void CreateProfile(CreateUserResult& _return, const UserProfile& profile);
   int32_t send_CreateProfile(const UserProfile& profile);
   void recv_CreateProfile(CreateUserResult& _return, const int32_t seqid);
-  bool CheckUserExisted(const int32_t userId);
-  int32_t send_CheckUserExisted(const int32_t userId);
-  bool recv_CheckUserExisted(const int32_t seqid);
   void GetProfile(GetUserResult& _return, const int32_t userId);
   int32_t send_GetProfile(const int32_t userId);
   void recv_GetProfile(GetUserResult& _return, const int32_t seqid);
@@ -1686,6 +1683,9 @@ class ProfileServicesConcurrentClient : virtual public ProfileServicesIf {
   int32_t GetIdByName(const std::string& username);
   int32_t send_GetIdByName(const std::string& username);
   int32_t recv_GetIdByName(const int32_t seqid);
+  bool chechExist(const int32_t userId);
+  int32_t send_chechExist(const int32_t userId);
+  bool recv_chechExist(const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

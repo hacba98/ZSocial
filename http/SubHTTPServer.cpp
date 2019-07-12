@@ -134,7 +134,7 @@ void SubHTTPServer::initialize(Application& app){
 void SubHTTPServer::uninitialize(){
 	Application &app = Application::instance();
 	app.logger().information(Logger::format("Un-initializing $0 .......", name()));
-	app.logger().information(to_string(_core->totalConnections()));
+	//app.logger().information(std::to_string(_core->totalConnections()));
 	// stop server if it is currently running
 	terminate();
 
