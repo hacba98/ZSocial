@@ -10,7 +10,7 @@ UserProfileDB::UserProfileDB(){
     
 };
 UserProfileDB::~UserProfileDB(){
-    if (!db.close() || !keyStore.close()) {
+    if (!db.close() || !keyStore.close() || !username_id.close()) {
         log->error("close database error");
     }
 };
@@ -18,12 +18,14 @@ UserProfileDB::~UserProfileDB(){
 void UserProfileDB::initialize ( Poco::Util::Application &self ){
     std::string DB = self.config().getString("DBFile" ,"userProfiles.kch");
     std::string keyDB = self.config().getString("DBKeyStore","keyGen.kch");
+    std::string usernameDB = self.config().getString("DBUserNameStore","user_id.kch");
     
     log = &self.logger();
     
     
     if (!db.open(DB, kyotocabinet::HashDB::OWRITER | kyotocabinet::HashDB::OCREATE) || 
-            !keyStore.open(keyDB, kyotocabinet::HashDB::OWRITER | kyotocabinet::HashDB::OCREATE)) {
+            !keyStore.open(keyDB, kyotocabinet::HashDB::OWRITER | kyotocabinet::HashDB::OCREATE) ||
+            !username_id.open(usernameDB, kyotocabinet::HashDB::OWRITER | kyotocabinet::HashDB::OCREATE)) {
         log->error("open database error");
     }
 };
@@ -100,16 +102,16 @@ ErrorCode::type UserProfileDB::setUsername(std::string username , int id){
     return ErrorCode::SUCCESS;
 };
 ErrorCode::type UserProfileDB::rmUsername(std::string username){
-    db.remove(username);
+    username_id.remove(username);
     return ErrorCode::SUCCESS;
 };
 
 ErrorCode::type UserProfileDB::getIdByName(int& _ret,std::string username){
     std::string vaule;
-    if (!db.get(username, &vaule)) {
+    if (!username_id.get(username, &vaule)) {
         return ErrorCode::USER_NOT_FOUND;
     };
-    _ret = std::to_string(vaule);
+    _ret = atoi(vaule.c_str());
     return ErrorCode::SUCCESS;
 };
 

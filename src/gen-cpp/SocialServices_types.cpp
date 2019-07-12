@@ -1610,3 +1610,111 @@ void listFriendResult::printTo(std::ostream& out) const {
 }
 
 
+loginResult::~loginResult() throw() {
+}
+
+
+void loginResult::__set_code(const ErrorCode::type val) {
+  this->code = val;
+}
+
+void loginResult::__set_profile(const SimpleProfile& val) {
+  this->profile = val;
+}
+
+uint32_t loginResult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          int32_t ecast58;
+          xfer += iprot->readI32(ecast58);
+          this->code = (ErrorCode::type)ecast58;
+          this->__isset.code = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->profile.read(iprot);
+          this->__isset.profile = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t loginResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("loginResult");
+
+  xfer += oprot->writeFieldBegin("code", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((int32_t)this->code);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("profile", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->profile.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(loginResult &a, loginResult &b) {
+  using ::std::swap;
+  swap(a.code, b.code);
+  swap(a.profile, b.profile);
+  swap(a.__isset, b.__isset);
+}
+
+loginResult::loginResult(const loginResult& other59) {
+  code = other59.code;
+  profile = other59.profile;
+  __isset = other59.__isset;
+}
+loginResult& loginResult::operator=(const loginResult& other60) {
+  code = other60.code;
+  profile = other60.profile;
+  __isset = other60.__isset;
+  return *this;
+}
+void loginResult::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "loginResult(";
+  out << "code=" << to_string(code);
+  out << ", " << "profile=" << to_string(profile);
+  out << ")";
+}
+
+

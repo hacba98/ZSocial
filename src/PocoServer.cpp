@@ -1,6 +1,6 @@
 #include "PocoServer.h"
 
-userProfileServer::userProfileServer() : _helpRequested(false), _serverRequested(0) {
+userProfileServer::userProfileServer() : _helpRequested(false), _serverRequested(3) {
     
 }
 

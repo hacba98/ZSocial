@@ -100,12 +100,17 @@ struct listFriendResult {
 	4: ErrorCode code
 }
 
-service SocialServices{
+struct loginResult{
+        1: ErrorCode code,
+        2: SimpleProfile profile,
+}
+
+service ProfileServices {
 	// API For Proifle
 
 	// Login / Logout
-	i32 Login(1:string username, 2:string password),
-	ErrorCode Logout(1: i32 userId), 
+	loginResult Login(1:string username, 2:string password),
+	ErrorCode Logout(1:i32 userId), 
 
 	// Create new user
 	CreateUserResult CreateProfile(1:UserProfile profile),
@@ -133,7 +138,10 @@ service SocialServices{
 
 	// Get UserId from username
 	i32 GetIdByName(1:string username),
+	bool chechExist(1:i32 userId),
+}
 
+service FriendServices {
 
 	// -- API for friend function
 	// Check for new friend request
@@ -154,4 +162,3 @@ service SocialServices{
 	// View friend list
 	listFriendResult viewFriendList (1: i32 id, 2: i32 index, 3: i32 size);
 }
-

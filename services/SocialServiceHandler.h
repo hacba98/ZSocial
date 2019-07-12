@@ -25,12 +25,19 @@
 
 #include "util/Worker.h"
 #include "db/userProfileDB.h"
-#include <thrift/protocol/TBinaryProtocol.h>
-#include <thrift/transport/TBufferTransports.h>
+#include "thrift/protocol/TBinaryProtocol.h"
+#include "thrift/transport/TBufferTransports.h"
 #include <iostream>
 #include <mutex>
 #include <vector>
-#include <Poco/Util/Subsystem.h>
+#include "Poco/Util/Subsystem.h"
+
+#include "Poco/HMACEngine.h"
+#include "Poco/SHA1Engine.h"
+
+using Poco::DigestEngine;
+using Poco::HMACEngine;
+using Poco::SHA1Engine;
 
 using Poco::Notification;
 using Poco::NotificationQueue;
@@ -49,7 +56,7 @@ public:
 
     ~SocialServiceHandler();
 
-    int32_t Login(const std::string& username, const std::string& password);
+    void Login(loginResult& _return, const std::string& username, const std::string& password);
     ErrorCode::type Logout(const int32_t userId);
     void CreateProfile(CreateUserResult& _return, const UserProfile& profile);
     void GetProfile(GetUserResult& _return, const int32_t userId);
@@ -60,17 +67,21 @@ public:
     ErrorCode::type ansyDeleteProfile(const int32_t userId);
     void getList(ListProfileResult& _return, const std::vector<int32_t> & ids);
     int32_t GetIdByName(const std::string& username);
+    bool chechExist(const int32_t userId);
     
-    void CreateWithId(int userId,const UserProfile& profile);
+    void CreateWithId(int userId,const UserProfile& _profile);
     int GetSimpleProfile(SimpleProfile& _ret,int32_t userId);
     
-    void checkRequest(pingResult& _return, const int32_t id) {};
-    ErrorCode::type addFriend(const FriendRequest& request) {};
-    ErrorCode::type acceptRequest(const int32_t curId, const int32_t requestId) {};
-    ErrorCode::type declineRequest(const int32_t curId, const int32_t requestId) {};
-    ErrorCode::type removeFriend(const int32_t curId, const int32_t friendId) {};
-    void viewFriendList(listFriendResult& _return, const int32_t id, const int32_t index, const int32_t size) {};
-
+    std::string hash(const std::string& key , int id){
+        std::string pass = key;
+        pass.append(to_string(id));
+        
+        HMACEngine<SHA1Engine> hmac("LOL");
+        hmac.update(pass);
+        
+        std::string hashPass(DigestEngine::digestToHex(hmac.digest()));
+        return hashPass;
+    }
 private:
     int newID;
     std::mutex mutexUpdate;

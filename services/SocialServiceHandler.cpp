@@ -42,8 +42,38 @@ const char* SocialServiceHandler::name() const{
     return "SocialService Handler";
 };
 
-int32_t SocialServiceHandler::Login(const std::string& username, const std::string& password){};
-ErrorCode::type SocialServiceHandler::Logout(const int32_t userId){};
+void SocialServiceHandler::Login(loginResult& _return, const std::string& username, const std::string& password){
+    int userId = GetIdByName(username);
+    if (userId == -1){
+        _return.code = ErrorCode::USER_NOT_FOUND;
+        return;
+    }
+    GetUserResult profile;
+    GetProfile(profile,userId);
+    
+    if (profile.profile.password == hash(password , userId)){
+        _return.profile.id = profile.profile.id;
+        _return.profile.gender = profile.profile.gender;
+        _return.profile.last_active_time = profile.profile.last_active_time = -1;
+        _return.profile.name = profile.profile.name;
+        
+        users.remove(userId);
+        _return.code = db->setDB(userId,profile.profile);
+    }else{
+        _return.code = ErrorCode::USER_NOT_FOUND;
+    }
+    log->debug("Login");
+};
+ErrorCode::type SocialServiceHandler::Logout(const int32_t userId){
+    GetUserResult profile;
+    GetProfile(profile,userId);
+    if (profile.errorCode != ErrorCode::SUCCESS) return profile.errorCode;
+    profile.profile.last_active_time = (int)now.epochTime();
+    
+    users.remove(userId);
+    log->debug("Logout");
+    return db->setDB(userId,profile.profile);
+};
 
 void SocialServiceHandler::CreateProfile(CreateUserResult& _return, const UserProfile& profile){
 
@@ -57,6 +87,7 @@ void SocialServiceHandler::CreateProfile(CreateUserResult& _return, const UserPr
     
     now.update();
     newProfile.last_active_time = newProfile.join_date = (int)now.epochTime();
+    newProfile.password = hash(newProfile.password,newProfile.id);
     
     _return.errorCode = db->setDB(newProfile.id, newProfile);
     db->setUsername(newProfile.username,newProfile.id);
@@ -84,20 +115,49 @@ void SocialServiceHandler::GetProfile(GetUserResult& _return, const int32_t user
 }
 
 ErrorCode::type SocialServiceHandler::UpdateProfile(const UserProfile& profile, const int32_t userId) {
-    if(db->isContainDB(userId)) return ErrorCode::type::DUPLICATED_REQUEST;
+    
+    GetUserResult newProfile;
+    GetProfile(newProfile,userId);
+    
+    if(newProfile.errorCode != ErrorCode::SUCCESS) return ErrorCode::type::DUPLICATED_REQUEST;
+    
     users.remove(userId);
     
+    if (profile.birth != 0){
+        newProfile.profile.__set_birth(profile.birth);
+    }
+    
+    //if (profile.__isset.gender){
+    //    newProfile.profile.__set_gender(profile.gender);
+    //}
+    
+    if (profile.password != ""){
+        newProfile.profile.__set_password(hash(profile.password,userId));
+    }
+    
+    if (profile.phoneNumber != 0){
+        newProfile.profile.__set_phoneNumber(profile.phoneNumber);
+    }
+    
+    if (profile.name != ""){
+        newProfile.profile.__set_name(profile.name);
+    }
+    
+    if (profile.__isset.last_active_time != 0){
+        newProfile.profile.__set_last_active_time(profile.last_active_time);
+    }
+    
     log->debug("Update");
-    return db->setDB(userId, profile);
+    return db->setDB(userId, newProfile.profile);
 }
 
 ErrorCode::type SocialServiceHandler::DeleteProfile(const int32_t userId) {
-    UserProfile profile;
+    GetUserResult profile;
     GetProfile(profile,userId);
     
     users.remove(userId);
     
-    db->rmUsername(profile.username);
+    db->rmUsername(profile.profile.username);
     log->debug("Delete");
     return db->removeDB(userId);
 }
@@ -112,7 +172,11 @@ void SocialServiceHandler::ansyCreateProfile(CreateUserResult& _return, const Us
     _return.errorCode = ErrorCode::type::SUCCESS;
     _return.id = id;
 }
-void SocialServiceHandler::CreateWithId(int userId,const UserProfile& profile){
+void SocialServiceHandler::CreateWithId(int userId,const UserProfile& _profile){
+    UserProfile profile(_profile);
+    profile.last_active_time = profile.join_date = (int)now.epochTime();
+    profile.password = hash(profile.password,userId);
+    
     db->setDB(userId, profile);
     db->setUsername(profile.username,userId);
     log->debug("Create");
@@ -154,10 +218,14 @@ int SocialServiceHandler::GetSimpleProfile(SimpleProfile& _ret,int32_t userId){
 }
 int32_t SocialServiceHandler::GetIdByName(const std::string& username){
     int ret;
-    if (db->getIdByName(ret,username) == ErrorCode::SUCCESS){
+    if (db->getIdByName(ret,username) != ErrorCode::SUCCESS){
         return -1;
     }
     
     log->debug("Get by Name");
     return ret;
 }
+
+bool SocialServiceHandler::chechExist(const int32_t userId){
+    return db->isContainDB(userId);
+};

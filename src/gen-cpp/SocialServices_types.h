@@ -55,6 +55,8 @@ class pingResult;
 
 class listFriendResult;
 
+class loginResult;
+
 typedef struct _UserProfile__isset {
   _UserProfile__isset() : id(false), name(false), birth(false), gender(false), username(false), password(false), phoneNumber(false), join_date(false), last_active_time(false) {}
   bool id :1;
@@ -712,6 +714,58 @@ class listFriendResult {
 void swap(listFriendResult &a, listFriendResult &b);
 
 inline std::ostream& operator<<(std::ostream& out, const listFriendResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _loginResult__isset {
+  _loginResult__isset() : code(false), profile(false) {}
+  bool code :1;
+  bool profile :1;
+} _loginResult__isset;
+
+class loginResult {
+ public:
+
+  loginResult(const loginResult&);
+  loginResult& operator=(const loginResult&);
+  loginResult() : code((ErrorCode::type)0) {
+  }
+
+  virtual ~loginResult() throw();
+  ErrorCode::type code;
+  SimpleProfile profile;
+
+  _loginResult__isset __isset;
+
+  void __set_code(const ErrorCode::type val);
+
+  void __set_profile(const SimpleProfile& val);
+
+  bool operator == (const loginResult & rhs) const
+  {
+    if (!(code == rhs.code))
+      return false;
+    if (!(profile == rhs.profile))
+      return false;
+    return true;
+  }
+  bool operator != (const loginResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const loginResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(loginResult &a, loginResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const loginResult& obj)
 {
   obj.printTo(out);
   return out;

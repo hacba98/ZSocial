@@ -12,7 +12,7 @@ using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
 
-//using boost::shared_ptr;
+using boost::shared_ptr;
 
 class ProfileServicesHandler : virtual public ProfileServicesIf {
  public:
@@ -20,7 +20,7 @@ class ProfileServicesHandler : virtual public ProfileServicesIf {
     // Your initialization goes here
   }
 
-  int32_t Login(const std::string& username, const std::string& password) {
+  void Login(loginResult& _return, const std::string& username, const std::string& password) {
     // Your implementation goes here
     printf("Login\n");
   }
@@ -75,15 +75,20 @@ class ProfileServicesHandler : virtual public ProfileServicesIf {
     printf("GetIdByName\n");
   }
 
+  bool chechExist(const int32_t userId) {
+    // Your implementation goes here
+    printf("chechExist\n");
+  }
+
 };
 
 int main(int argc, char **argv) {
   int port = 9090;
-  boost::shared_ptr<ProfileServicesHandler> handler(new ProfileServicesHandler());
-  boost::shared_ptr<TProcessor> processor(new ProfileServicesProcessor(handler));
-  boost::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  boost::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  boost::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+  shared_ptr<ProfileServicesHandler> handler(new ProfileServicesHandler());
+  shared_ptr<TProcessor> processor(new ProfileServicesProcessor(handler));
+  shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+  shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+  shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
 
   TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
   server.serve();
