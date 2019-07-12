@@ -21,7 +21,6 @@
 class FriendServicesIf {
  public:
   virtual ~FriendServicesIf() {}
-  virtual void ping(const std::string& secretKey) = 0;
   virtual void checkRequest(pingResult& _return, const int32_t id) = 0;
   virtual ErrorCode::type addFriend(const FriendRequest& request) = 0;
   virtual ErrorCode::type acceptRequest(const int32_t curId, const int32_t requestId) = 0;
@@ -57,9 +56,6 @@ class FriendServicesIfSingletonFactory : virtual public FriendServicesIfFactory 
 class FriendServicesNull : virtual public FriendServicesIf {
  public:
   virtual ~FriendServicesNull() {}
-  void ping(const std::string& /* secretKey */) {
-    return;
-  }
   void checkRequest(pingResult& /* _return */, const int32_t /* id */) {
     return;
   }
@@ -82,92 +78,6 @@ class FriendServicesNull : virtual public FriendServicesIf {
   void viewFriendList(listFriendResult& /* _return */, const int32_t /* id */, const int32_t /* index */, const int32_t /* size */) {
     return;
   }
-};
-
-typedef struct _FriendServices_ping_args__isset {
-  _FriendServices_ping_args__isset() : secretKey(false) {}
-  bool secretKey :1;
-} _FriendServices_ping_args__isset;
-
-class FriendServices_ping_args {
- public:
-
-  FriendServices_ping_args(const FriendServices_ping_args&);
-  FriendServices_ping_args& operator=(const FriendServices_ping_args&);
-  FriendServices_ping_args() : secretKey() {
-  }
-
-  virtual ~FriendServices_ping_args() throw();
-  std::string secretKey;
-
-  _FriendServices_ping_args__isset __isset;
-
-  void __set_secretKey(const std::string& val);
-
-  bool operator == (const FriendServices_ping_args & rhs) const
-  {
-    if (!(secretKey == rhs.secretKey))
-      return false;
-    return true;
-  }
-  bool operator != (const FriendServices_ping_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const FriendServices_ping_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class FriendServices_ping_pargs {
- public:
-
-
-  virtual ~FriendServices_ping_pargs() throw();
-  const std::string* secretKey;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class FriendServices_ping_result {
- public:
-
-  FriendServices_ping_result(const FriendServices_ping_result&);
-  FriendServices_ping_result& operator=(const FriendServices_ping_result&);
-  FriendServices_ping_result() {
-  }
-
-  virtual ~FriendServices_ping_result() throw();
-
-  bool operator == (const FriendServices_ping_result & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const FriendServices_ping_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const FriendServices_ping_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class FriendServices_ping_presult {
- public:
-
-
-  virtual ~FriendServices_ping_presult() throw();
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
 };
 
 typedef struct _FriendServices_checkRequest_args__isset {
@@ -854,9 +764,6 @@ class FriendServicesClient : virtual public FriendServicesIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void ping(const std::string& secretKey);
-  void send_ping(const std::string& secretKey);
-  void recv_ping();
   void checkRequest(pingResult& _return, const int32_t id);
   void send_checkRequest(const int32_t id);
   void recv_checkRequest(pingResult& _return);
@@ -890,7 +797,6 @@ class FriendServicesProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (FriendServicesProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_checkRequest(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_addFriend(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_acceptRequest(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -900,7 +806,6 @@ class FriendServicesProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   FriendServicesProcessor(boost::shared_ptr<FriendServicesIf> iface) :
     iface_(iface) {
-    processMap_["ping"] = &FriendServicesProcessor::process_ping;
     processMap_["checkRequest"] = &FriendServicesProcessor::process_checkRequest;
     processMap_["addFriend"] = &FriendServicesProcessor::process_addFriend;
     processMap_["acceptRequest"] = &FriendServicesProcessor::process_acceptRequest;
@@ -935,15 +840,6 @@ class FriendServicesMultiface : virtual public FriendServicesIf {
     ifaces_.push_back(iface);
   }
  public:
-  void ping(const std::string& secretKey) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ping(secretKey);
-    }
-    ifaces_[i]->ping(secretKey);
-  }
-
   void checkRequest(pingResult& _return, const int32_t id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1030,9 +926,6 @@ class FriendServicesConcurrentClient : virtual public FriendServicesIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void ping(const std::string& secretKey);
-  int32_t send_ping(const std::string& secretKey);
-  void recv_ping(const int32_t seqid);
   void checkRequest(pingResult& _return, const int32_t id);
   int32_t send_checkRequest(const int32_t id);
   void recv_checkRequest(pingResult& _return, const int32_t seqid);

@@ -96,7 +96,7 @@ struct listFriendResult {
 	1: i32 size,
 	// idx of next item in list, -1 if it is last page
 	2: i32 idx,
-	3: list<i32> friendList,
+	3: list<FriendData> friendList,
 	4: ErrorCode code
 }
 
@@ -109,15 +109,12 @@ service ProfileServices {
 	// API For Proifle
 
 	// Login / Logout
-	i32 Login(1:string username, 2:string password),
+	loginResult Login(1:string username, 2:string password),
 	ErrorCode Logout(1:i32 userId), 
 
 	// Create new user
 	CreateUserResult CreateProfile(1:UserProfile profile),
 	
-	// Check user existed
-	bool CheckUserExisted(1:i32 userId),
-
 	// Get User Profile
 	GetUserResult GetProfile(1:i32 userId),
 
@@ -141,11 +138,10 @@ service ProfileServices {
 
 	// Get UserId from username
 	i32 GetIdByName(1:string username),
+	bool chechExist(1:i32 userId),
 }
 
 service FriendServices {
-	// Ping function to let server know when to start
-	void ping (1: string secretKey);
 
 	// -- API for friend function
 	// Check for new friend request

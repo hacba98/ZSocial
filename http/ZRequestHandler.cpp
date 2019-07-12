@@ -53,10 +53,91 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		} catch (Exception e){
 			cout << e.message() << endl;
 		}
-	}
+	}else if(url.find("/register") == 0){
+            res.setStatus(HTTPResponse::HTTP_OK);
+            res.setContentType("text/html");
+	
+            try {
+            	url = "./src/register.html";
+		res.sendFile(url, "text/html");
+            } catch (Exception e){
+		cout << e.message() << endl;
+            }
+        }
 }
 
 //////////////////////////////////////
+
 void ProfileRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerResponse& res){
-	Application::instance().logger().information(req.getURI());
+	Application::instance().logger().information("line 76");
+        std::string url = req.getURI();
+	if (url.find("/profile/login/") == 0)
+		return handleLogin(req, res);
+        else if (url.find("/profile/register") == 0){
+            
+            return handleRegister(req,res);
+        }
+	
+}
+
+void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res){
+    Application& app = Application::instance();
+    app.logger().information("CREATE Request from " + req.clientAddress().toString());
+
+    HTMLForm form(req, req.stream());
+
+    string name = form.get("name", "No one will name like this");
+    string gender = form.get("gender", "");
+    
+    long phoneNumber = (long)atoi(form.get("phonenumber", "-1").c_str());
+    string username =  form.get("username","");
+    string password =  form.get("password","");
+    string repassword =form.get("repassword","");
+    bool ok = (name != "No one will name like this") && (gender != "") && (phoneNumber != -1l) &&
+                (username != "") && (password != "") && (repassword == password);
+    
+    Poco::DateTime birthDate;
+    int tz_diff;
+    Poco::DateTimeParser::parse("yyyy-mm-dd", form.get("birth", "2000-01-01"), birthDate, tz_diff);
+    int birth = (int)(birthDate.timestamp().epochTime());
+    app.logger().information(birth);
+    UserProfile profile;
+    TOOL::setProfile(profile , name,gender ,birth,phoneNumber,username ,password);
+
+    CreateUserResult ret;
+    if (ok) {
+        _conn->client()->CreateProfile(ret, profile);
+    }
+
+    if (ret.errorCode == ErrorCode::SUCCESS && ok){ // valid case need to response token
+		res.setStatus(HTTPResponse::HTTP_OK);
+		res.set("valid", "true");
+	} else {
+		res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+		res.set("valid", "false");
+	}
+	
+	res.send().flush();
+};
+
+void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res){
+	// parsing data: username and password
+	istream& body_stream = req.stream();
+	HTMLForm form(req, body_stream);
+	string username = form.get("username");
+	string password = form.get("password");
+	
+	// using given connection to process server bussiness
+	loginResult loginRet;
+	_conn->client()->Login(loginRet, username, password);
+	
+	if (loginRet.code == ErrorCode::SUCCESS){ // valid case need to response token
+		res.setStatus(HTTPResponse::HTTP_OK);
+		res.set("valid", "true");
+	} else if (loginRet.code == ErrorCode::USER_NOT_FOUND){
+		res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+		res.set("valid", "false");
+	}
+	
+	res.send().flush();
 }

@@ -22,8 +22,11 @@
 #include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/ObjectPool.h"
 #include "Poco/Util/Application.h"
-
+#include "Poco/Net/HTMLForm.h"
+#include "Poco/DateTime.h"
+#include "Poco/DateTimeParser.h"
 #include "Connection.h"
+#include "../gen-cpp/ProfileServices.h"
 
 #include <iostream>
 #include <string>
@@ -53,9 +56,10 @@ private:
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
 public:
-	void handleRequest(
-		Poco::Net::HTTPServerRequest &req, 
-		Poco::Net::HTTPServerResponse &res);
+
+    void handleRequest(
+            Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
 };
 
 class ProfileRequestHandler : public Poco::Net::HTTPRequestHandler {
@@ -72,6 +76,10 @@ public:
 	
 	// handler of specify request
 	void handleLogin(
+		Poco::Net::HTTPServerRequest &req, 
+		Poco::Net::HTTPServerResponse &res);
+        
+        void handleRegister(
 		Poco::Net::HTTPServerRequest &req, 
 		Poco::Net::HTTPServerResponse &res);
 private:
@@ -96,7 +104,39 @@ private:
 	FriendConnection *_conn;
 };
 
+class TOOL {
+public:
+    
+    static int getTime(int d, int m, int y) {
+        time_t rawtime;
+        struct tm * timeinfo;
 
+        time(&rawtime);
+        timeinfo = localtime(&rawtime);
+        timeinfo->tm_year = y - 1900;
+        timeinfo->tm_mon = m - 1;
+        timeinfo->tm_mday = d;
+
+        return int(mktime(timeinfo));
+    }
+
+    static void getDMY(int birth,int &d, int &m, int &y) {
+        time_t b = (time_t)birth;
+        tm *ltm = localtime(&b);
+        d = ltm->tm_mday;
+        m = ltm->tm_mon + 1;
+        y = ltm->tm_year + 1900;
+    }
+    
+    static void setProfile(UserProfile& profile , std::string name,std::string gender ,int birth ,long phoneNumber,std::string username ,std::string password){
+        if(birth != 0) profile.__set_birth(birth);
+        if(gender != "") profile.__set_gender(gender == "Nam");
+        if(name != "No one will name like this") profile.__set_name(name);
+        if(password != "") profile.__set_password(password);
+        if(phoneNumber != 0l)profile.__set_phoneNumber(phoneNumber);
+        if(username != "") profile.__set_username(username);
+    };
+};
 
 #endif /* ZREQUESTHANDLER_H */
 

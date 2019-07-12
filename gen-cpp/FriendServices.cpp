@@ -9,162 +9,6 @@
 
 
 
-FriendServices_ping_args::~FriendServices_ping_args() throw() {
-}
-
-
-uint32_t FriendServices_ping_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->secretKey);
-          this->__isset.secretKey = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t FriendServices_ping_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("FriendServices_ping_args");
-
-  xfer += oprot->writeFieldBegin("secretKey", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->secretKey);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-FriendServices_ping_pargs::~FriendServices_ping_pargs() throw() {
-}
-
-
-uint32_t FriendServices_ping_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("FriendServices_ping_pargs");
-
-  xfer += oprot->writeFieldBegin("secretKey", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->secretKey)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-FriendServices_ping_result::~FriendServices_ping_result() throw() {
-}
-
-
-uint32_t FriendServices_ping_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    xfer += iprot->skip(ftype);
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t FriendServices_ping_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("FriendServices_ping_result");
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-FriendServices_ping_presult::~FriendServices_ping_presult() throw() {
-}
-
-
-uint32_t FriendServices_ping_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    xfer += iprot->skip(ftype);
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
 FriendServices_checkRequest_args::~FriendServices_checkRequest_args() throw() {
 }
 
@@ -458,9 +302,9 @@ uint32_t FriendServices_addFriend_result::read(::apache::thrift::protocol::TProt
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast76;
-          xfer += iprot->readI32(ecast76);
-          this->success = (ErrorCode::type)ecast76;
+          int32_t ecast78;
+          xfer += iprot->readI32(ecast78);
+          this->success = (ErrorCode::type)ecast78;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -522,9 +366,9 @@ uint32_t FriendServices_addFriend_presult::read(::apache::thrift::protocol::TPro
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast77;
-          xfer += iprot->readI32(ecast77);
-          (*(this->success)) = (ErrorCode::type)ecast77;
+          int32_t ecast79;
+          xfer += iprot->readI32(ecast79);
+          (*(this->success)) = (ErrorCode::type)ecast79;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -665,9 +509,9 @@ uint32_t FriendServices_acceptRequest_result::read(::apache::thrift::protocol::T
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast78;
-          xfer += iprot->readI32(ecast78);
-          this->success = (ErrorCode::type)ecast78;
+          int32_t ecast80;
+          xfer += iprot->readI32(ecast80);
+          this->success = (ErrorCode::type)ecast80;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -729,9 +573,9 @@ uint32_t FriendServices_acceptRequest_presult::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast79;
-          xfer += iprot->readI32(ecast79);
-          (*(this->success)) = (ErrorCode::type)ecast79;
+          int32_t ecast81;
+          xfer += iprot->readI32(ecast81);
+          (*(this->success)) = (ErrorCode::type)ecast81;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -872,9 +716,9 @@ uint32_t FriendServices_declineRequest_result::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast80;
-          xfer += iprot->readI32(ecast80);
-          this->success = (ErrorCode::type)ecast80;
+          int32_t ecast82;
+          xfer += iprot->readI32(ecast82);
+          this->success = (ErrorCode::type)ecast82;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -936,9 +780,9 @@ uint32_t FriendServices_declineRequest_presult::read(::apache::thrift::protocol:
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast81;
-          xfer += iprot->readI32(ecast81);
-          (*(this->success)) = (ErrorCode::type)ecast81;
+          int32_t ecast83;
+          xfer += iprot->readI32(ecast83);
+          (*(this->success)) = (ErrorCode::type)ecast83;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1079,9 +923,9 @@ uint32_t FriendServices_removeFriend_result::read(::apache::thrift::protocol::TP
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast82;
-          xfer += iprot->readI32(ecast82);
-          this->success = (ErrorCode::type)ecast82;
+          int32_t ecast84;
+          xfer += iprot->readI32(ecast84);
+          this->success = (ErrorCode::type)ecast84;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1143,9 +987,9 @@ uint32_t FriendServices_removeFriend_presult::read(::apache::thrift::protocol::T
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast83;
-          xfer += iprot->readI32(ecast83);
-          (*(this->success)) = (ErrorCode::type)ecast83;
+          int32_t ecast85;
+          xfer += iprot->readI32(ecast85);
+          (*(this->success)) = (ErrorCode::type)ecast85;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1380,59 +1224,6 @@ uint32_t FriendServices_viewFriendList_presult::read(::apache::thrift::protocol:
   xfer += iprot->readStructEnd();
 
   return xfer;
-}
-
-void FriendServicesClient::ping(const std::string& secretKey)
-{
-  send_ping(secretKey);
-  recv_ping();
-}
-
-void FriendServicesClient::send_ping(const std::string& secretKey)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("ping", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  FriendServices_ping_pargs args;
-  args.secretKey = &secretKey;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void FriendServicesClient::recv_ping()
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("ping") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  FriendServices_ping_presult result;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  return;
 }
 
 void FriendServicesClient::checkRequest(pingResult& _return, const int32_t id)
@@ -1807,59 +1598,6 @@ bool FriendServicesProcessor::dispatchCall(::apache::thrift::protocol::TProtocol
   return true;
 }
 
-void FriendServicesProcessor::process_ping(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("FriendServices.ping", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "FriendServices.ping");
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "FriendServices.ping");
-  }
-
-  FriendServices_ping_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "FriendServices.ping", bytes);
-  }
-
-  FriendServices_ping_result result;
-  try {
-    iface_->ping(args.secretKey);
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "FriendServices.ping");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("ping", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "FriendServices.ping");
-  }
-
-  oprot->writeMessageBegin("ping", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "FriendServices.ping", bytes);
-  }
-}
-
 void FriendServicesProcessor::process_checkRequest(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
@@ -2189,84 +1927,6 @@ void FriendServicesProcessor::process_viewFriendList(int32_t seqid, ::apache::th
   ::boost::shared_ptr< FriendServicesIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
   ::boost::shared_ptr< ::apache::thrift::TProcessor > processor(new FriendServicesProcessor(handler));
   return processor;
-}
-
-void FriendServicesConcurrentClient::ping(const std::string& secretKey)
-{
-  int32_t seqid = send_ping(secretKey);
-  recv_ping(seqid);
-}
-
-int32_t FriendServicesConcurrentClient::send_ping(const std::string& secretKey)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("ping", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  FriendServices_ping_pargs args;
-  args.secretKey = &secretKey;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void FriendServicesConcurrentClient::recv_ping(const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("ping") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      FriendServices_ping_presult result;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      sentry.commit();
-      return;
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
 }
 
 void FriendServicesConcurrentClient::checkRequest(pingResult& _return, const int32_t id)
