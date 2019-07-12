@@ -55,8 +55,10 @@ class pingResult;
 
 class listFriendResult;
 
+class loginResult;
+
 typedef struct _UserProfile__isset {
-  _UserProfile__isset() : id(false), name(false), birth(false), gender(false), username(false), password(false), phoneNumber(false) {}
+  _UserProfile__isset() : id(false), name(false), birth(false), gender(false), username(false), password(false), phoneNumber(false), join_date(false), last_active_time(false) {}
   bool id :1;
   bool name :1;
   bool birth :1;
@@ -64,6 +66,8 @@ typedef struct _UserProfile__isset {
   bool username :1;
   bool password :1;
   bool phoneNumber :1;
+  bool join_date :1;
+  bool last_active_time :1;
 } _UserProfile__isset;
 
 class UserProfile {
@@ -71,7 +75,7 @@ class UserProfile {
 
   UserProfile(const UserProfile&);
   UserProfile& operator=(const UserProfile&);
-  UserProfile() : id(0), name(), birth(0), gender(0), username(), password(), phoneNumber(0) {
+  UserProfile() : id(0), name(), birth(0), gender(0), username(), password(), phoneNumber(0), join_date(0), last_active_time(0) {
   }
 
   virtual ~UserProfile() throw();
@@ -82,6 +86,8 @@ class UserProfile {
   std::string username;
   std::string password;
   int64_t phoneNumber;
+  int32_t join_date;
+  int32_t last_active_time;
 
   _UserProfile__isset __isset;
 
@@ -99,6 +105,10 @@ class UserProfile {
 
   void __set_phoneNumber(const int64_t val);
 
+  void __set_join_date(const int32_t val);
+
+  void __set_last_active_time(const int32_t val);
+
   bool operator == (const UserProfile & rhs) const
   {
     if (!(id == rhs.id))
@@ -114,6 +124,10 @@ class UserProfile {
     if (!(password == rhs.password))
       return false;
     if (!(phoneNumber == rhs.phoneNumber))
+      return false;
+    if (!(join_date == rhs.join_date))
+      return false;
+    if (!(last_active_time == rhs.last_active_time))
       return false;
     return true;
   }
@@ -138,10 +152,11 @@ inline std::ostream& operator<<(std::ostream& out, const UserProfile& obj)
 }
 
 typedef struct _SimpleProfile__isset {
-  _SimpleProfile__isset() : id(false), name(false), gender(false) {}
+  _SimpleProfile__isset() : id(false), name(false), gender(false), last_active_time(false) {}
   bool id :1;
   bool name :1;
   bool gender :1;
+  bool last_active_time :1;
 } _SimpleProfile__isset;
 
 class SimpleProfile {
@@ -149,13 +164,14 @@ class SimpleProfile {
 
   SimpleProfile(const SimpleProfile&);
   SimpleProfile& operator=(const SimpleProfile&);
-  SimpleProfile() : id(0), name(), gender(0) {
+  SimpleProfile() : id(0), name(), gender(0), last_active_time(0) {
   }
 
   virtual ~SimpleProfile() throw();
   int32_t id;
   std::string name;
   bool gender;
+  int32_t last_active_time;
 
   _SimpleProfile__isset __isset;
 
@@ -165,6 +181,8 @@ class SimpleProfile {
 
   void __set_gender(const bool val);
 
+  void __set_last_active_time(const int32_t val);
+
   bool operator == (const SimpleProfile & rhs) const
   {
     if (!(id == rhs.id))
@@ -172,6 +190,8 @@ class SimpleProfile {
     if (!(name == rhs.name))
       return false;
     if (!(gender == rhs.gender))
+      return false;
+    if (!(last_active_time == rhs.last_active_time))
       return false;
     return true;
   }
@@ -584,8 +604,8 @@ inline std::ostream& operator<<(std::ostream& out, const FriendData& obj)
 }
 
 typedef struct _pingResult__isset {
-  _pingResult__isset() : code(false), data(false) {}
-  bool code :1;
+  _pingResult__isset() : haveData(false), data(false) {}
+  bool haveData :1;
   bool data :1;
 } _pingResult__isset;
 
@@ -594,22 +614,22 @@ class pingResult {
 
   pingResult(const pingResult&);
   pingResult& operator=(const pingResult&);
-  pingResult() : code((ErrorCode::type)0) {
+  pingResult() : haveData(0) {
   }
 
   virtual ~pingResult() throw();
-  ErrorCode::type code;
+  bool haveData;
   std::vector<FriendRequest>  data;
 
   _pingResult__isset __isset;
 
-  void __set_code(const ErrorCode::type val);
+  void __set_haveData(const bool val);
 
   void __set_data(const std::vector<FriendRequest> & val);
 
   bool operator == (const pingResult & rhs) const
   {
-    if (!(code == rhs.code))
+    if (!(haveData == rhs.haveData))
       return false;
     if (!(data == rhs.data))
       return false;
@@ -694,6 +714,58 @@ class listFriendResult {
 void swap(listFriendResult &a, listFriendResult &b);
 
 inline std::ostream& operator<<(std::ostream& out, const listFriendResult& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+typedef struct _loginResult__isset {
+  _loginResult__isset() : code(false), profile(false) {}
+  bool code :1;
+  bool profile :1;
+} _loginResult__isset;
+
+class loginResult {
+ public:
+
+  loginResult(const loginResult&);
+  loginResult& operator=(const loginResult&);
+  loginResult() : code((ErrorCode::type)0) {
+  }
+
+  virtual ~loginResult() throw();
+  ErrorCode::type code;
+  SimpleProfile profile;
+
+  _loginResult__isset __isset;
+
+  void __set_code(const ErrorCode::type val);
+
+  void __set_profile(const SimpleProfile& val);
+
+  bool operator == (const loginResult & rhs) const
+  {
+    if (!(code == rhs.code))
+      return false;
+    if (!(profile == rhs.profile))
+      return false;
+    return true;
+  }
+  bool operator != (const loginResult &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const loginResult & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(loginResult &a, loginResult &b);
+
+inline std::ostream& operator<<(std::ostream& out, const loginResult& obj)
 {
   obj.printTo(out);
   return out;

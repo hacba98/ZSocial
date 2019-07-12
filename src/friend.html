@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		<title>TODO supply a title</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<form action="/addFriend" method="POST">
+			<h2>Add Friend</h2>
+			<label>Your Id </label><br>
+			<input type="text" name="addfriend.userid" required>
+			<br><br>
+			<label>Your Friend Id </label><br>
+			<input type="text" name="addfriend.friendid" required>
+			<br><br>
+			<label>Say something to your friend</label><br>
+			<textarea name="addfriend.greeting" rows="2" cols="20">Hi! Let's make friend.</textarea><br>
+			<input type="submit" value="Add Friend">
+			<br><br>
+		</form>
+		<hr width="10%" align="left">
+		<form action="/viewRequest" method="POST">
+			<h2>View Friend Request</h2>
+			<label>Your Id </label><br>
+			<input type="text" name="viewrequest.userid" required>
+			<input type="submit" value="View">
+			<br><br>
+		</form>
+		<hr width="10%" align="left">
+		<form action="/viewFriend" method="POST">
+			<h2>View Friend List</h2>
+			<label>Your Id </label><br>
+			<input type="text" name="viewfriend.userid" required>
+			<input type="hidden" name="viewfriend.page" value=0>
+			<input type="hidden" name="viewfriend.pageSize" value=2>
+			<input type="submit" value="View">
+			<br><br>
+		</form>
+	</body>
+</html>

@@ -458,9 +458,9 @@ uint32_t FriendServices_addFriend_result::read(::apache::thrift::protocol::TProt
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast76;
-          xfer += iprot->readI32(ecast76);
-          this->success = (ErrorCode::type)ecast76;
+          int32_t ecast78;
+          xfer += iprot->readI32(ecast78);
+          this->success = (ErrorCode::type)ecast78;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -522,9 +522,9 @@ uint32_t FriendServices_addFriend_presult::read(::apache::thrift::protocol::TPro
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast77;
-          xfer += iprot->readI32(ecast77);
-          (*(this->success)) = (ErrorCode::type)ecast77;
+          int32_t ecast79;
+          xfer += iprot->readI32(ecast79);
+          (*(this->success)) = (ErrorCode::type)ecast79;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -665,9 +665,9 @@ uint32_t FriendServices_acceptRequest_result::read(::apache::thrift::protocol::T
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast78;
-          xfer += iprot->readI32(ecast78);
-          this->success = (ErrorCode::type)ecast78;
+          int32_t ecast80;
+          xfer += iprot->readI32(ecast80);
+          this->success = (ErrorCode::type)ecast80;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -729,9 +729,9 @@ uint32_t FriendServices_acceptRequest_presult::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast79;
-          xfer += iprot->readI32(ecast79);
-          (*(this->success)) = (ErrorCode::type)ecast79;
+          int32_t ecast81;
+          xfer += iprot->readI32(ecast81);
+          (*(this->success)) = (ErrorCode::type)ecast81;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -872,9 +872,9 @@ uint32_t FriendServices_declineRequest_result::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast80;
-          xfer += iprot->readI32(ecast80);
-          this->success = (ErrorCode::type)ecast80;
+          int32_t ecast82;
+          xfer += iprot->readI32(ecast82);
+          this->success = (ErrorCode::type)ecast82;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -936,9 +936,9 @@ uint32_t FriendServices_declineRequest_presult::read(::apache::thrift::protocol:
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast81;
-          xfer += iprot->readI32(ecast81);
-          (*(this->success)) = (ErrorCode::type)ecast81;
+          int32_t ecast83;
+          xfer += iprot->readI32(ecast83);
+          (*(this->success)) = (ErrorCode::type)ecast83;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1079,9 +1079,9 @@ uint32_t FriendServices_removeFriend_result::read(::apache::thrift::protocol::TP
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast82;
-          xfer += iprot->readI32(ecast82);
-          this->success = (ErrorCode::type)ecast82;
+          int32_t ecast84;
+          xfer += iprot->readI32(ecast84);
+          this->success = (ErrorCode::type)ecast84;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1143,9 +1143,9 @@ uint32_t FriendServices_removeFriend_presult::read(::apache::thrift::protocol::T
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast83;
-          xfer += iprot->readI32(ecast83);
-          (*(this->success)) = (ErrorCode::type)ecast83;
+          int32_t ecast85;
+          xfer += iprot->readI32(ecast85);
+          (*(this->success)) = (ErrorCode::type)ecast85;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);

@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/gen-cpp/SocialServices_constants.o \
 	${OBJECTDIR}/gen-cpp/SocialServices_types.o \
 	${OBJECTDIR}/http/Connection.o \
+	${OBJECTDIR}/http/NoServicesInvokeHandler.o \
 	${OBJECTDIR}/http/SubHTTPServer.o \
 	${OBJECTDIR}/http/ZRequestHandler.o \
 	${OBJECTDIR}/main.o
@@ -97,6 +98,11 @@ ${OBJECTDIR}/http/Connection.o: http/Connection.cpp
 	${MKDIR} -p ${OBJECTDIR}/http
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../Thrift -I../Poco/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/Connection.o http/Connection.cpp
+
+${OBJECTDIR}/http/NoServicesInvokeHandler.o: http/NoServicesInvokeHandler.cpp
+	${MKDIR} -p ${OBJECTDIR}/http
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../Thrift -I../Poco/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/NoServicesInvokeHandler.o http/NoServicesInvokeHandler.cpp
 
 ${OBJECTDIR}/http/SubHTTPServer.o: http/SubHTTPServer.cpp
 	${MKDIR} -p ${OBJECTDIR}/http

@@ -20,8 +20,11 @@
 #include "Poco/Net/HTTPRequestHandler.h"
 #include "Poco/Net/HTTPServerRequest.h"
 #include "Poco/Net/HTTPServerResponse.h"
+#include "Poco/Net/HTMLForm.h"
 #include "Poco/ObjectPool.h"
 #include "Poco/Util/Application.h"
+
+#include "../gen-cpp/ProfileServices.h"
 
 #include "Connection.h"
 

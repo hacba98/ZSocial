@@ -130,8 +130,8 @@ uint32_t ProfileServices_Login_result::read(::apache::thrift::protocol::TProtoco
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -156,8 +156,8 @@ uint32_t ProfileServices_Login_result::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeStructBegin("ProfileServices_Login_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -192,8 +192,8 @@ uint32_t ProfileServices_Login_presult::read(::apache::thrift::protocol::TProtoc
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -318,9 +318,9 @@ uint32_t ProfileServices_Logout_result::read(::apache::thrift::protocol::TProtoc
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast59;
-          xfer += iprot->readI32(ecast59);
-          this->success = (ErrorCode::type)ecast59;
+          int32_t ecast61;
+          xfer += iprot->readI32(ecast61);
+          this->success = (ErrorCode::type)ecast61;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -382,9 +382,9 @@ uint32_t ProfileServices_Logout_presult::read(::apache::thrift::protocol::TProto
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast60;
-          xfer += iprot->readI32(ecast60);
-          (*(this->success)) = (ErrorCode::type)ecast60;
+          int32_t ecast62;
+          xfer += iprot->readI32(ecast62);
+          (*(this->success)) = (ErrorCode::type)ecast62;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1086,9 +1086,9 @@ uint32_t ProfileServices_UpdateProfile_result::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast61;
-          xfer += iprot->readI32(ecast61);
-          this->success = (ErrorCode::type)ecast61;
+          int32_t ecast63;
+          xfer += iprot->readI32(ecast63);
+          this->success = (ErrorCode::type)ecast63;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1150,9 +1150,9 @@ uint32_t ProfileServices_UpdateProfile_presult::read(::apache::thrift::protocol:
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast62;
-          xfer += iprot->readI32(ecast62);
-          (*(this->success)) = (ErrorCode::type)ecast62;
+          int32_t ecast64;
+          xfer += iprot->readI32(ecast64);
+          (*(this->success)) = (ErrorCode::type)ecast64;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1277,9 +1277,9 @@ uint32_t ProfileServices_DeleteProfile_result::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast63;
-          xfer += iprot->readI32(ecast63);
-          this->success = (ErrorCode::type)ecast63;
+          int32_t ecast65;
+          xfer += iprot->readI32(ecast65);
+          this->success = (ErrorCode::type)ecast65;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1341,9 +1341,9 @@ uint32_t ProfileServices_DeleteProfile_presult::read(::apache::thrift::protocol:
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast64;
-          xfer += iprot->readI32(ecast64);
-          (*(this->success)) = (ErrorCode::type)ecast64;
+          int32_t ecast66;
+          xfer += iprot->readI32(ecast66);
+          (*(this->success)) = (ErrorCode::type)ecast66;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1671,9 +1671,9 @@ uint32_t ProfileServices_ansyUpdateProfile_result::read(::apache::thrift::protoc
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast65;
-          xfer += iprot->readI32(ecast65);
-          this->success = (ErrorCode::type)ecast65;
+          int32_t ecast67;
+          xfer += iprot->readI32(ecast67);
+          this->success = (ErrorCode::type)ecast67;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1735,9 +1735,9 @@ uint32_t ProfileServices_ansyUpdateProfile_presult::read(::apache::thrift::proto
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast66;
-          xfer += iprot->readI32(ecast66);
-          (*(this->success)) = (ErrorCode::type)ecast66;
+          int32_t ecast68;
+          xfer += iprot->readI32(ecast68);
+          (*(this->success)) = (ErrorCode::type)ecast68;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1862,9 +1862,9 @@ uint32_t ProfileServices_ansyDeleteProfile_result::read(::apache::thrift::protoc
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast67;
-          xfer += iprot->readI32(ecast67);
-          this->success = (ErrorCode::type)ecast67;
+          int32_t ecast69;
+          xfer += iprot->readI32(ecast69);
+          this->success = (ErrorCode::type)ecast69;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1926,9 +1926,9 @@ uint32_t ProfileServices_ansyDeleteProfile_presult::read(::apache::thrift::proto
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast68;
-          xfer += iprot->readI32(ecast68);
-          (*(this->success)) = (ErrorCode::type)ecast68;
+          int32_t ecast70;
+          xfer += iprot->readI32(ecast70);
+          (*(this->success)) = (ErrorCode::type)ecast70;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1976,14 +1976,14 @@ uint32_t ProfileServices_getList_args::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->ids.clear();
-            uint32_t _size69;
-            ::apache::thrift::protocol::TType _etype72;
-            xfer += iprot->readListBegin(_etype72, _size69);
-            this->ids.resize(_size69);
-            uint32_t _i73;
-            for (_i73 = 0; _i73 < _size69; ++_i73)
+            uint32_t _size71;
+            ::apache::thrift::protocol::TType _etype74;
+            xfer += iprot->readListBegin(_etype74, _size71);
+            this->ids.resize(_size71);
+            uint32_t _i75;
+            for (_i75 = 0; _i75 < _size71; ++_i75)
             {
-              xfer += iprot->readI32(this->ids[_i73]);
+              xfer += iprot->readI32(this->ids[_i75]);
             }
             xfer += iprot->readListEnd();
           }
@@ -2012,10 +2012,10 @@ uint32_t ProfileServices_getList_args::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("ids", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->ids.size()));
-    std::vector<int32_t> ::const_iterator _iter74;
-    for (_iter74 = this->ids.begin(); _iter74 != this->ids.end(); ++_iter74)
+    std::vector<int32_t> ::const_iterator _iter76;
+    for (_iter76 = this->ids.begin(); _iter76 != this->ids.end(); ++_iter76)
     {
-      xfer += oprot->writeI32((*_iter74));
+      xfer += oprot->writeI32((*_iter76));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2039,10 +2039,10 @@ uint32_t ProfileServices_getList_pargs::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("ids", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->ids)).size()));
-    std::vector<int32_t> ::const_iterator _iter75;
-    for (_iter75 = (*(this->ids)).begin(); _iter75 != (*(this->ids)).end(); ++_iter75)
+    std::vector<int32_t> ::const_iterator _iter77;
+    for (_iter77 = (*(this->ids)).begin(); _iter77 != (*(this->ids)).end(); ++_iter77)
     {
-      xfer += oprot->writeI32((*_iter75));
+      xfer += oprot->writeI32((*_iter77));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2348,10 +2348,10 @@ uint32_t ProfileServices_GetIdByName_presult::read(::apache::thrift::protocol::T
   return xfer;
 }
 
-int32_t ProfileServicesClient::Login(const std::string& username, const std::string& password)
+void ProfileServicesClient::Login(loginResult& _return, const std::string& username, const std::string& password)
 {
   send_Login(username, password);
-  return recv_Login();
+  recv_Login(_return);
 }
 
 void ProfileServicesClient::send_Login(const std::string& username, const std::string& password)
@@ -2369,7 +2369,7 @@ void ProfileServicesClient::send_Login(const std::string& username, const std::s
   oprot_->getTransport()->flush();
 }
 
-int32_t ProfileServicesClient::recv_Login()
+void ProfileServicesClient::recv_Login(loginResult& _return)
 {
 
   int32_t rseqid = 0;
@@ -2394,7 +2394,6 @@ int32_t ProfileServicesClient::recv_Login()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
   ProfileServices_Login_presult result;
   result.success = &_return;
   result.read(iprot_);
@@ -2402,7 +2401,8 @@ int32_t ProfileServicesClient::recv_Login()
   iprot_->getTransport()->readEnd();
 
   if (result.__isset.success) {
-    return _return;
+    // _return pointer has now been filled
+    return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Login failed: unknown result");
 }
@@ -3089,7 +3089,7 @@ void ProfileServicesProcessor::process_Login(int32_t seqid, ::apache::thrift::pr
 
   ProfileServices_Login_result result;
   try {
-    result.success = iface_->Login(args.username, args.password);
+    iface_->Login(result.success, args.username, args.password);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -3721,10 +3721,10 @@ void ProfileServicesProcessor::process_GetIdByName(int32_t seqid, ::apache::thri
   return processor;
 }
 
-int32_t ProfileServicesConcurrentClient::Login(const std::string& username, const std::string& password)
+void ProfileServicesConcurrentClient::Login(loginResult& _return, const std::string& username, const std::string& password)
 {
   int32_t seqid = send_Login(username, password);
-  return recv_Login(seqid);
+  recv_Login(_return, seqid);
 }
 
 int32_t ProfileServicesConcurrentClient::send_Login(const std::string& username, const std::string& password)
@@ -3746,7 +3746,7 @@ int32_t ProfileServicesConcurrentClient::send_Login(const std::string& username,
   return cseqid;
 }
 
-int32_t ProfileServicesConcurrentClient::recv_Login(const int32_t seqid)
+void ProfileServicesConcurrentClient::recv_Login(loginResult& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -3784,7 +3784,6 @@ int32_t ProfileServicesConcurrentClient::recv_Login(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      int32_t _return;
       ProfileServices_Login_presult result;
       result.success = &_return;
       result.read(iprot_);
@@ -3792,8 +3791,9 @@ int32_t ProfileServicesConcurrentClient::recv_Login(const int32_t seqid)
       iprot_->getTransport()->readEnd();
 
       if (result.__isset.success) {
+        // _return pointer has now been filled
         sentry.commit();
-        return _return;
+        return;
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Login failed: unknown result");

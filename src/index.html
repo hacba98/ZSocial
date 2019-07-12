@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
 	<head>
-		<title>TODO supply a title</title>
+		<title>ZSocial Login Page</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
@@ -24,6 +24,8 @@ and open the template in the editor.
 				xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
 					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 					    alert("Working", xmlHttp.responseText);
+					} else if (xmlHttp.status == 404){
+					    alert("Username or password is incorrect");
 					}
 				}
 				xmlHttp.send(params);
@@ -49,9 +51,11 @@ and open the template in the editor.
 					<tr>
 						<td colspan="2" align="center" width="275"><input type="button" name="a1" value="Login" onclick="login()"></td>
 					</tr>
+					<tr>
+						<td colspan="2" align="center" width="275"><a href="localhost/register">Click Here To Sign Up</a></td>
+					</tr>
 				</table>
 			</form>
-
 		</center>
 	</body>
 </html>

@@ -21,7 +21,7 @@
 class ProfileServicesIf {
  public:
   virtual ~ProfileServicesIf() {}
-  virtual int32_t Login(const std::string& username, const std::string& password) = 0;
+  virtual void Login(loginResult& _return, const std::string& username, const std::string& password) = 0;
   virtual ErrorCode::type Logout(const int32_t userId) = 0;
   virtual void CreateProfile(CreateUserResult& _return, const UserProfile& profile) = 0;
   virtual bool CheckUserExisted(const int32_t userId) = 0;
@@ -62,9 +62,8 @@ class ProfileServicesIfSingletonFactory : virtual public ProfileServicesIfFactor
 class ProfileServicesNull : virtual public ProfileServicesIf {
  public:
   virtual ~ProfileServicesNull() {}
-  int32_t Login(const std::string& /* username */, const std::string& /* password */) {
-    int32_t _return = 0;
-    return _return;
+  void Login(loginResult& /* _return */, const std::string& /* username */, const std::string& /* password */) {
+    return;
   }
   ErrorCode::type Logout(const int32_t /* userId */) {
     ErrorCode::type _return = (ErrorCode::type)0;
@@ -174,15 +173,15 @@ class ProfileServices_Login_result {
 
   ProfileServices_Login_result(const ProfileServices_Login_result&);
   ProfileServices_Login_result& operator=(const ProfileServices_Login_result&);
-  ProfileServices_Login_result() : success(0) {
+  ProfileServices_Login_result() {
   }
 
   virtual ~ProfileServices_Login_result() throw();
-  int32_t success;
+  loginResult success;
 
   _ProfileServices_Login_result__isset __isset;
 
-  void __set_success(const int32_t val);
+  void __set_success(const loginResult& val);
 
   bool operator == (const ProfileServices_Login_result & rhs) const
   {
@@ -211,7 +210,7 @@ class ProfileServices_Login_presult {
 
 
   virtual ~ProfileServices_Login_presult() throw();
-  int32_t* success;
+  loginResult* success;
 
   _ProfileServices_Login_presult__isset __isset;
 
@@ -1402,9 +1401,9 @@ class ProfileServicesClient : virtual public ProfileServicesIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  int32_t Login(const std::string& username, const std::string& password);
+  void Login(loginResult& _return, const std::string& username, const std::string& password);
   void send_Login(const std::string& username, const std::string& password);
-  int32_t recv_Login();
+  void recv_Login(loginResult& _return);
   ErrorCode::type Logout(const int32_t userId);
   void send_Logout(const int32_t userId);
   ErrorCode::type recv_Logout();
@@ -1508,13 +1507,14 @@ class ProfileServicesMultiface : virtual public ProfileServicesIf {
     ifaces_.push_back(iface);
   }
  public:
-  int32_t Login(const std::string& username, const std::string& password) {
+  void Login(loginResult& _return, const std::string& username, const std::string& password) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->Login(username, password);
+      ifaces_[i]->Login(_return, username, password);
     }
-    return ifaces_[i]->Login(username, password);
+    ifaces_[i]->Login(_return, username, password);
+    return;
   }
 
   ErrorCode::type Logout(const int32_t userId) {
@@ -1650,9 +1650,9 @@ class ProfileServicesConcurrentClient : virtual public ProfileServicesIf {
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  int32_t Login(const std::string& username, const std::string& password);
+  void Login(loginResult& _return, const std::string& username, const std::string& password);
   int32_t send_Login(const std::string& username, const std::string& password);
-  int32_t recv_Login(const int32_t seqid);
+  void recv_Login(loginResult& _return, const int32_t seqid);
   ErrorCode::type Logout(const int32_t userId);
   int32_t send_Logout(const int32_t userId);
   ErrorCode::type recv_Logout(const int32_t seqid);

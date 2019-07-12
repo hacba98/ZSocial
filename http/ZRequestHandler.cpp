@@ -38,25 +38,34 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
 	}
 }
 
+
 //////////////////////////////////////
 
-void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerResponse &res){
-	string url = req.getURI();
+void ProfileRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerResponse& res){
+	std::string url = req.getURI();
+	if (url.find("/profile/login/") == 0)
+		return handleLogin(req, res);
 	
-	if (url.empty() || url == "/"){
-		res.setStatus(HTTPResponse::HTTP_OK);
-		res.setContentType("text/html");
-		
-		try {
-			url = "./src/index.html";
-			res.sendFile(url, "text/html");
-		} catch (Exception e){
-			cout << e.message() << endl;
-		}
-	}
 }
 
-//////////////////////////////////////
-void ProfileRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerResponse& res){
-	Application::instance().logger().information(req.getURI());
+void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res){
+	// parsing data: username and password
+	istream& body_stream = req.stream();
+	HTMLForm form(req, body_stream);
+	string username = form.get("username");
+	string password = form.get("password");
+	
+	// using given connection to process server bussiness
+	loginResult loginRet;
+	_conn->client()->Login(loginRet, username, password);
+	
+	if (loginRet.code == ErrorCode::SUCCESS){ // valid case need to response token
+		res.setStatus(HTTPResponse::HTTP_OK);
+		res.set("valid", "true");
+	} else if (loginRet.code == ErrorCode::USER_NOT_FOUND){
+		res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+		res.set("valid", "false");
+	}
+	
+	res.send().flush();
 }

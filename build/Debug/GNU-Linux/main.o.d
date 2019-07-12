@@ -67,10 +67,11 @@ build/Debug/GNU-Linux/main.o: main.cpp \
  ../Poco/include/Poco/ListMap.h \
  ../Poco/include/Poco/Net/HTTPServerResponse.h \
  ../Poco/include/Poco/Net/HTTPResponse.h \
- ../Poco/include/Poco/Net/HTTPCookie.h ../Poco/include/Poco/ObjectPool.h \
+ ../Poco/include/Poco/Net/HTTPCookie.h \
+ ../Poco/include/Poco/Net/HTMLForm.h ../Poco/include/Poco/ObjectPool.h \
  ../Poco/include/Poco/Poco.h ../Poco/include/Poco/Condition.h \
- ../Poco/include/Poco/ScopedUnlock.h http/./Connection.h \
- ../Thrift/thrift/protocol/TBinaryProtocol.h \
+ ../Poco/include/Poco/ScopedUnlock.h http/./../gen-cpp/ProfileServices.h \
+ ../Thrift/thrift/TDispatchProcessor.h ../Thrift/thrift/TProcessor.h \
  ../Thrift/thrift/protocol/TProtocol.h \
  ../Thrift/thrift/transport/TTransport.h ../Thrift/thrift/Thrift.h \
  ../Thrift/thrift/transport/PlatformSocket.h \
@@ -78,28 +79,26 @@ build/Debug/GNU-Linux/main.o: main.cpp \
  ../Thrift/thrift/TLogging.h ../Thrift/thrift/TOutput.h \
  ../Thrift/thrift/transport/TTransportException.h \
  ../Thrift/thrift/protocol/TProtocolException.h \
+ ../Thrift/thrift/async/TConcurrentClientSyncInfo.h \
+ ../Thrift/thrift/concurrency/Mutex.h \
+ ../Thrift/thrift/concurrency/Monitor.h \
+ ../Thrift/thrift/concurrency/Exception.h \
+ http/./../gen-cpp/SocialServices_types.h \
+ ../Thrift/thrift/TApplicationException.h \
+ ../Thrift/thrift/cxxfunctional.h http/./Connection.h \
+ ../Thrift/thrift/protocol/TBinaryProtocol.h \
  ../Thrift/thrift/protocol/TVirtualProtocol.h \
  ../Thrift/thrift/protocol/TBinaryProtocol.tcc \
  ../Thrift/thrift/transport/TSocket.h \
  ../Thrift/thrift/transport/TVirtualTransport.h \
  ../Thrift/thrift/transport/TServerSocket.h \
  ../Thrift/thrift/transport/TServerTransport.h \
- ../Thrift/thrift/cxxfunctional.h \
  ../Thrift/thrift/transport/TTransportUtils.h \
  ../Thrift/thrift/transport/TBufferTransports.h \
  ../Thrift/thrift/transport/TFileTransport.h \
- ../Thrift/thrift/TProcessor.h ../Thrift/thrift/concurrency/Mutex.h \
- ../Thrift/thrift/concurrency/Monitor.h \
- ../Thrift/thrift/concurrency/Exception.h \
  ../Thrift/thrift/concurrency/PlatformThreadFactory.h \
  ../Thrift/thrift/concurrency/PosixThreadFactory.h \
- ../Thrift/thrift/concurrency/Thread.h \
- http/./../gen-cpp/ProfileServices.h \
- ../Thrift/thrift/TDispatchProcessor.h \
- ../Thrift/thrift/async/TConcurrentClientSyncInfo.h \
- http/./../gen-cpp/SocialServices_types.h \
- ../Thrift/thrift/TApplicationException.h \
- http/./../gen-cpp/FriendServices.h
+ ../Thrift/thrift/concurrency/Thread.h http/./../gen-cpp/FriendServices.h
 
 ../Poco/include/Poco/Util/Application.h:
 
@@ -307,6 +306,8 @@ http/./ZRequestHandler.h:
 
 ../Poco/include/Poco/Net/HTTPCookie.h:
 
+../Poco/include/Poco/Net/HTMLForm.h:
+
 ../Poco/include/Poco/ObjectPool.h:
 
 ../Poco/include/Poco/Poco.h:
@@ -315,9 +316,11 @@ http/./ZRequestHandler.h:
 
 ../Poco/include/Poco/ScopedUnlock.h:
 
-http/./Connection.h:
+http/./../gen-cpp/ProfileServices.h:
 
-../Thrift/thrift/protocol/TBinaryProtocol.h:
+../Thrift/thrift/TDispatchProcessor.h:
+
+../Thrift/thrift/TProcessor.h:
 
 ../Thrift/thrift/protocol/TProtocol.h:
 
@@ -339,6 +342,24 @@ http/./Connection.h:
 
 ../Thrift/thrift/protocol/TProtocolException.h:
 
+../Thrift/thrift/async/TConcurrentClientSyncInfo.h:
+
+../Thrift/thrift/concurrency/Mutex.h:
+
+../Thrift/thrift/concurrency/Monitor.h:
+
+../Thrift/thrift/concurrency/Exception.h:
+
+http/./../gen-cpp/SocialServices_types.h:
+
+../Thrift/thrift/TApplicationException.h:
+
+../Thrift/thrift/cxxfunctional.h:
+
+http/./Connection.h:
+
+../Thrift/thrift/protocol/TBinaryProtocol.h:
+
 ../Thrift/thrift/protocol/TVirtualProtocol.h:
 
 ../Thrift/thrift/protocol/TBinaryProtocol.tcc:
@@ -351,36 +372,16 @@ http/./Connection.h:
 
 ../Thrift/thrift/transport/TServerTransport.h:
 
-../Thrift/thrift/cxxfunctional.h:
-
 ../Thrift/thrift/transport/TTransportUtils.h:
 
 ../Thrift/thrift/transport/TBufferTransports.h:
 
 ../Thrift/thrift/transport/TFileTransport.h:
 
-../Thrift/thrift/TProcessor.h:
-
-../Thrift/thrift/concurrency/Mutex.h:
-
-../Thrift/thrift/concurrency/Monitor.h:
-
-../Thrift/thrift/concurrency/Exception.h:
-
 ../Thrift/thrift/concurrency/PlatformThreadFactory.h:
 
 ../Thrift/thrift/concurrency/PosixThreadFactory.h:
 
 ../Thrift/thrift/concurrency/Thread.h:
-
-http/./../gen-cpp/ProfileServices.h:
-
-../Thrift/thrift/TDispatchProcessor.h:
-
-../Thrift/thrift/async/TConcurrentClientSyncInfo.h:
-
-http/./../gen-cpp/SocialServices_types.h:
-
-../Thrift/thrift/TApplicationException.h:
 
 http/./../gen-cpp/FriendServices.h:

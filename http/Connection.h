@@ -25,7 +25,7 @@
 class ProfileConnection {
 public:
 	ProfileConnection(){
-		int profile_services_port = Poco::Util::Application::instance().config().getInt("profile.port", 2020);
+		int profile_services_port = Poco::Util::Application::instance().config().getInt("services.profile.port", 2020);
 		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", profile_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
@@ -50,7 +50,7 @@ private:
 class FriendConnection {
 public:
 	FriendConnection(){
-		int profile_services_port = Poco::Util::Application::instance().config().getInt("friend.port", 3030);
+		int profile_services_port = Poco::Util::Application::instance().config().getInt("services.friend.port", 3030);
 		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", profile_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));

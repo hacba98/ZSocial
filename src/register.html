@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		<title>ZSocial Login Page</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<script language="javascript">
+			function register(){
+				var username = document.loginform.username.value;
+				var password = document.loginform.password.value;
+				var url = "/profile/login/";
+				var params = "username=" + username + "&password=" + password;
+				console.log(params);
+				
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.open('POST', url, true);
+				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+					    alert("Working", xmlHttp.responseText);
+					} else if (xmlHttp.status == 404){
+					    alert("Username or password is incorrect");
+					}
+				}
+				xmlHttp.send(params);
+			}
+		</script>
+	</head>
+	<body>
+		<Center>
+			<form name="registerForm" onsubmit="register()">
+				<table border="0" bgcolor="#CCCCFF" cellspacing="1" cellpadding="3" width="287">
+					<tr>
+						<td align="left" colspan="2" width="275"><b><font size="5" color="#000080">Login</font></b></td>
+					</tr>
+					<tr>
+						<td align="right" width="81"><b><font color="#000080">User
+								Name:</font></b></td>
+						<td width="184"><input type="text" name="username" id="user" size="20" value="" /></td>
+					</tr>
+					<tr>
+						<td align="right" width="81"><b><font color="#000080">Password:</font></b></td>
+						<td width="184"><input type="password" name="password" size="20" value="" /></td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center" width="275"><input type="button" name="a1" value="Login" onclick="login()"></td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center" width="275"><a href="localhost/register">Click Here To Sign Up</a></td>
+					</tr>
+				</table>
+			</form>
+		</center>
+	</body>
+</html>
