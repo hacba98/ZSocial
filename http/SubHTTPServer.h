@@ -35,9 +35,9 @@ public:
 	virtual ~SubHTTPServer();
 	
 	// control method
-	void start(); // start process
-	void run();
-	void terminate();
+	virtual void start(); // start process
+	virtual void run();
+	virtual void terminate();
 	inline bool isRunning(){ return _running; }
 	
 protected:

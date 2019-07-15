@@ -624,8 +624,8 @@ inline std::ostream& operator<<(std::ostream& out, const FriendData& obj)
 }
 
 typedef struct _pingResult__isset {
-  _pingResult__isset() : haveData(false), data(false) {}
-  bool haveData :1;
+  _pingResult__isset() : code(false), data(false) {}
+  bool code :1;
   bool data :1;
 } _pingResult__isset;
 
@@ -634,22 +634,22 @@ class pingResult {
 
   pingResult(const pingResult&);
   pingResult& operator=(const pingResult&);
-  pingResult() : haveData(0) {
+  pingResult() : code((ErrorCode::type)0) {
   }
 
   virtual ~pingResult() throw();
-  bool haveData;
+  ErrorCode::type code;
   std::vector<FriendRequest>  data;
 
   _pingResult__isset __isset;
 
-  void __set_haveData(const bool val);
+  void __set_code(const ErrorCode::type val);
 
   void __set_data(const std::vector<FriendRequest> & val);
 
   bool operator == (const pingResult & rhs) const
   {
-    if (!(haveData == rhs.haveData))
+    if (!(code == rhs.code))
       return false;
     if (!(data == rhs.data))
       return false;

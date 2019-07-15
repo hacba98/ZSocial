@@ -318,9 +318,9 @@ uint32_t ProfileServices_Logout_result::read(::apache::thrift::protocol::TProtoc
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast93;
-          xfer += iprot->readI32(ecast93);
-          this->success = (ErrorCode::type)ecast93;
+          int32_t ecast94;
+          xfer += iprot->readI32(ecast94);
+          this->success = (ErrorCode::type)ecast94;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -382,9 +382,9 @@ uint32_t ProfileServices_Logout_presult::read(::apache::thrift::protocol::TProto
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast94;
-          xfer += iprot->readI32(ecast94);
-          (*(this->success)) = (ErrorCode::type)ecast94;
+          int32_t ecast95;
+          xfer += iprot->readI32(ecast95);
+          (*(this->success)) = (ErrorCode::type)ecast95;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -899,9 +899,9 @@ uint32_t ProfileServices_UpdateProfile_result::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast95;
-          xfer += iprot->readI32(ecast95);
-          this->success = (ErrorCode::type)ecast95;
+          int32_t ecast96;
+          xfer += iprot->readI32(ecast96);
+          this->success = (ErrorCode::type)ecast96;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -963,9 +963,9 @@ uint32_t ProfileServices_UpdateProfile_presult::read(::apache::thrift::protocol:
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast96;
-          xfer += iprot->readI32(ecast96);
-          (*(this->success)) = (ErrorCode::type)ecast96;
+          int32_t ecast97;
+          xfer += iprot->readI32(ecast97);
+          (*(this->success)) = (ErrorCode::type)ecast97;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1090,9 +1090,9 @@ uint32_t ProfileServices_DeleteProfile_result::read(::apache::thrift::protocol::
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast97;
-          xfer += iprot->readI32(ecast97);
-          this->success = (ErrorCode::type)ecast97;
+          int32_t ecast98;
+          xfer += iprot->readI32(ecast98);
+          this->success = (ErrorCode::type)ecast98;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1154,9 +1154,9 @@ uint32_t ProfileServices_DeleteProfile_presult::read(::apache::thrift::protocol:
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast98;
-          xfer += iprot->readI32(ecast98);
-          (*(this->success)) = (ErrorCode::type)ecast98;
+          int32_t ecast99;
+          xfer += iprot->readI32(ecast99);
+          (*(this->success)) = (ErrorCode::type)ecast99;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1484,9 +1484,9 @@ uint32_t ProfileServices_ansyUpdateProfile_result::read(::apache::thrift::protoc
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast99;
-          xfer += iprot->readI32(ecast99);
-          this->success = (ErrorCode::type)ecast99;
+          int32_t ecast100;
+          xfer += iprot->readI32(ecast100);
+          this->success = (ErrorCode::type)ecast100;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1548,9 +1548,9 @@ uint32_t ProfileServices_ansyUpdateProfile_presult::read(::apache::thrift::proto
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast100;
-          xfer += iprot->readI32(ecast100);
-          (*(this->success)) = (ErrorCode::type)ecast100;
+          int32_t ecast101;
+          xfer += iprot->readI32(ecast101);
+          (*(this->success)) = (ErrorCode::type)ecast101;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1675,9 +1675,9 @@ uint32_t ProfileServices_ansyDeleteProfile_result::read(::apache::thrift::protoc
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast101;
-          xfer += iprot->readI32(ecast101);
-          this->success = (ErrorCode::type)ecast101;
+          int32_t ecast102;
+          xfer += iprot->readI32(ecast102);
+          this->success = (ErrorCode::type)ecast102;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1739,9 +1739,9 @@ uint32_t ProfileServices_ansyDeleteProfile_presult::read(::apache::thrift::proto
     {
       case 0:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast102;
-          xfer += iprot->readI32(ecast102);
-          (*(this->success)) = (ErrorCode::type)ecast102;
+          int32_t ecast103;
+          xfer += iprot->readI32(ecast103);
+          (*(this->success)) = (ErrorCode::type)ecast103;
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1789,14 +1789,14 @@ uint32_t ProfileServices_getList_args::read(::apache::thrift::protocol::TProtoco
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->ids.clear();
-            uint32_t _size103;
-            ::apache::thrift::protocol::TType _etype106;
-            xfer += iprot->readListBegin(_etype106, _size103);
-            this->ids.resize(_size103);
-            uint32_t _i107;
-            for (_i107 = 0; _i107 < _size103; ++_i107)
+            uint32_t _size104;
+            ::apache::thrift::protocol::TType _etype107;
+            xfer += iprot->readListBegin(_etype107, _size104);
+            this->ids.resize(_size104);
+            uint32_t _i108;
+            for (_i108 = 0; _i108 < _size104; ++_i108)
             {
-              xfer += iprot->readI32(this->ids[_i107]);
+              xfer += iprot->readI32(this->ids[_i108]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1825,10 +1825,10 @@ uint32_t ProfileServices_getList_args::write(::apache::thrift::protocol::TProtoc
   xfer += oprot->writeFieldBegin("ids", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->ids.size()));
-    std::vector<int32_t> ::const_iterator _iter108;
-    for (_iter108 = this->ids.begin(); _iter108 != this->ids.end(); ++_iter108)
+    std::vector<int32_t> ::const_iterator _iter109;
+    for (_iter109 = this->ids.begin(); _iter109 != this->ids.end(); ++_iter109)
     {
-      xfer += oprot->writeI32((*_iter108));
+      xfer += oprot->writeI32((*_iter109));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1852,10 +1852,10 @@ uint32_t ProfileServices_getList_pargs::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeFieldBegin("ids", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->ids)).size()));
-    std::vector<int32_t> ::const_iterator _iter109;
-    for (_iter109 = (*(this->ids)).begin(); _iter109 != (*(this->ids)).end(); ++_iter109)
+    std::vector<int32_t> ::const_iterator _iter110;
+    for (_iter110 = (*(this->ids)).begin(); _iter110 != (*(this->ids)).end(); ++_iter110)
     {
-      xfer += oprot->writeI32((*_iter109));
+      xfer += oprot->writeI32((*_iter110));
     }
     xfer += oprot->writeListEnd();
   }

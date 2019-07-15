@@ -55,3 +55,29 @@ Start
 	Create cache
 	Start worker system
 	starting server up
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+		GetFeed
+	shutting server down
+	Stop worker system
+	Close cache
+	Close database
+End.

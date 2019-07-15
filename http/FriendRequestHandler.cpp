@@ -24,7 +24,7 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
 	}
 	
 	// serve load friend page
-	if (req.getMethod() == "GET" && (url == "/friend/page" || url == "/friend/")){
+	if (req.getMethod() == "GET" && (url == "/friend/page" || url == "/friend/" || url == "/friend")){
 		return handleLoadPage(req, res, uid);
 	}
 	
@@ -33,7 +33,12 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
 		return handleAddFriend(req, res, uid);
 	}
 	
-	
+	// serve css file
+	if (url == "/friend/friend.css" || url == "/friend/friend/friend.css"){
+		res.setStatus(HTTPResponse::HTTP_OK);
+		res.sendFile("./src/friend.css", "text/css");
+		return;
+	}
 }
 
 /**
@@ -44,7 +49,7 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
  */
 void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResponse& res, string uid){
 	string pendingHTMLCode; // code for render pending list
-	string friendListHTMLCode; // code for render friend list
+	string friendListHTMLCode = "<p> TODO </p>"; // code for render friend list
 	string htmlCode; // code for return to render html page
 	try {
 		// connect to friend service
@@ -54,7 +59,12 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 		pingResult ret;
 		_conn->client()->checkRequest(ret, user_id);
 		
-		if(!ret.haveData) {
+		if (!(ret.code == ErrorCode::SUCCESS)){
+			res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+			return;
+		}
+		
+		if(ret.data.size() == 0) {
 			pendingHTMLCode = "<p> You don't have any friend request. <p>";
 		} else {
 			char buf[50];
@@ -81,24 +91,29 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 		// TODO - add code for friend list
 		
 		// read HTML file as string 
-		FileInputStream htmlFile("../src/friend.html");
+		Poco::FileInputStream htmlFile("./src/friend.html");
+		string code;
 		while (!htmlFile.eof()){
-			string line;
-			htmlFile >> line;
-			htmlCode.append(line + "\n");
+			char line[256];
+			//htmlFile >> line;
+			htmlFile.getline(line, 256);
+			code.append(line);
+			code.append("\n");
 		}
 		
 		// put render code into template string
-		char buf[512];
-		snprintf(buf, htmlCode.size(), htmlCode.c_str(), 
-			pendingHTMLCode.c_str(), friendListHTMLCode.c_str());
+		Poco::format(htmlCode, code, pendingHTMLCode, friendListHTMLCode);
+		cout << htmlCode;
+//		char buf[512];
+//		snprintf(buf, htmlCode.size(), htmlCode.c_str(), 
+//			pendingHTMLCode.c_str(), friendListHTMLCode.c_str());
 		
 		// response to client
 		res.setStatus(HTTPResponse::HTTP_OK);
 		res.setChunkedTransferEncoding(true);
                 res.setContentType("text/html");
 		ostream& out = res.send();
-		out << buf;
+		out << htmlCode;
 		out.flush();
 	} catch(...){
 		Application::instance().logger().error("Error-Load Friend Page Error");
@@ -112,12 +127,12 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
  * @param res
  * @param uid - userID getting from cookies
  */
-void FriendRequestHandler::handleAddFriend(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, string uid){
+void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerResponse& res, string uid){
 	try {
 		istream& body_stream = req.stream();
 		HTMLForm form(req, body_stream);
-		string fr_username = form.get("addfriend.friend_username", "no_user_name");
-		string greeting = form.get("addfriend.message");
+		string fr_username = form.get("friend_username", "no_user_name");
+		string greeting = form.get("message");
 
 		// Mapping username to userid of friend
 		ProfileConnection *borrow;
@@ -128,7 +143,8 @@ void FriendRequestHandler::handleAddFriend(Poco::Net::HTTPServerRequest& req, Po
 		// check friend ID existed
 		if (fr_id == -1){ // not found
 			string reason = "Username not found";
-			res.setStatusAndReason(HTTPResponse::HTTP_NOT_FOUND, reason);
+			res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+			//res.setStatusAndReason(HTTPResponse::HTTP_NOT_FOUND, reason);
 			return;
 		}
 		
