@@ -62,7 +62,6 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		res.setContentType("text/html");
 		
 		try {
-			Application::instance().logger().information(uid);
 			Poco::FileInputStream htmlFile("./src/dashboard.html");
 			string dashboardString;
 			htmlFile >> dashboardString;
