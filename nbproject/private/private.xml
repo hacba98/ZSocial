@@ -7,14 +7,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/handlers.cpp</file>
-            <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/http.properties</file>
-            <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/Connection.cpp</file>
             <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/ZRequestHandler.cpp</file>
+            <file>file:/home/cpu10855/Projects/ZSocialHTTP/src/register.html</file>
             <file>file:/home/cpu10855/Projects/ZSocialHTTP/main.cpp</file>
-            <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/SubHTTPServer.h</file>
             <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/SubHTTPServer.cpp</file>
             <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/ZRequestHandler.h</file>
+            <file>file:/home/cpu10855/Projects/ZSocialHTTP/src/dashboard.html</file>
+            <file>file:/home/cpu10855/Projects/ZSocialHTTP/src/friend.html</file>
+            <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/NoServicesInvokeHandler.cpp</file>
             <file>file:/home/cpu10855/Projects/ZSocialHTTP/http/Connection.h</file>
         </group>
     </open-files>

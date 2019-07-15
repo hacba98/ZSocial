@@ -49,8 +49,14 @@ build/Debug/GNU-Linux/http/ZRequestHandler.o: http/ZRequestHandler.cpp \
  ../Poco/include/Poco/Message.h ../Poco/include/Poco/Format.h \
  ../Poco/include/Poco/Any.h ../Poco/include/Poco/MetaProgramming.h \
  ../Poco/include/Poco/Path.h ../Poco/include/Poco/Timespan.h \
- http/../gen-cpp/ProfileServices.h ../Thrift/thrift/TDispatchProcessor.h \
- ../Thrift/thrift/TProcessor.h ../Thrift/thrift/protocol/TProtocol.h \
+ ../Poco/include/Poco/DateTime.h ../Poco/include/Poco/DateTimeParser.h \
+ ../Poco/include/Poco/FileStream.h \
+ ../Poco/include/Poco/FileStream_POSIX.h \
+ ../Poco/include/Poco/BufferedBidirectionalStreamBuf.h \
+ ../Poco/include/Poco/BufferAllocator.h ../Poco/include/Poco/StreamUtil.h \
+ ../Thrift/thrift/TToString.h http/../gen-cpp/ProfileServices.h \
+ ../Thrift/thrift/TDispatchProcessor.h ../Thrift/thrift/TProcessor.h \
+ ../Thrift/thrift/protocol/TProtocol.h \
  ../Thrift/thrift/transport/TTransport.h ../Thrift/thrift/Thrift.h \
  ../Thrift/thrift/transport/PlatformSocket.h \
  ../Thrift/thrift/thrift-config.h ../Thrift/thrift/config.h \
@@ -63,7 +69,8 @@ build/Debug/GNU-Linux/http/ZRequestHandler.o: http/ZRequestHandler.cpp \
  ../Thrift/thrift/concurrency/Exception.h \
  http/../gen-cpp/SocialServices_types.h \
  ../Thrift/thrift/TApplicationException.h \
- ../Thrift/thrift/cxxfunctional.h http/Connection.h \
+ ../Thrift/thrift/cxxfunctional.h http/../gen-cpp/FriendServices.h \
+ http/../gen-cpp/NewsFeedService.h http/Connection.h \
  ../Thrift/thrift/protocol/TBinaryProtocol.h \
  ../Thrift/thrift/protocol/TVirtualProtocol.h \
  ../Thrift/thrift/protocol/TBinaryProtocol.tcc \
@@ -76,7 +83,7 @@ build/Debug/GNU-Linux/http/ZRequestHandler.o: http/ZRequestHandler.cpp \
  ../Thrift/thrift/transport/TFileTransport.h \
  ../Thrift/thrift/concurrency/PlatformThreadFactory.h \
  ../Thrift/thrift/concurrency/PosixThreadFactory.h \
- ../Thrift/thrift/concurrency/Thread.h http/../gen-cpp/FriendServices.h
+ ../Thrift/thrift/concurrency/Thread.h
 
 http/ZRequestHandler.h:
 
@@ -228,6 +235,22 @@ http/ZRequestHandler.h:
 
 ../Poco/include/Poco/Timespan.h:
 
+../Poco/include/Poco/DateTime.h:
+
+../Poco/include/Poco/DateTimeParser.h:
+
+../Poco/include/Poco/FileStream.h:
+
+../Poco/include/Poco/FileStream_POSIX.h:
+
+../Poco/include/Poco/BufferedBidirectionalStreamBuf.h:
+
+../Poco/include/Poco/BufferAllocator.h:
+
+../Poco/include/Poco/StreamUtil.h:
+
+../Thrift/thrift/TToString.h:
+
 http/../gen-cpp/ProfileServices.h:
 
 ../Thrift/thrift/TDispatchProcessor.h:
@@ -268,6 +291,10 @@ http/../gen-cpp/SocialServices_types.h:
 
 ../Thrift/thrift/cxxfunctional.h:
 
+http/../gen-cpp/FriendServices.h:
+
+http/../gen-cpp/NewsFeedService.h:
+
 http/Connection.h:
 
 ../Thrift/thrift/protocol/TBinaryProtocol.h:
@@ -295,5 +322,3 @@ http/Connection.h:
 ../Thrift/thrift/concurrency/PosixThreadFactory.h:
 
 ../Thrift/thrift/concurrency/Thread.h:
-
-http/../gen-cpp/FriendServices.h:

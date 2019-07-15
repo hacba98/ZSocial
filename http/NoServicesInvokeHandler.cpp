@@ -16,16 +16,30 @@ using namespace Poco::Net;
 void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerResponse &res){
 	string url = req.getURI();
 	
+	// check for cookie
+	NameValueCollection nvc;
+	req.getCookies(nvc);
+	string uid = nvc.get("zuid", "no_cookies");
+	
 	// serve login - entry page
 	if (url.empty() || url == "/"){
-		res.setStatus(HTTPResponse::HTTP_OK);
-		res.setContentType("text/html");
+		bool flag = true;
+		// if cookie has data
+		if (!(uid == "no_cookies")){
+			url = "/dashboard";
+			flag = false;
+		}
 		
-		try {
-			url = "./src/index.html";
-			res.sendFile(url, "text/html");
-		} catch (Exception e){
-			cout << e.message() << endl;
+		if (flag){
+			res.setStatus(HTTPResponse::HTTP_OK);
+			res.setContentType("text/html");
+
+			try {
+				url = "./src/index.html";
+				res.sendFile(url, "text/html");
+			} catch (Exception e) {
+				cout << e.message() << endl;
+			}
 		}
 	} 
 	
@@ -48,6 +62,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		res.setContentType("text/html");
 		
 		try {
+			Application::instance().logger().information(uid);
 			Poco::FileInputStream htmlFile("./src/dashboard.html");
 			string dashboardString;
 			htmlFile >> dashboardString;
@@ -55,7 +70,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 			// retrieve list friend's newsfeed
 			FeedResult feedRet;
 			NewsFeedConnection *feedConn;
-			while(!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
+			//while(!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 			//feedConn->client()->getFeed(feedRet, i32);
 			
 		} catch (Exception e){

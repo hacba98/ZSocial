@@ -15,7 +15,7 @@
 
 boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
-boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_friends;
+boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
 
 using namespace std;
 using namespace Poco;
@@ -37,7 +37,7 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
 	} else if (url == "/newsfeed"){
 		NewsFeedConnection *borrowObj;
 		while(!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
-		return new FriendRequestHandler(borrowObj);
+		return new NewsFeedRequestHandler(borrowObj);
 	} else {
 		return new NoServicesInvokeHandler;
 	}
@@ -46,7 +46,6 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
 //////////////////////////////////////
 
 void ProfileRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerResponse& res){
-	Application::instance().logger().information("line 76");
         std::string url = req.getURI();
 	if (url.find("/profile/login/") == 0)
 		return handleLogin(req, res);
@@ -77,7 +76,6 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest &req, Po
     int tz_diff;
     Poco::DateTimeParser::parse("yyyy-mm-dd", form.get("birth", "2000-01-01"), birthDate, tz_diff);
     int birth = (int)(birthDate.timestamp().epochTime());
-    app.logger().information(birth);
     UserProfile profile;
     TOOL::setProfile(profile , name,gender ,birth,phoneNumber,username ,password);
 
@@ -97,6 +95,7 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest &req, Po
 	res.send().flush();
 };
 
+using apache::thrift::to_string;
 void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res){
 	// parsing data: username and password
 	istream& body_stream = req.stream();
@@ -110,6 +109,15 @@ void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco:
 	
 	if (loginRet.code == ErrorCode::SUCCESS){ // valid case need to response token
 		res.setStatus(HTTPResponse::HTTP_OK);
+		HTTPCookie cookie;
+		cookie.setMaxAge(60*60*24); // 1 year life time
+		cookie.setName("zuid");
+		cookie.setValue(to_string(loginRet.profile.id));
+		cookie.setDomain("localhost");
+		cookie.setPath("/");
+		res.set("Set-Cookie", cookie.toString());
+
+		//string cookie = sprintf("ZUID=%s", to_string(loginRet.profile.id));
 		res.set("valid", "true");
 	} else if (loginRet.code == ErrorCode::USER_NOT_FOUND){
 		res.setStatus(HTTPResponse::HTTP_NOT_FOUND);

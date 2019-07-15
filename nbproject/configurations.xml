@@ -8,8 +8,12 @@
     <logicalFolder name="gen-cpp" displayName="gen-cpp" projectFiles="true">
       <itemPath>gen-cpp/FriendServices.cpp</itemPath>
       <itemPath>gen-cpp/FriendServices.h</itemPath>
+      <itemPath>gen-cpp/NewsFeedService.cpp</itemPath>
+      <itemPath>gen-cpp/NewsFeedService.h</itemPath>
       <itemPath>gen-cpp/ProfileServices.cpp</itemPath>
       <itemPath>gen-cpp/ProfileServices.h</itemPath>
+      <itemPath>gen-cpp/SocialServices.cpp</itemPath>
+      <itemPath>gen-cpp/SocialServices.h</itemPath>
       <itemPath>gen-cpp/SocialServices_constants.cpp</itemPath>
       <itemPath>gen-cpp/SocialServices_constants.h</itemPath>
       <itemPath>gen-cpp/SocialServices_types.cpp</itemPath>
@@ -111,9 +115,17 @@
       </item>
       <item path="gen-cpp/FriendServices.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="gen-cpp/NewsFeedService.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/NewsFeedService.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="gen-cpp/ProfileServices.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gen-cpp/ProfileServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="gen-cpp/SocialServices_constants.cpp"
             ex="false"
@@ -177,9 +189,17 @@
       </item>
       <item path="gen-cpp/FriendServices.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="gen-cpp/NewsFeedService.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/NewsFeedService.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="gen-cpp/ProfileServices.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gen-cpp/ProfileServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="gen-cpp/SocialServices_constants.cpp"
             ex="false"

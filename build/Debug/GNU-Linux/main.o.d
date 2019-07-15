@@ -70,7 +70,9 @@ build/Debug/GNU-Linux/main.o: main.cpp \
  ../Poco/include/Poco/Net/HTTPCookie.h \
  ../Poco/include/Poco/Net/HTMLForm.h ../Poco/include/Poco/ObjectPool.h \
  ../Poco/include/Poco/Poco.h ../Poco/include/Poco/Condition.h \
- ../Poco/include/Poco/ScopedUnlock.h http/./../gen-cpp/ProfileServices.h \
+ ../Poco/include/Poco/ScopedUnlock.h ../Poco/include/Poco/DateTime.h \
+ ../Poco/include/Poco/DateTimeParser.h \
+ http/./../gen-cpp/ProfileServices.h \
  ../Thrift/thrift/TDispatchProcessor.h ../Thrift/thrift/TProcessor.h \
  ../Thrift/thrift/protocol/TProtocol.h \
  ../Thrift/thrift/transport/TTransport.h ../Thrift/thrift/Thrift.h \
@@ -85,7 +87,8 @@ build/Debug/GNU-Linux/main.o: main.cpp \
  ../Thrift/thrift/concurrency/Exception.h \
  http/./../gen-cpp/SocialServices_types.h \
  ../Thrift/thrift/TApplicationException.h \
- ../Thrift/thrift/cxxfunctional.h http/./Connection.h \
+ ../Thrift/thrift/cxxfunctional.h http/./../gen-cpp/FriendServices.h \
+ http/./../gen-cpp/NewsFeedService.h http/./Connection.h \
  ../Thrift/thrift/protocol/TBinaryProtocol.h \
  ../Thrift/thrift/protocol/TVirtualProtocol.h \
  ../Thrift/thrift/protocol/TBinaryProtocol.tcc \
@@ -98,7 +101,7 @@ build/Debug/GNU-Linux/main.o: main.cpp \
  ../Thrift/thrift/transport/TFileTransport.h \
  ../Thrift/thrift/concurrency/PlatformThreadFactory.h \
  ../Thrift/thrift/concurrency/PosixThreadFactory.h \
- ../Thrift/thrift/concurrency/Thread.h http/./../gen-cpp/FriendServices.h
+ ../Thrift/thrift/concurrency/Thread.h
 
 ../Poco/include/Poco/Util/Application.h:
 
@@ -316,6 +319,10 @@ http/./ZRequestHandler.h:
 
 ../Poco/include/Poco/ScopedUnlock.h:
 
+../Poco/include/Poco/DateTime.h:
+
+../Poco/include/Poco/DateTimeParser.h:
+
 http/./../gen-cpp/ProfileServices.h:
 
 ../Thrift/thrift/TDispatchProcessor.h:
@@ -356,6 +363,10 @@ http/./../gen-cpp/SocialServices_types.h:
 
 ../Thrift/thrift/cxxfunctional.h:
 
+http/./../gen-cpp/FriendServices.h:
+
+http/./../gen-cpp/NewsFeedService.h:
+
 http/./Connection.h:
 
 ../Thrift/thrift/protocol/TBinaryProtocol.h:
@@ -383,5 +394,3 @@ http/./Connection.h:
 ../Thrift/thrift/concurrency/PosixThreadFactory.h:
 
 ../Thrift/thrift/concurrency/Thread.h:
-
-http/./../gen-cpp/FriendServices.h:

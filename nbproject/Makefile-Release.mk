@@ -36,7 +36,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/gen-cpp/FriendServices.o \
+	${OBJECTDIR}/gen-cpp/NewsFeedService.o \
 	${OBJECTDIR}/gen-cpp/ProfileServices.o \
+	${OBJECTDIR}/gen-cpp/SocialServices.o \
 	${OBJECTDIR}/gen-cpp/SocialServices_constants.o \
 	${OBJECTDIR}/gen-cpp/SocialServices_types.o \
 	${OBJECTDIR}/http/Connection.o \
@@ -75,10 +77,20 @@ ${OBJECTDIR}/gen-cpp/FriendServices.o: gen-cpp/FriendServices.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/FriendServices.o gen-cpp/FriendServices.cpp
 
+${OBJECTDIR}/gen-cpp/NewsFeedService.o: gen-cpp/NewsFeedService.cpp
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/NewsFeedService.o gen-cpp/NewsFeedService.cpp
+
 ${OBJECTDIR}/gen-cpp/ProfileServices.o: gen-cpp/ProfileServices.cpp
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/ProfileServices.o gen-cpp/ProfileServices.cpp
+
+${OBJECTDIR}/gen-cpp/SocialServices.o: gen-cpp/SocialServices.cpp
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/SocialServices.o gen-cpp/SocialServices.cpp
 
 ${OBJECTDIR}/gen-cpp/SocialServices_constants.o: gen-cpp/SocialServices_constants.cpp
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp

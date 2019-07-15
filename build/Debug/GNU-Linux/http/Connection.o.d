@@ -56,7 +56,7 @@ build/Debug/GNU-Linux/http/Connection.o: http/Connection.cpp \
  ../Thrift/thrift/async/TConcurrentClientSyncInfo.h \
  http/../gen-cpp/SocialServices_types.h \
  ../Thrift/thrift/TApplicationException.h \
- http/../gen-cpp/FriendServices.h
+ http/../gen-cpp/FriendServices.h http/../gen-cpp/NewsFeedService.h
 
 http/Connection.h:
 
@@ -227,3 +227,5 @@ http/../gen-cpp/SocialServices_types.h:
 ../Thrift/thrift/TApplicationException.h:
 
 http/../gen-cpp/FriendServices.h:
+
+http/../gen-cpp/NewsFeedService.h:
