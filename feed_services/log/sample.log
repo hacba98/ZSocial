@@ -50,3 +50,8 @@ Start
 		createNewsFeed
 		createNewsFeed
 		createNewsFeed
+Start
+	Open database
+	Create cache
+	Start worker system
+	starting server up

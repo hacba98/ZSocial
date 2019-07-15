@@ -22,7 +22,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 	string uid = nvc.get("zuid", "no_cookies");
 	
 	// serve login - entry page
-	if (url.empty() || url == "/"){
+	if (url.empty() || url == "/" || url == "/login"){
 		bool flag = true;
 		// if cookie has data
 		if (!(uid == "no_cookies")){
@@ -41,6 +41,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 				cout << e.message() << endl;
 			}
 		}
+		return;
 	} 
 	
 	// serve register page
@@ -54,6 +55,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		} catch (Exception e){
 			cout << e.message() << endl;
 		}
+		return;
 	}
 	
 	// serve dashboard
@@ -82,6 +84,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		} catch (Exception e){
 			Poco::Util::Application::instance().logger().error(e.message());
 		}
+		return;
 	}
 	
 	// serve add friend page
@@ -95,5 +98,10 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		} catch (Exception e){
 			cout << e.message() << endl;
 		}
+		return;
 	}
+	
+	// serve unknow path
+	res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+	return;
 }

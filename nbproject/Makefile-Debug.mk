@@ -42,7 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/gen-cpp/SocialServices_constants.o \
 	${OBJECTDIR}/gen-cpp/SocialServices_types.o \
 	${OBJECTDIR}/http/Connection.o \
-	${OBJECTDIR}/http/MultiplexedClient.o \
+	${OBJECTDIR}/http/FriendRequestHandler.o \
 	${OBJECTDIR}/http/NoServicesInvokeHandler.o \
 	${OBJECTDIR}/http/SubHTTPServer.o \
 	${OBJECTDIR}/http/ZRequestHandler.o \
@@ -118,10 +118,10 @@ ${OBJECTDIR}/http/Connection.o: http/Connection.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/Connection.o http/Connection.cpp
 
-${OBJECTDIR}/http/MultiplexedClient.o: http/MultiplexedClient.cpp
+${OBJECTDIR}/http/FriendRequestHandler.o: http/FriendRequestHandler.cpp
 	${MKDIR} -p ${OBJECTDIR}/http
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/MultiplexedClient.o http/MultiplexedClient.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/FriendRequestHandler.o http/FriendRequestHandler.cpp
 
 ${OBJECTDIR}/http/NoServicesInvokeHandler.o: http/NoServicesInvokeHandler.cpp
 	${MKDIR} -p ${OBJECTDIR}/http

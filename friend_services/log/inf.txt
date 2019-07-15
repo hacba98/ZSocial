@@ -16,3 +16,11 @@ Un-initializing Subsystem-Cache .....OK ♪
 Un-initializing Subsystem-KyotoCabinet .......
 Un-initializing Subsystem-KyotoCabinet .....OK ♪
 Server is starting at port 3030
+%$%$%$%$%$%$%$% STOP SERVER $%$%$%$%$%$%$%$%
+Un-initializing Subsystem-Cache .......
+Hit rate of friend.cache.friendRequest = 0.500000.
+Hit rate of friend.cache.pendingUserId = 0.500000.
+Un-initializing Subsystem-Cache .....OK ♪
+Un-initializing Subsystem-KyotoCabinet .......
+Un-initializing Subsystem-KyotoCabinet .....OK ♪
+Server is starting at port 3030

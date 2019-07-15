@@ -6,41 +6,103 @@ and open the template in the editor.
 -->
 <html>
 	<head>
-		<title>TODO supply a title</title>
+		<title>Z-Social</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			body {
+				margin: 0;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.topnav {
+				overflow: hidden;
+				background-color: #007acc;
+			}
+
+			.topnav a {
+				float: right;
+				color: #f2f2f2;
+				text-align: center;
+				padding: 14px 32px;
+				text-decoration: none;
+				font-size: 17px;
+			}
+
+			.topnav a:hover {
+				background-color: #ddd;
+				color: black;
+			}
+
+			.topnav a.active {
+				background-color: #4CAF50;
+				color: white;
+			}
+			
+			.split {
+				height: 95%;
+				width: 50%;
+				position: fixed;
+				z-index: 1;
+				top: 0;
+				overflow-x: hidden;
+				top: 5%;
+				padding: 50;
+				
+			}
+
+			.left {
+				left: 0;
+				text-align: center;
+			}
+
+			.right {
+				right: 0;
+			}
+			
+			.centered {
+				position: absolute;
+				top: 40%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
-		<form action="/addFriend" method="POST">
-			<h2>Add Friend</h2>
-			<label>Your Id </label><br>
-			<input type="text" name="addfriend.userid" required>
-			<br><br>
-			<label>Your Friend Id </label><br>
-			<input type="text" name="addfriend.friendid" required>
-			<br><br>
-			<label>Say something to your friend</label><br>
-			<textarea name="addfriend.greeting" rows="2" cols="20">Hi! Let's make friend.</textarea><br>
-			<input type="submit" value="Add Friend">
-			<br><br>
-		</form>
-		<hr width="10%" align="left">
-		<form action="/viewRequest" method="POST">
+		<div class="topnav">
+			<a href="/logout">Logout</a>
+			<a class="active" href="/friend">Friend</a>
+			<a href="/message">Contact</a>
+			<a href="/profile">Profile</a>
+			<a href="/feed">My Feed</a>
+			<a href="/dashboard">Wall</a>
+		</div>
+		
+		<div class="split left">
+			<form action="/friend/add" method="POST">
+				<h2>Add Friend</h2>
+				<label>Your Friend's Username </label><br>
+				<input type="text" name="addfriend.friend_username" required>
+				<br><br>
+				<label>Say something to your friend</label><br>
+				<textarea name="addfriend.message" rows="3" cols="25">Hi! Let's make friend!</textarea><br>
+				<input type="submit" value="Add Friend">
+				<br><br>
+			</form>
+		</div>
+
+		<div class="split right">
 			<h2>View Friend Request</h2>
-			<label>Your Id </label><br>
-			<input type="text" name="viewrequest.userid" required>
-			<input type="submit" value="View">
 			<br><br>
-		</form>
-		<hr width="10%" align="left">
-		<form action="/viewFriend" method="POST">
+			<!--This will be load as list of pending requests-->
+			%s
+			<br><br>
 			<h2>View Friend List</h2>
-			<label>Your Id </label><br>
-			<input type="text" name="viewfriend.userid" required>
-			<input type="hidden" name="viewfriend.page" value=0>
-			<input type="hidden" name="viewfriend.pageSize" value=2>
-			<input type="submit" value="View">
 			<br><br>
-		</form>
+			<!--This will be load as friends list-->
+			%s
+			<br><br>
+		</div>
 	</body>
 </html>

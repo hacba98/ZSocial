@@ -48,8 +48,7 @@
     <logicalFolder name="http" displayName="http" projectFiles="true">
       <itemPath>http/Connection.cpp</itemPath>
       <itemPath>http/Connection.h</itemPath>
-      <itemPath>http/MultiplexedClient.cpp</itemPath>
-      <itemPath>http/MultiplexedClient.h</itemPath>
+      <itemPath>http/FriendRequestHandler.cpp</itemPath>
       <itemPath>http/NoServicesInvokeHandler.cpp</itemPath>
       <itemPath>http/SubHTTPServer.cpp</itemPath>
       <itemPath>http/SubHTTPServer.h</itemPath>
@@ -217,9 +216,7 @@
       </item>
       <item path="http/Connection.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="http/MultiplexedClient.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="http/MultiplexedClient.h" ex="false" tool="3" flavor2="0">
+      <item path="http/FriendRequestHandler.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="http/NoServicesInvokeHandler.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -367,9 +364,7 @@
       </item>
       <item path="http/Connection.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="http/MultiplexedClient.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="http/MultiplexedClient.h" ex="false" tool="3" flavor2="0">
+      <item path="http/FriendRequestHandler.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="http/NoServicesInvokeHandler.cpp" ex="false" tool="1" flavor2="0">
       </item>
