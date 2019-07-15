@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="feed_services"
+                   displayName="feed_services"
+                   projectFiles="true">
+      <logicalFolder name="log" displayName="log" projectFiles="true">
+        <itemPath>feed_services/log/sample.log</itemPath>
+      </logicalFolder>
+      <itemPath>feed_services/app.properties</itemPath>
+      <itemPath>feed_services/dbfeed.kch</itemPath>
+      <itemPath>feed_services/dbinfo.kch</itemPath>
+      <itemPath>feed_services/dbpost.kch</itemPath>
+      <itemPath>feed_services/dbuser.kch</itemPath>
+      <itemPath>feed_services/serverd</itemPath>
+    </logicalFolder>
+    <logicalFolder name="friend_services"
+                   displayName="friend_services"
+                   projectFiles="true">
+      <logicalFolder name="log" displayName="log" projectFiles="true">
+        <itemPath>friend_services/log/inf.txt</itemPath>
+      </logicalFolder>
+      <logicalFolder name="storage" displayName="storage" projectFiles="true">
+        <itemPath>friend_services/storage/friend.counter.kch</itemPath>
+        <itemPath>friend_services/storage/friend.list.kch</itemPath>
+        <itemPath>friend_services/storage/friend.pending.kch</itemPath>
+        <itemPath>friend_services/storage/friend.pendingUser.kch</itemPath>
+        <itemPath>friend_services/storage/friend.request.kch</itemPath>
+        <itemPath>friend_services/storage/friend.user.kch</itemPath>
+      </logicalFolder>
+      <itemPath>friend_services/config.properties</itemPath>
+      <itemPath>friend_services/friend_services</itemPath>
+    </logicalFolder>
+    <logicalFolder name="gen-cpp" displayName="gen-cpp" projectFiles="true">
+      <itemPath>gen-cpp/FriendServices.cpp</itemPath>
+      <itemPath>gen-cpp/FriendServices.h</itemPath>
+      <itemPath>gen-cpp/NewsFeedService.cpp</itemPath>
+      <itemPath>gen-cpp/NewsFeedService.h</itemPath>
+      <itemPath>gen-cpp/ProfileServices.cpp</itemPath>
+      <itemPath>gen-cpp/ProfileServices.h</itemPath>
+      <itemPath>gen-cpp/SocialServices_constants.cpp</itemPath>
+      <itemPath>gen-cpp/SocialServices_constants.h</itemPath>
+      <itemPath>gen-cpp/SocialServices_types.cpp</itemPath>
+      <itemPath>gen-cpp/SocialServices_types.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="http" displayName="http" projectFiles="true">
+      <itemPath>http/Connection.cpp</itemPath>
+      <itemPath>http/Connection.h</itemPath>
+      <itemPath>http/MultiplexedClient.cpp</itemPath>
+      <itemPath>http/MultiplexedClient.h</itemPath>
+      <itemPath>http/NoServicesInvokeHandler.cpp</itemPath>
+      <itemPath>http/SubHTTPServer.cpp</itemPath>
+      <itemPath>http/SubHTTPServer.h</itemPath>
+      <itemPath>http/ZRequestHandler.cpp</itemPath>
+      <itemPath>http/ZRequestHandler.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="profile_services"
+                   displayName="profile_services"
+                   projectFiles="true">
+      <logicalFolder name="storage" displayName="storage" projectFiles="true">
+        <itemPath>profile_services/storage/keyGen.kch</itemPath>
+        <itemPath>profile_services/storage/userProfiles.kch</itemPath>
+      </logicalFolder>
+      <itemPath>profile_services/app.properties</itemPath>
+      <itemPath>profile_services/profile_services</itemPath>
+      <itemPath>profile_services/user_id.kch</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="src" displayName="src" projectFiles="true">
+      <itemPath>src/dashboard.html</itemPath>
+      <itemPath>src/friend.html</itemPath>
+      <itemPath>src/index.html</itemPath>
+      <itemPath>src/login.html</itemPath>
+      <itemPath>src/profile.html</itemPath>
+      <itemPath>src/register.html</itemPath>
+    </logicalFolder>
+    <logicalFolder name="util" displayName="util" projectFiles="true">
+      <itemPath>util/Converter.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>main.cpp</itemPath>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>gen-cpp</Elem>
+    <Elem>src</Elem>
+    <Elem>http</Elem>
+    <Elem>feed_services</Elem>
+    <Elem>friend_services</Elem>
+    <Elem>profile_services</Elem>
+    <Elem>util</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+        </ccTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>../ZSocial/lib</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>../ZSocial/lib</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerLibFileItem>/usr/local/lib/libPocoFoundationd.so</linkerLibFileItem>
+            <linkerLibFileItem>/usr/local/lib/libPocoNet.so</linkerLibFileItem>
+            <linkerLibFileItem>/usr/local/lib/libPocoUtil.so</linkerLibFileItem>
+            <linkerLibFileItem>/usr/local/lib/libthrift.so</linkerLibFileItem>
+            <linkerLibFileItem>/usr/local/lib/libthriftnb.so</linkerLibFileItem>
+          </linkerLibItems>
+          <commandLine>-levent -lpthread</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="feed_services/app.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbfeed.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbinfo.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbpost.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbuser.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/log/sample.log" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/serverd" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/config.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/friend_services" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/log/inf.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.counter.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.list.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.pending.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.pendingUser.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.request.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.user.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/NewsFeedService.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/NewsFeedService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/Connection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/Connection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/MultiplexedClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/MultiplexedClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/NoServicesInvokeHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="profile_services/app.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="profile_services/profile_services" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="profile_services/storage/keyGen.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="profile_services/storage/userProfiles.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="profile_services/user_id.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/dashboard.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/friend.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/index.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/login.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/profile.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/register.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="util/Converter.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="feed_services/app.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbfeed.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbinfo.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbpost.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/dbuser.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/log/sample.log" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="feed_services/serverd" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/config.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/friend_services" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/log/inf.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.counter.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.list.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.pending.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.pendingUser.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.request.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="friend_services/storage/friend.user.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/FriendServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/NewsFeedService.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/NewsFeedService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/ProfileServices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_constants.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gen-cpp/SocialServices_types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/Connection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/Connection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/MultiplexedClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/MultiplexedClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/NoServicesInvokeHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/SubHTTPServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/ZRequestHandler.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="profile_services/app.properties" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="profile_services/profile_services" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="profile_services/storage/keyGen.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="profile_services/storage/userProfiles.kch"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="profile_services/user_id.kch" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/dashboard.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/friend.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/index.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/login.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/profile.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/register.html" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="util/Converter.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

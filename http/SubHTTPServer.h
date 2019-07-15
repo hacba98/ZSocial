@@ -68,6 +68,7 @@ private:
 	Poco::Timespan _keepAliveTimeout; //micro seconds
 	
 	boost::shared_ptr<Poco::Net::HTTPServer> _core;
+	//Poco::ThreadPool& _pool;
 };
 
 #endif /* SUBHTTPSERVER_H */

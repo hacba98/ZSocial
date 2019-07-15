@@ -12,6 +12,8 @@
  */
 
 
+#include <Poco/ThreadPool.h>
+
 #include "SubHTTPServer.h"
 
 using namespace std;
@@ -34,6 +36,24 @@ void SubHTTPServer::initCommon(){
 }
 
 // control methods
+void SubHTTPServer::start(){
+	using apache::thrift::to_string;
+	
+	try {
+		if (!isRunning()){
+			// log info
+			Application::instance().logger().information(
+				Logger::format("Web Server is running at port $0", to_string(_listenPort)));
+			// starting server
+			run();
+		} else {
+			throw new Poco::Exception("Server is already running");
+		}
+	} catch (Poco::Exception e){
+		Application::instance().logger().error(e.message());
+	}
+}
+
 void SubHTTPServer::run () {
 	if (_running) {
 		throw Poco::Exception("Server is already start", Application::EXIT_NOHOST);
@@ -86,11 +106,17 @@ void SubHTTPServer::initialize(Application& app){
 		
 		// thread pool for connection pool - threadpool for accepting incoming requests
 		Poco::ThreadPool connectionPool("connectionPool", _minConnectionPool, _maxConnectionPool);
+		//_pool = connectionPool;
+		
 		// server socket
 		ServerSocket listenSocket(_listenPort);
 		
+		Poco::ThreadPool::defaultPool().addCapacity(_maxConnectionPool);
+		
+		// some issue cannot use new thread pool as arguments in create new HTTP Server
+		// solution for now: using default Pool instead
 		boost::shared_ptr<HTTPServer> server(new HTTPServer
-			(new ZRequestHandlerFactory, connectionPool, listenSocket, params));
+			(new ZRequestHandlerFactory, listenSocket, params));
 		
 		_core = server;
 		
@@ -108,7 +134,7 @@ void SubHTTPServer::initialize(Application& app){
 void SubHTTPServer::uninitialize(){
 	Application &app = Application::instance();
 	app.logger().information(Logger::format("Un-initializing $0 .......", name()));
-	
+	//app.logger().information(std::to_string(_core->totalConnections()));
 	// stop server if it is currently running
 	terminate();
 
@@ -125,20 +151,3 @@ void SubHTTPServer::defineOptions(Poco::Util::OptionSet& options){
 		.repeatable(false));
 }
 
-void SubHTTPServer::start(){
-	using apache::thrift::to_string;
-	
-	try {
-		if (!isRunning()){
-			// log info
-			Application::instance().logger().information(
-				Logger::format("Web Server is running at port $0", to_string(_listenPort)));
-			// starting server
-			run();
-		} else {
-			throw new Poco::Exception("Server is already running");
-		}
-	} catch (Poco::Exception e){
-		Application::instance().logger().error(e.message());
-	}
-}

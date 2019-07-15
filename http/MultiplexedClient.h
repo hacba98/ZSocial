@@ -14,8 +14,8 @@
 #ifndef MULTIPLEXEDCLIENT_H
 #define MULTIPLEXEDCLIENT_H
 
-#include "../src/gen-cpp/FriendServices.h"
-#include "../src/gen-cpp/ProfileServices.h"
+#include "../gen-cpp/FriendServices.h"
+#include "../gen-cpp/ProfileServices.h"
 
 class MultiplexedClient {
 public:
