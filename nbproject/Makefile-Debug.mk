@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/gen-cpp/FriendServices.o \
 	${OBJECTDIR}/gen-cpp/NewsFeedService.o \
 	${OBJECTDIR}/gen-cpp/ProfileServices.o \
+	${OBJECTDIR}/gen-cpp/SocialServices.o \
 	${OBJECTDIR}/gen-cpp/SocialServices_constants.o \
 	${OBJECTDIR}/gen-cpp/SocialServices_types.o \
 	${OBJECTDIR}/http/Connection.o \
@@ -96,6 +97,11 @@ ${OBJECTDIR}/gen-cpp/ProfileServices.o: gen-cpp/ProfileServices.cpp
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/ProfileServices.o gen-cpp/ProfileServices.cpp
+
+${OBJECTDIR}/gen-cpp/SocialServices.o: gen-cpp/SocialServices.cpp
+	${MKDIR} -p ${OBJECTDIR}/gen-cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gen-cpp/SocialServices.o gen-cpp/SocialServices.cpp
 
 ${OBJECTDIR}/gen-cpp/SocialServices_constants.o: gen-cpp/SocialServices_constants.cpp
 	${MKDIR} -p ${OBJECTDIR}/gen-cpp

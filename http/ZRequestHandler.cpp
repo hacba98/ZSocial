@@ -76,8 +76,7 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest &req, Po
     Poco::DateTime birthDate;
     int tz_diff;
     Poco::DateTimeParser::parse("yyyy-mm-dd", form.get("birth", "2000-01-01"), birthDate, tz_diff);
-    int birth = (int) (birthDate.timestamp().epochTime());
-    //app.logger().information(birth);
+    int birth = (int)(birthDate.timestamp().epochTime());
     UserProfile profile;
     TOOL::setProfile(profile, name, gender, birth, phoneNumber, username, password);
 
@@ -97,28 +96,36 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest &req, Po
     res.send().flush();
 };
 
-void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res) {
-    Application& app = Application::instance();
-    app.logger().information("LOGIN Request from " + req.clientAddress().toString());
-    // parsing data: username and password
-    istream& body_stream = req.stream();
-    HTMLForm form(req, body_stream);
-    string username = form.get("username");
-    string password = form.get("password");
+using apache::thrift::to_string;
+void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res){
+	// parsing data: username and password
+	istream& body_stream = req.stream();
+	HTMLForm form(req, body_stream);
+	string username = form.get("username");
+	string password = form.get("password");
+	
+	// using given connection to process server bussiness
+	loginResult loginRet;
+	_conn->client()->Login(loginRet, username, password);
+	
+	if (loginRet.code == ErrorCode::SUCCESS){ // valid case need to response token
+		res.setStatus(HTTPResponse::HTTP_OK);
+		HTTPCookie cookie;
+		cookie.setMaxAge(60*60*24); // 1 year life time
+		cookie.setName("zuid");
+		cookie.setValue(to_string(loginRet.profile.id));
+		cookie.setDomain("localhost");
+		cookie.setPath("/");
+		res.set("Set-Cookie", cookie.toString());
 
-    // using given connection to process server bussiness
-    loginResult loginRet;
-    _conn->client()->Login(loginRet, username, password);
-
-    if (loginRet.code == ErrorCode::SUCCESS) { // valid case need to response token
-        res.setStatus(HTTPResponse::HTTP_OK);
-        res.set("valid", "true");
-
-    } else if (loginRet.code == ErrorCode::USER_NOT_FOUND) {
-        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-        res.set("valid", "false");
-    }
-    res.send().flush();
+		//string cookie = sprintf("ZUID=%s", to_string(loginRet.profile.id));
+		res.set("valid", "true");
+	} else if (loginRet.code == ErrorCode::USER_NOT_FOUND){
+		res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+		res.set("valid", "false");
+	}
+	
+	res.send().flush();
 }
 
 void NewsFeedRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res) {
@@ -138,7 +145,7 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     string content = form.get("content");
     
     FeedCreateResult ret;
-    _conn->client()->createNewsFeed(ret,1,content,0);//owner wait for cookie feature finish,it 1 now, status is 0 because no IDEA
+    _conn->client()->createNewsFeed(ret,11,content,0);//owner wait for cookie feature finish,it 1 now, status is 0 because no IDEA
     Poco::Util::Application::instance().logger().information(std::to_string(ret.result));
     Poco::Util::Application::instance().logger().information(ret.message);
     Poco::Util::Application::instance().logger().information(std::to_string(ret.exitCode));

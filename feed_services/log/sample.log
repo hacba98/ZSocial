@@ -34,3 +34,19 @@ Start
 		GetFeed
 		createNewsFeed
 		createNewsFeed
+		GetFeed
+		createNewsFeed
+		GetFeed
+	shutting server down
+	Stop worker system
+	Close cache
+	Close database
+End.
+Start
+	Open database
+	Create cache
+	Start worker system
+	starting server up
+		createNewsFeed
+		createNewsFeed
+		createNewsFeed

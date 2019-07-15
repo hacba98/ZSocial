@@ -21,12 +21,16 @@
 #include "Poco/Net/HTTPServerRequest.h"
 #include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Net/HTMLForm.h"
+#include "Poco/Net/NameValueCollection.h"
+#include "Poco/Net/HTTPCookie.h"
 #include "Poco/ObjectPool.h"
 #include "Poco/Util/Application.h"
 #include "Poco/Net/HTMLForm.h"
 #include "Poco/DateTime.h"
 #include "Poco/DateTimeParser.h"
 #include "Poco/FileStream.h"
+
+#include "thrift/TToString.h"
 
 #include "../gen-cpp/ProfileServices.h"
 #include "../gen-cpp/FriendServices.h"

@@ -78,8 +78,8 @@ private:
 class NewsFeedConnection{
 public:
 	NewsFeedConnection(){
-		int profile_services_port = Poco::Util::Application::instance().config().getInt("services.feed.port", 4040);
-		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", profile_services_port));
+		int newsfeed_services_port = Poco::Util::Application::instance().config().getInt("services.feed.port", 4040);
+		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", newsfeed_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
 		
