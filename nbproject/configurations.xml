@@ -91,6 +91,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>config.properties</itemPath>
     <itemPath>main.cpp</itemPath>
   </logicalFolder>
   <sourceRootList>
@@ -131,6 +132,8 @@
           <commandLine>-levent -lpthread</commandLine>
         </linkerTool>
       </compileType>
+      <item path="config.properties" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="feed_services/app.properties" ex="false" tool="3" flavor2="0">
       </item>
       <item path="feed_services/dbfeed.kch" ex="false" tool="3" flavor2="0">
@@ -275,6 +278,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="config.properties" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="feed_services/app.properties" ex="false" tool="3" flavor2="0">
       </item>
       <item path="feed_services/dbfeed.kch" ex="false" tool="3" flavor2="0">
