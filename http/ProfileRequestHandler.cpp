@@ -81,7 +81,7 @@ void ProfileRequestHandler::handleLogin(
 	if (loginRet.code == ErrorCode::SUCCESS){ // valid case need to response token
 		res.setStatus(HTTPResponse::HTTP_OK);
 		HTTPCookie cookie;
-		cookie.setMaxAge(60*60*24); // 1 year life time
+		cookie.setMaxAge(60*60*24); // 1 year(day :v) life time
 		cookie.setName("zuid");
 		cookie.setValue(to_string(loginRet.profile.id));
 		cookie.setDomain("localhost");

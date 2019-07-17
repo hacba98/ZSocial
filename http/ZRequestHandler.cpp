@@ -16,6 +16,13 @@
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
 
+string ZRequestHandlerFactory::dashboardString;
+string ZRequestHandlerFactory::loginString;
+string ZRequestHandlerFactory::registerString;
+string ZRequestHandlerFactory::profileString;
+string ZRequestHandlerFactory::friendString;
+string ZRequestHandlerFactory::myfeedString;
+
 Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &req) {
     Application::instance().logger().information(req.getURI());
     std::string url = req.getURI();

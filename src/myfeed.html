@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			body {
+				margin: 0;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.topnav {
+				overflow: hidden;
+				background-color: #007acc;
+			}
+
+			.topnav a {
+				float: right;
+				color: #f2f2f2;
+				text-align: center;
+				padding: 14px 32px;
+				text-decoration: none;
+				font-size: 17px;
+			}
+
+			.topnav a:hover {
+				background-color: #ddd;
+				color: black;
+			}
+
+			.topnav a.active {
+				background-color: #4CAF50;
+				color: white;
+			}
+			
+			.split {
+				height: 95%%;
+				width: 20%%;
+				position: fixed;
+				z-index: 1;
+				top: 0;
+				overflow-x: hidden;
+				padding-top: 20px;
+				top: 5%%;
+			}
+
+			.left {
+				left: 0;
+				background-color: aqua;
+			}
+
+			.right {
+				right: 0;
+				background-color: red;
+			}
+			
+			.center {
+				left: 20%%;
+				right: 20%%;
+				background-color: whitesmoke;
+				width: 60%%;
+			}
+			
+			.centered {
+				position: absolute;
+				top: 10%%;
+				left: 50%%;
+				transform: translate(-50%%, 0%%);
+				text-align: center;
+			}
+			
+			.status_post {
+				min-height: 100px;
+				width: 350px;
+				border: solid 1px silver;
+				background: #fff;
+			}
+			
+			.post_button{
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div class="topnav">
+			<a href="/profile/logout">Logout</a>
+			<a href="/friend">Friend</a>
+			<a href="/message">Contact</a>
+			<a href="/myprofile">Profile</a>
+			<a class="active" href="/feed">My Feed</a>
+			<a href="/dashboard">Wall</a>
+		</div>
+		
+		<div class="split center">
+			<div class="centered">
+				<form method="POST" action="/newsFeed/create">
+					<p>What is in your mind?</p>
+					<textarea class="status_post" rows="4" name="content"></textarea><br>
+                                        <button type ="submit" class="post_button">Post</button>
+				</form>
+				<hr>
+				%s
+			</div>
+		</div>
+		
+		<div class="split left">
+			<p> Nothing in here </p>
+		</div>
+		
+		<div class="split right">
+			<div class="centered">
+				%s
+			</div>
+		</div>
+		
+		
+	</body>
+</html>

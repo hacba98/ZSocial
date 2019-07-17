@@ -62,16 +62,12 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
         res.setContentType("text/html");
 
         try {
-            Poco::FileInputStream htmlFile("./src/dashboard.html");
-            string line, dashboardString,result,feed,fr;
-            while (!htmlFile.eof()) {
-                htmlFile >> line;
-                dashboardString.append(line + "\n");
-            }
-
+            
+            string result,feed = "<p></p>",fr="%s";
+            
             std::ostream& ostr = res.send();
-            Poco::format(result,dashboardString,feed,fr);
-            ostr << dashboardString;
+            Poco::format(result,ZRequestHandlerFactory::dashboardString,feed,fr);
+            ostr << result;
         } catch (Exception e) {
             Poco::Util::Application::instance().logger().error(e.message());
         }
@@ -82,13 +78,6 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
         res.setContentType("text/html");
 
         try {
-            Poco::FileInputStream htmlFile("./src/dashboard.html");
-            string line, dashboardString;
-            while (!htmlFile.eof()) {
-                htmlFile >> line;
-                dashboardString.append(line + "\n");
-            }
-
             // retrieve list friend's newsfeed
             FeedCountResult feedRet;
             ListFeedResult listFeed;
@@ -96,14 +85,25 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
             while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
             feedConn->client()->getFeedCount(feedRet, atoi(uid.c_str()));
             feedConn->client()->getListFeed(listFeed,atoi(uid.c_str()),feedRet.result,5);
+            
+            // user data
+            ProfileConnection *profileConn;
+            GetUserResult userRet;
+            while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
+            profileConn->client()->GetProfile(userRet,atoi(uid.c_str()));
+            
             string result,feedString;
             if (listFeed.exitCode == 0){
                 for(auto i = listFeed.result.feedlist.begin(); i != listFeed.result.feedlist.end(); ++i){
-                    string feed ="<p>" + i->content + "</p>\n";
+                    int d,m,y;
+                    TOOL::getDMY(i->edit_time,d,m,y);
+                    string date = Poco::NumberFormatter::format(y)+"-"+Poco::NumberFormatter::format0(m,2) + "-" + Poco::NumberFormatter::format0(d,2);
+                    string feed ="<p text-align : right>" + userRet.profile.name + " - Date:" + date + "</p>\n" 
+                            +"<p text-align : left>" + i->content + "</p> <hr>\n";
                     feedString.append(feed);
                 }
             }
-            Poco::format(result,dashboardString,feedString);
+            Poco::format(result,ZRequestHandlerFactory::myfeedString,feedString);
             std::ostream& ostr = res.send();
             ostr << result;
         } catch (Exception e) {
@@ -116,16 +116,6 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
         res.setContentType("text/html");
 
         try {
-            Poco::FileInputStream htmlFile("./src/profile.html");
-            
-            string dashboardString;
-            while (!htmlFile.eof()) {
-                char line[255];
-                htmlFile.getline(line ,255);
-                dashboardString.append(line);
-                dashboardString.append("\n");
-            }
-            
             GetUserResult ret;
             ProfileConnection *profileConn;
             while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100))); // timeout 100 miliseconds
@@ -135,9 +125,8 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
             TOOL::getDMY(ret.profile.birth,d,m,y);
             string result,date,gender = ret.profile.gender?"Nam":"Nu";
             date = Poco::NumberFormatter::format(y)+"-"+Poco::NumberFormatter::format0(m,2) + "-" + Poco::NumberFormatter::format0(d,2);
-            Poco::format(result,dashboardString,ret.profile.username,ret.profile.name,gender,ret.profile.phoneNumber,date);
             
-            //Poco::Util::Application::instance().logger().information(result);
+            Poco::format(result,ZRequestHandlerFactory::profileString,ret.profile.username,ret.profile.name,gender,ret.profile.phoneNumber,date);
             
             std::ostream& ostr = res.send();
             ostr << result;

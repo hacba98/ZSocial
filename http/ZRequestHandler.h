@@ -61,6 +61,13 @@ public:
         ZRequestHandlerFactory::_pool_profiles = pool_profiles;
         ZRequestHandlerFactory::_pool_friends = pool_friends;
         ZRequestHandlerFactory::_pool_newsfeed = pool_newsfeed;
+        
+        loadString(dashboardString,"./src/dashboard.html");
+        loadString(loginString,"./src/index.html");
+        loadString(registerString,"./src/register.html");
+        loadString(profileString,"./src/profile.html");
+        loadString(friendString,"./src/friend.html");
+        loadString(myfeedString,"./src/myfeed.html");
     }
 
     virtual Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest &req);
@@ -76,11 +83,27 @@ public:
     static Poco::ObjectPool<NewsFeedConnection> * newsfeedPool() {
         return ZRequestHandlerFactory::_pool_newsfeed.get();
     }
+    
+    static string dashboardString;
+    static string loginString;
+    static string registerString;
+    static string profileString;
+    static string friendString;
+    static string myfeedString;
 
 private:
     static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
     static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
     static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
+    
+    void loadString(string& result, string path) {
+        Poco::FileInputStream htmlFile(path);
+        string line;
+        while (!htmlFile.eof()) {
+            htmlFile >> line;
+            result.append(line + "\n");
+        }
+    }
 };
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
