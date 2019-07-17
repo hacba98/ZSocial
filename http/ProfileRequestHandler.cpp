@@ -43,7 +43,7 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest& req, Po
 
     Poco::DateTime birthDate;
     int tz_diff;
-    Poco::DateTimeParser::parse("yyyy-mm-dd", form.get("birth", "2000-01-01"), birthDate, tz_diff);
+    Poco::DateTimeParser::parse("%Y-%n-%e", form.get("birth", "1900-01-01"), birthDate, tz_diff);
     int birth = (int)(birthDate.timestamp().epochTime());
     UserProfile profile;
     TOOL::setProfile(profile, name, gender, birth, phoneNumber, username, password);

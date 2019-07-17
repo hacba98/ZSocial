@@ -54,11 +54,17 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     HTMLForm form(req, body_stream);
     string content = form.get("content");
     
+    NameValueCollection nvc;
+    req.getCookies(nvc);
+    string uid = nvc.get("zuid", "no_cookies");
+    int id = atoi(uid.c_str());
+    
     FeedCreateResult ret;
-    _conn->client()->createNewsFeed(ret,11,content,0);//owner wait for cookie feature finish,it 1 now, status is 0 because no IDEA
-    Poco::Util::Application::instance().logger().information(std::to_string(ret.result));
-    Poco::Util::Application::instance().logger().information(ret.message);
-    Poco::Util::Application::instance().logger().information(std::to_string(ret.exitCode));
-    res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+    _conn->client()->createNewsFeed(ret,id,content,0);//status is 0 because no IDEA what it do
+    if (ret.exitCode == 0){
+        res.setStatus(HTTPResponse::HTTP_OK);
+    }else{
+        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+    }
     res.send().flush();
 };

@@ -63,6 +63,26 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 
         try {
             Poco::FileInputStream htmlFile("./src/dashboard.html");
+            string line, dashboardString,result,feed,fr;
+            while (!htmlFile.eof()) {
+                htmlFile >> line;
+                dashboardString.append(line + "\n");
+            }
+
+            std::ostream& ostr = res.send();
+            Poco::format(result,dashboardString,feed,fr);
+            ostr << dashboardString;
+        } catch (Exception e) {
+            Poco::Util::Application::instance().logger().error(e.message());
+        }
+        return;
+    }
+    if (url.find("/feed") == 0){
+        res.setChunkedTransferEncoding(true);
+        res.setContentType("text/html");
+
+        try {
+            Poco::FileInputStream htmlFile("./src/dashboard.html");
             string line, dashboardString;
             while (!htmlFile.eof()) {
                 htmlFile >> line;
@@ -70,19 +90,28 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
             }
 
             // retrieve list friend's newsfeed
-            FeedResult feedRet;
+            FeedCountResult feedRet;
+            ListFeedResult listFeed;
             NewsFeedConnection *feedConn;
             while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
-            feedConn->client()->getFeed(feedRet, atoi(uid.c_str()));
-
-
+            feedConn->client()->getFeedCount(feedRet, atoi(uid.c_str()));
+            feedConn->client()->getListFeed(listFeed,atoi(uid.c_str()),feedRet.result,5);
+            string result,feedString;
+            if (listFeed.exitCode == 0){
+                for(auto i = listFeed.result.feedlist.begin(); i != listFeed.result.feedlist.end(); ++i){
+                    string feed ="<p>" + i->content + "</p>\n";
+                    feedString.append(feed);
+                }
+            }
+            Poco::format(result,dashboardString,feedString);
             std::ostream& ostr = res.send();
-            ostr << dashboardString;
+            ostr << result;
         } catch (Exception e) {
             Poco::Util::Application::instance().logger().error(e.message());
         }
+        return;
     }
-    if (url == "/myprofile") {
+    if (url.find("/myprofile") == 0) {
         res.setChunkedTransferEncoding(true);
         res.setContentType("text/html");
 
@@ -115,6 +144,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
         } catch (Exception e) {
             Poco::Util::Application::instance().logger().error(e.message());
         }
+        return;
     }
     // serve add friend page
     if (url == "/friend") {
