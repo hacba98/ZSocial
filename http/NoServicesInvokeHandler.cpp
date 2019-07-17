@@ -44,7 +44,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
     }
 
     // serve register page
-    if (url == "/register") {
+    if (url.find("/register") == 0) {
         res.setStatus(HTTPResponse::HTTP_OK);
         res.setContentType("text/html");
 
