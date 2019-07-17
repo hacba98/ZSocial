@@ -22,12 +22,12 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 	string uid = nvc.get("zuid", "no_cookies");
 
 	// serve login - entry page
-	if (url.empty() || url == "/") {
+	if (url.empty() || url == "/" || url == "/login") {
 		bool flag = true;
 		// if cookie has data
 		if (!(uid == "no_cookies")) {
-			url = "/dashboard";
-			flag = false;
+			res.redirect("/dashboard");
+			return;
 		}
 
 		if (flag) {
@@ -40,6 +40,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 			} catch (Exception e) {
 				cout << e.message() << endl;
 			}
+			return;
 		}
 	}
 
