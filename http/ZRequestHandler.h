@@ -98,10 +98,12 @@ private:
     
     void loadString(string& result, string path) {
         Poco::FileInputStream htmlFile(path);
-        string line;
+        
         while (!htmlFile.eof()) {
-            htmlFile >> line;
-            result.append(line + "\n");
+            char line[255];
+            htmlFile.getline(line, 255);
+            result.append(line);
+            result.append("\n");
         }
     }
 };
@@ -186,6 +188,8 @@ public:
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     void handleCreateRequest(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
+    void handleUpdateRequest(Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
 private:
     NewsFeedConnection *_conn;

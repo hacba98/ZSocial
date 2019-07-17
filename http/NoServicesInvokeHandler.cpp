@@ -63,7 +63,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 
         try {
             
-            string result,feed = "<p></p>",fr="%s";
+            string result,feed = "%s",fr="%s";
             
             std::ostream& ostr = res.send();
             Poco::format(result,ZRequestHandlerFactory::dashboardString,feed,fr);
@@ -98,8 +98,12 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
                     int d,m,y;
                     TOOL::getDMY(i->edit_time,d,m,y);
                     string date = Poco::NumberFormatter::format(y)+"-"+Poco::NumberFormatter::format0(m,2) + "-" + Poco::NumberFormatter::format0(d,2);
-                    string feed ="<p text-align : right>" + userRet.profile.name + " - Date:" + date + "</p>\n" 
-                            +"<p text-align : left>" + i->content + "</p> <hr>\n";
+                    string feed ="<form name=\"feed_no_"+ std::to_string(i->id) +"\" onsubmit=\"updateFeed('"+std::to_string(i->id)+"')\">\n" +
+                            "<p name=\"feed_id\" hidden>"+ std::to_string(i->id) +"</p>\n" +
+                            "<p>" + userRet.profile.name + " - Date:" + date + "</p>\n" +
+                            "<textarea class=\"status_post\" rows=\"4\" name=\"content\">"+ i->content +"</textarea><br>\n" +
+                            "<input type =\"button\" class=\"post_button\" onClick=\"updateFeed('"+std::to_string(i->id)+"')\" value=\"UPDATE\">\n"+
+                            "</form> <hr>\n";
                     feedString.append(feed);
                 }
             }

@@ -49,7 +49,9 @@ void NewsFeedRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &req, Po
     std::string url = req.getURI();
     if (url.find("/newsFeed/create") == 0)
         return handleCreateRequest(req, res);
-    else  {
+    else if (url.find("/newsFeed/update") == 0)
+        return handleUpdateRequest(req, res);
+    else {
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
         res.send().flush();
     }
@@ -72,6 +74,25 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
         res.setStatus(HTTPResponse::HTTP_OK);
     }else{
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+    }
+    res.send().flush();
+};
+
+void NewsFeedRequestHandler::handleUpdateRequest(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
+    Poco::Util::Application::instance().logger().information("UPDATE FEED Request from " + req.clientAddress().toString());
+    istream& body_stream = req.stream();
+    HTMLForm form(req, body_stream);
+    string content = form.get("content");
+    int f_id = atoi(form.get("id").c_str());
+    
+    FeedUpdateResult ret;
+    _conn->client()->updateNewsFeed(ret,f_id,content,0);//status is 0 because no IDEA what it do
+    if (ret.exitCode == 0){
+        res.setStatus(HTTPResponse::HTTP_OK);
+        res.set("valid", "true");
+    }else{
+        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+        res.set("valid", "false");
     }
     res.send().flush();
 };
