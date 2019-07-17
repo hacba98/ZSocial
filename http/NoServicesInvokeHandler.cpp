@@ -20,6 +20,13 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 	NameValueCollection nvc;
 	req.getCookies(nvc);
 	string uid = nvc.get("zuid", "no_cookies");
+	
+	// serve icon request from browser
+	if (url == "/favicon.ico"){
+		url = "./src/icon.png";
+		res.sendFile(url, "image/png");
+		return;
+	}
 
 	// serve login - entry page
 	if (url.empty() || url == "/" || url == "/login") {

@@ -6,7 +6,6 @@
 
 #include "ZRequestHandler.h"
 
-boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 
 void ProfileRequestHandler::handleRequest(
             Poco::Net::HTTPServerRequest &req,
@@ -179,7 +178,8 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
         res.set(res.SET_COOKIE, cookie.toString());
         res.setStatus(HTTPResponse::HTTP_OK);
         res.set("valid", "true");
-        
+        res.redirect("/login");
+	return;
     } else {
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
         res.set("valid", "false");

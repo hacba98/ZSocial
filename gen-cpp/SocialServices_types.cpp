@@ -1456,7 +1456,7 @@ void listFriendResult::__set_idx(const int32_t val) {
   this->idx = val;
 }
 
-void listFriendResult::__set_friendList(const std::vector<FriendData> & val) {
+void listFriendResult::__set_friendList(const std::vector<int32_t> & val) {
   this->friendList = val;
 }
 
@@ -1512,7 +1512,7 @@ uint32_t listFriendResult::read(::apache::thrift::protocol::TProtocol* iprot) {
             uint32_t _i54;
             for (_i54 = 0; _i54 < _size50; ++_i54)
             {
-              xfer += this->friendList[_i54].read(iprot);
+              xfer += iprot->readI32(this->friendList[_i54]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1558,11 +1558,11 @@ uint32_t listFriendResult::write(::apache::thrift::protocol::TProtocol* oprot) c
 
   xfer += oprot->writeFieldBegin("friendList", ::apache::thrift::protocol::T_LIST, 3);
   {
-    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->friendList.size()));
-    std::vector<FriendData> ::const_iterator _iter56;
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->friendList.size()));
+    std::vector<int32_t> ::const_iterator _iter56;
     for (_iter56 = this->friendList.begin(); _iter56 != this->friendList.end(); ++_iter56)
     {
-      xfer += (*_iter56).write(oprot);
+      xfer += oprot->writeI32((*_iter56));
     }
     xfer += oprot->writeListEnd();
   }

@@ -13,8 +13,14 @@
 
 #include "ZRequestHandler.h"
 
+boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
+
+using namespace std;
+using namespace Poco;
+using namespace Poco::Util;
+using namespace Poco::Net;
 
 Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &req) {
     Application::instance().logger().information(req.getURI());

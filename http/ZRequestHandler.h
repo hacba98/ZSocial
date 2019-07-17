@@ -151,6 +151,12 @@ public:
 	void handleLoadPage(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
+		std::string uid,
+		int paging_index);
+	
+	void handleAcceptRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
 		std::string uid);
 
 private:
