@@ -29,6 +29,8 @@
 #include "Poco/DateTime.h"
 #include "Poco/DateTimeParser.h"
 #include "Poco/FileStream.h"
+#include "Poco/Format.h"
+#include "Poco/NumberFormatter.h"
 
 #include "thrift/TToString.h"
 
@@ -41,6 +43,10 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
+using namespace Poco;
+using namespace Poco::Util;
+using namespace Poco::Net;
 class ZRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
 public:
 
@@ -106,6 +112,14 @@ public:
             Poco::Net::HTTPServerResponse &res);
 
     void handleRegister(
+            Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
+    
+    void handleUpdate(
+            Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
+    
+    void handleLogout(
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
 private:

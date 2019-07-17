@@ -7,6 +7,21 @@ and open the template in the editor.
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+                <script>
+                    function onLogout(){
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.open('POST', url, true);
+			xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlHttp.onreadystatechange = function() {
+				if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+				    location.replace("/");
+				} else if (xmlHttp.status == 404){
+				    alert("Error 500 not work");
+				}
+			}
+			xmlHttp.send(params);
+                    }
+                </script>
 		<style>
 			body {
 				margin: 0;
@@ -87,10 +102,10 @@ and open the template in the editor.
 	</head>
 	<body>
 		<div class="topnav">
-			<a href="/logout">Logout</a>
+			<a href="/profile/logout">Logout</a>
 			<a href="/friend">Friend</a>
 			<a href="/message">Contact</a>
-			<a href="/profile">Profile</a>
+			<a href="/myprofile">Profile</a>
 			<a href="/feed">My Feed</a>
 			<a class="active" href="/dashboard">Wall</a>
 		</div>
