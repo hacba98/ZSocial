@@ -44,6 +44,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/http/Connection.o \
 	${OBJECTDIR}/http/MultiplexedClient.o \
 	${OBJECTDIR}/http/NoServicesInvokeHandler.o \
+	${OBJECTDIR}/http/ProfileRequestHandler.o \
 	${OBJECTDIR}/http/SubHTTPServer.o \
 	${OBJECTDIR}/http/ZRequestHandler.o \
 	${OBJECTDIR}/main.o
@@ -127,6 +128,11 @@ ${OBJECTDIR}/http/NoServicesInvokeHandler.o: http/NoServicesInvokeHandler.cpp
 	${MKDIR} -p ${OBJECTDIR}/http
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/NoServicesInvokeHandler.o http/NoServicesInvokeHandler.cpp
+
+${OBJECTDIR}/http/ProfileRequestHandler.o: http/ProfileRequestHandler.cpp
+	${MKDIR} -p ${OBJECTDIR}/http
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/http/ProfileRequestHandler.o http/ProfileRequestHandler.cpp
 
 ${OBJECTDIR}/http/SubHTTPServer.o: http/SubHTTPServer.cpp
 	${MKDIR} -p ${OBJECTDIR}/http

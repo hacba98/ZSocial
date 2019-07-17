@@ -51,6 +51,7 @@
       <itemPath>http/MultiplexedClient.cpp</itemPath>
       <itemPath>http/MultiplexedClient.h</itemPath>
       <itemPath>http/NoServicesInvokeHandler.cpp</itemPath>
+      <itemPath>http/ProfileRequestHandler.cpp</itemPath>
       <itemPath>http/SubHTTPServer.cpp</itemPath>
       <itemPath>http/SubHTTPServer.h</itemPath>
       <itemPath>http/ZRequestHandler.cpp</itemPath>
@@ -223,6 +224,8 @@
       </item>
       <item path="http/NoServicesInvokeHandler.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="http/ProfileRequestHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="http/SubHTTPServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="http/SubHTTPServer.h" ex="false" tool="3" flavor2="0">
@@ -372,6 +375,8 @@
       <item path="http/MultiplexedClient.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="http/NoServicesInvokeHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="http/ProfileRequestHandler.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="http/SubHTTPServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
