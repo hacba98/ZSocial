@@ -2,7 +2,6 @@
 /dist
 /nbproject
 /src/gen-cpp/FriendServices_server.skeleton.cpp
-/friend_services/log
-/friend_services/storage
-/profile_services/storage
-/feed_services/log
+/friend_services
+/feed_services
+/profile_services
