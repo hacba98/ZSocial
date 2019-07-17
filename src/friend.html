@@ -17,7 +17,7 @@
 				http.onreadystatechange = function (){
 					if(http.readyState == 4 && http.status == 200){
 						alert("Your request had been sent.");
-					} else if (http.status == 400){
+					} else if (http.status == 500){
 						alert("Username " + friend_username + " doesn't existed");
 					}
 				}

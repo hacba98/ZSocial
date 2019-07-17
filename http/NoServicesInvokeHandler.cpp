@@ -21,10 +21,6 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 	req.getCookies(nvc);
 	string uid = nvc.get("zuid", "no_cookies");
 	
-	// Guard
-	if (uid == "no_cookies")
-		url = "/";
-	
 	// serve login - entry page
 	if (url.empty() || url == "/" || url == "/login"){
 		bool flag = true;
@@ -61,6 +57,10 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		}
 		return;
 	}
+	
+	// Guard
+	if (uid == "no_cookies")
+		url = "/";
 	
 	// serve dashboard
 	if (url.find("/dashboard") == 0){

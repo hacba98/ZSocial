@@ -117,7 +117,8 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 		out.flush();
 	} catch(...){
 		Application::instance().logger().error("Error-Load Friend Page Error");
-		return res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+		res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+		res.send().flush();
 	}
 }
 
@@ -143,8 +144,8 @@ void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerRes
 		// check friend ID existed
 		if (fr_id == -1){ // not found
 			string reason = "Username not found";
-			res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-			//res.setStatusAndReason(HTTPResponse::HTTP_NOT_FOUND, reason);
+			res.setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR, reason);
+			res.send().flush();
 			return;
 		}
 		
@@ -157,6 +158,7 @@ void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerRes
 		// calling async api
 		_conn->client()->addFriend(request);
 		res.setStatus(HTTPResponse::HTTP_OK);
+		res.send().flush();
 	} catch (...){ // some thing wrong
 		Application::instance().logger().error("Error-Add Friend Request");
 		return res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);

@@ -52,7 +52,6 @@ void ProfileRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerResp
     if (url.find("/profile/login") == 0)
         return handleLogin(req, res);
     else if (url.find("/profile/register") == 0) {
-
         return handleRegister(req, res);
     }
 
@@ -117,7 +116,7 @@ void ProfileRequestHandler::handleLogin(Poco::Net::HTTPServerRequest& req, Poco:
 		cookie.setValue(to_string(loginRet.profile.id));
 		cookie.setDomain("localhost");
 		cookie.setPath("/");
-		res.set("Set-Cookie", cookie.toString());
+		res.set(res.SET_COOKIE, cookie.toString());
 
 		//string cookie = sprintf("ZUID=%s", to_string(loginRet.profile.id));
 		res.set("valid", "true");
