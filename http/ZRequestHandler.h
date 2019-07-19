@@ -229,6 +229,8 @@ public:
             Poco::Net::HTTPServerResponse &res);
     void handleUpdateRequest(Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
+    void handleDeleteRequest(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
 private:
     NewsFeedConnection *_conn;
 };
@@ -255,6 +257,16 @@ public:
         d = ltm->tm_mday;
         m = ltm->tm_mon + 1;
         y = ltm->tm_year + 1900;
+    }
+    
+    static void getDMY(int birth, int &d, int &m, int &y , int &hh, int &pp) {
+        time_t b = (time_t) birth;
+        tm *ltm = localtime(&b);
+        d = ltm->tm_mday;
+        m = ltm->tm_mon + 1;
+        y = ltm->tm_year + 1900;
+        hh = ltm->tm_hour;
+        pp = ltm->tm_min;
     }
 
     static void setProfile(UserProfile& profile, std::string name, std::string gender, int birth, long phoneNumber, std::string username, std::string password) {
