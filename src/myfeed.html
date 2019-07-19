@@ -29,6 +29,26 @@ and open the template in the editor.
 				}
 				xmlHttp.send(params);
 			}
+                        
+                        function removeFeed(name){
+                                console.log(name);
+                                
+				var url = "/newsFeed/delete";
+				var params = "id=" + name;
+				console.log(params);
+				
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.open('POST', url, true);
+				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                                xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+					    location.replace("/feed/");
+					} else if (xmlHttp.status == 404){
+					    alert("Error 500 not work");
+					}
+				}
+				xmlHttp.send(params);
+			}
 		</script>
 		<style>
 			body {
@@ -82,10 +102,8 @@ and open the template in the editor.
 			}
 			
 			.center {
-				left: 20%%;
-				right: 20%%;
-				background-color: whitesmoke;
-				width: 60%%;
+				width: 100%%;
+				background-color: cornsilk;
 			}
 			
 			.centered {
@@ -106,6 +124,52 @@ and open the template in the editor.
 			.post_button{
 				
 			}
+                        .card {
+                            box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+                            max-width: 500px;
+                            margin: auto;
+                            text-align: center;
+                            font-family: countryside;
+                            background-color: white;
+                        }
+
+                        .price {
+                            color: grey;
+                            font-size: 22px;
+                        }
+
+                        .updateBTN {
+                            border: white;
+                            outline: 0;
+                            padding: 12px;
+                            color: white;
+                            background-color: #2479ff;
+                            text-align: center;
+                            cursor: pointer;
+                            width: 50%%;
+                            font-size: 18px;
+                            left : 0;
+                            position: fixed;
+                        }
+                        .deleteBTN {
+                            border: white;
+                            outline: 0;
+                            padding: 12px;
+                            color: white;
+                            background-color: blue;
+                            text-align: center;
+                            cursor: pointer;
+                            width: 50%%;
+                            font-size: 18px;
+                            right: 0;
+                            position: fixed;
+                        }
+                        .updateBTN:hover {
+                            background-color: #1a64d9;
+                        }
+                        .deleteBTN:hover {
+                            background-color: #1a64d9;
+                        }
 		</style>
 	</head>
 	<body>
@@ -130,15 +194,6 @@ and open the template in the editor.
 			</div>
 		</div>
 		
-		<div class="split left">
-			<p> Nothing in here </p>
-		</div>
-		
-		<div class="split right">
-			<div class="centered">
-				%s
-			</div>
-		</div>
 		
 	</body>
 </html>

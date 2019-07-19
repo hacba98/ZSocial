@@ -60,6 +60,8 @@ void NewsFeedRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &req, Po
         return handleCreateRequest(req, res);
     else if (url.find("/newsFeed/update") == 0)
         return handleUpdateRequest(req, res);
+    else if (url.find("/newsFeed/delete") == 0)
+        return handleDeleteRequest(req, res);
     else {
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
         res.send().flush();
@@ -75,7 +77,7 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    int id = atoi(uid.c_str());
+    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
     
     FeedCreateResult ret;
     _conn->client()->createNewsFeed(ret,id,content,0);//status is 0 because no IDEA what it do
@@ -84,7 +86,7 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     }else{
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
     }
-    res.send().flush();
+    res.redirect("/feed");
 };
 
 void NewsFeedRequestHandler::handleUpdateRequest(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
@@ -96,6 +98,28 @@ void NewsFeedRequestHandler::handleUpdateRequest(Poco::Net::HTTPServerRequest &r
     
     FeedUpdateResult ret;
     _conn->client()->updateNewsFeed(ret,f_id,content,0);//status is 0 because no IDEA what it do
+    if (ret.exitCode == 0){
+        res.setStatus(HTTPResponse::HTTP_OK);
+        res.set("valid", "true");
+    }else{
+        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+        res.set("valid", "false");
+    }
+    res.send().flush();
+};
+void NewsFeedRequestHandler::handleDeleteRequest(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
+    Poco::Util::Application::instance().logger().information("Delete FEED Request from " + req.clientAddress().toString());
+    istream& body_stream = req.stream();
+    HTMLForm form(req, body_stream);
+    int f_id = atoi(form.get("id").c_str());
+    
+    NameValueCollection nvc;
+    req.getCookies(nvc);
+    string uid = nvc.get("zuid", "no_cookies");
+    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    
+    FeedDeleteResult ret;
+    _conn->client()->deleteNewsFeed(ret,f_id,id);//status is 0 because no IDEA what it do
     if (ret.exitCode == 0){
         res.setStatus(HTTPResponse::HTTP_OK);
         res.set("valid", "true");

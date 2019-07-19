@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
 	<head>
-		<title> Z-Social </title>
+                <meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
 			body {
@@ -39,14 +39,14 @@ and open the template in the editor.
 			}
 			
 			.split {
-				height: 95%;
-				width: 20%;
+				height: 95%%;
+				width: 20%%;
 				position: fixed;
 				z-index: 1;
 				top: 0;
 				overflow-x: hidden;
 				padding-top: 20px;
-				top: 5%;
+				top: 5%%;
 			}
 
 			.left {
@@ -60,17 +60,15 @@ and open the template in the editor.
 			}
 			
 			.center {
-				left: 20%;
-				right: 20%;
-				background-color: whitesmoke;
-				width: 60%;
+				width: 100%%;
+				background-color: cornsilk;
 			}
 			
 			.centered {
 				position: absolute;
-				top: 10%;
-				left: 50%;
-				transform: translate(-50%, 0%);
+				top: 10%%;
+				left: 50%%;
+				transform: translate(-50%%, 0%%);
 				text-align: center;
 			}
 			
@@ -84,6 +82,35 @@ and open the template in the editor.
 			.post_button{
 				
 			}
+                        .card {
+                            box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+                            max-width: 500px;
+                            margin: auto;
+                            text-align: center;
+                            font-family: countryside;
+                            background-color: white;
+                        }
+
+                        .price {
+                            color: grey;
+                            font-size: 12px;
+                        }
+
+                        .card button {
+                            border: none;
+                            outline: 0;
+                            padding: 12px;
+                            color: white;
+                            background-color: #2479ff;
+                            text-align: center;
+                            cursor: pointer;
+                            width: 100%%;
+                            font-size: 18px;
+                        }
+
+                        .card button:hover {
+                            background-color: #1a64d9;
+                        }
 		</style>
 	</head>
 	<body>
@@ -104,16 +131,6 @@ and open the template in the editor.
                                         <button type ="submit" class="post_button">Post</button>
 				</form>
 				<hr>
-				%s
-			</div>
-		</div>
-		
-		<div class="split left">
-			<p> Nothing in here </p>
-		</div>
-		
-		<div class="split right">
-			<div class="centered">
 				%s
 			</div>
 		</div>

@@ -74,10 +74,55 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 
         try {
 
-            string result, feed = "%s", fr = "%s";
+            string result;
+            string feedString;
+            int user_id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+            
+            FriendConnection * friendConn ;
+            listFriendResult friRet;
+            while (!(friendConn = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
+            
+            friendConn->client()->viewFriendList(friRet,user_id,0,20);
+            
+            FeedCountResult feedRet;
+            ListFeedResult listFeed;
+            NewsFeedConnection *feedConn;
+            while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 
+
+            // user data
+            ProfileConnection *profileConn;
+            GetUserResult userRet;
+            while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
+
+
+            
+            for(auto fr = friRet.friendList.begin(); fr != friRet.friendList.end() ; ++fr) {
+                feedConn->client()->getFeedCount(feedRet, *fr);
+                feedConn->client()->getListFeed(listFeed, *fr, feedRet.result, 10);
+                
+
+                profileConn->client()->GetProfile(userRet, *fr);
+                
+                
+                if (listFeed.exitCode == 0) {
+                    for (auto i = listFeed.result.feedlist.begin(); i != listFeed.result.feedlist.end(); ++i) {
+                        int d, m, y ,hh,pp;
+                        TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+                        string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
+                                + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
+                        string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
+                                "<p class=\"price\">" + date + "</p>" +
+                                "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+                        feedString.append(feed);
+                    }
+                }
+            }
+            ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
+            ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
+            ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
+            Poco::format(result, ZRequestHandlerFactory::dashboardString, feedString);
             std::ostream& ostr = res.send();
-            Poco::format(result, ZRequestHandlerFactory::dashboardString, feed, fr);
             ostr << result;
         } catch (Exception e) {
             Poco::Util::Application::instance().logger().error(e.message());
@@ -96,29 +141,26 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
             NewsFeedConnection *feedConn;
             while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
             feedConn->client()->getFeedCount(feedRet, user_id);
-            feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 5);
-
-            // user data
-            ProfileConnection *profileConn;
-            GetUserResult userRet;
-            while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
-            profileConn->client()->GetProfile(userRet, user_id);
+            feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 10);
 
             string result, feedString;
             if (listFeed.exitCode == 0) {
                 for (auto i = listFeed.result.feedlist.begin(); i != listFeed.result.feedlist.end(); ++i) {
-                    int d, m, y;
-                    TOOL::getDMY(i->edit_time, d, m, y);
-                    string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2);
-                    string feed = "<form name=\"feed_no_" + std::to_string(i->id) + "\" onsubmit=\"updateFeed('" + std::to_string(i->id) + "')\">\n" +
-                            "<p name=\"feed_id\" hidden>" + std::to_string(i->id) + "</p>\n" +
-                            "<p>" + userRet.profile.name + " - Date:" + date + "</p>\n" +
+                    int d, m, y ,hh,pp;
+                    TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+                    string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
+                            + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
+                    string feed = "<form class=\"card\" name=\"feed_no_" + std::to_string(i->id) + "\" onsubmit=\"updateFeed('" + std::to_string(i->id) + "')\">\n" +
+                            "<p class=\"price\"> Date:" + date + "</p>\n" +
                             "<textarea class=\"status_post\" rows=\"4\" name=\"content\">" + i->content + "</textarea><br>\n" +
-                            "<input type =\"button\" class=\"post_button\" onClick=\"updateFeed('" + std::to_string(i->id) + "')\" value=\"UPDATE\">\n" +
-                            "</form> <hr>\n";
+                            "<input type =\"button\" class=\"updateBTN\" onClick=\"updateFeed('" + std::to_string(i->id) + "')\" value=\"UPDATE\">\n" +
+                            "<input type =\"button\" class=\"deleteBTN\" onClick=\"removeFeed('" + std::to_string(i->id) + "')\" value=\"REMOVE\">\n" +
+                            "</form> <hr><br><br>\n";
                     feedString.append(feed);
                 }
             }
+            ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
+            
             Poco::format(result, ZRequestHandlerFactory::myfeedString, feedString);
             std::ostream& ostr = res.send();
             ostr << result;
@@ -136,12 +178,14 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
             ProfileConnection *profileConn;
             while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100))); // timeout 100 miliseconds
             profileConn->client()->GetProfile(ret, ZRequestHandlerFactory::getUIDfromCookie(uid));
-
+            
+            ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
+            
             int d, m, y;
             TOOL::getDMY(ret.profile.birth, d, m, y);
             string result, date, gender = ret.profile.gender ? "Nam" : "Nu";
             date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2);
-
+            
             Poco::format(result, ZRequestHandlerFactory::profileString, ret.profile.username, ret.profile.name, gender, ret.profile.phoneNumber, date);
 
             std::ostream& ostr = res.send();
