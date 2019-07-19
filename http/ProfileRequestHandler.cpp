@@ -86,7 +86,7 @@ void ProfileRequestHandler::handleLogin(
 		cookie.setValue(to_string(loginRet.profile.id));
 		cookie.setDomain("localhost");
 		cookie.setPath("/");
-		res.set("Set-Cookie", cookie.toString());
+		res.set(res.SET_COOKIE, cookie.toString());
 
 		//string cookie = sprintf("ZUID=%s", to_string(loginRet.profile.id));
 		res.set("valid", "true");
@@ -158,7 +158,7 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
     if (uid == "no_cookies"){
         res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
         res.set("valid", "false");
-        res.send().flush();
+        res.redirect("/login");
         return;
     }
     
@@ -176,7 +176,7 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
 	cookie.setValue("0");
 	cookie.setDomain("localhost");
 	cookie.setPath("/");
-        res.set("Set-Cookie", cookie.toString());
+        res.set(res.SET_COOKIE, cookie.toString());
         res.setStatus(HTTPResponse::HTTP_OK);
         res.set("valid", "true");
         
@@ -184,6 +184,5 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
         res.set("valid", "false");
     }
-
-    res.send().flush();
+    res.redirect("/login");
 };

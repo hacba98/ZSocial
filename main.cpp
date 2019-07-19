@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#include "http/SubHTTPServer.h"
+#include "./http/SubHTTPServer.h"
 
 using namespace std;
 using namespace Poco;
@@ -53,7 +53,7 @@ class SocialServer : public ServerApplication {
 public:
 	SocialServer() : _helpRequested(false) {
 		// must register sub-systems in here to make daemon runnable 
-		this->addSubsystem(new SubHTTPServer);
+		this->addSubsystem(new SubHTTPServer());
 	}
 	
 	~SocialServer() {

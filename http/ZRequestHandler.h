@@ -163,12 +163,20 @@ public:
 
     // main control
 
-    void handleRequest(
-            Poco::Net::HTTPServerRequest &req,
-            Poco::Net::HTTPServerResponse &res) {
-    };
+	void handleRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res);
 
-    // handler of specify request
+	// handler of specify request
+	void handleAddFriend(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		std::string uid);
+	
+	void handleLoadPage(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		std::string uid);
 
 private:
     FriendConnection *_conn;

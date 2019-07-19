@@ -31,7 +31,7 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
         ProfileConnection *borrowObj;
         while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
         return new ProfileRequestHandler(borrowObj);
-    } else if (url == "/friend") {
+    } else if (url.find("/friend") == 0) {
         FriendConnection *borrowObj;
         while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
         return new FriendRequestHandler(borrowObj);

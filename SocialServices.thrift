@@ -87,7 +87,7 @@ struct FriendData { // simplify version of User - hinding sensitive data
 
 // -- Structure server send to return user information
 struct pingResult {
-	1: bool haveData,
+	1: ErrorCode code,
 	2: list<FriendRequest> data
 }
 

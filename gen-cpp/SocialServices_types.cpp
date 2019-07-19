@@ -1320,8 +1320,8 @@ pingResult::~pingResult() throw() {
 }
 
 
-void pingResult::__set_haveData(const bool val) {
-  this->haveData = val;
+void pingResult::__set_code(const ErrorCode::type val) {
+  this->code = val;
 }
 
 void pingResult::__set_data(const std::vector<FriendRequest> & val) {
@@ -1350,9 +1350,11 @@ uint32_t pingResult::read(::apache::thrift::protocol::TProtocol* iprot) {
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->haveData);
-          this->__isset.haveData = true;
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          int32_t ecast41;
+          xfer += iprot->readI32(ecast41);
+          this->code = (ErrorCode::type)ecast41;
+          this->__isset.code = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1361,14 +1363,14 @@ uint32_t pingResult::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->data.clear();
-            uint32_t _size41;
-            ::apache::thrift::protocol::TType _etype44;
-            xfer += iprot->readListBegin(_etype44, _size41);
-            this->data.resize(_size41);
-            uint32_t _i45;
-            for (_i45 = 0; _i45 < _size41; ++_i45)
+            uint32_t _size42;
+            ::apache::thrift::protocol::TType _etype45;
+            xfer += iprot->readListBegin(_etype45, _size42);
+            this->data.resize(_size42);
+            uint32_t _i46;
+            for (_i46 = 0; _i46 < _size42; ++_i46)
             {
-              xfer += this->data[_i45].read(iprot);
+              xfer += this->data[_i46].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1394,17 +1396,17 @@ uint32_t pingResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("pingResult");
 
-  xfer += oprot->writeFieldBegin("haveData", ::apache::thrift::protocol::T_BOOL, 1);
-  xfer += oprot->writeBool(this->haveData);
+  xfer += oprot->writeFieldBegin("code", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((int32_t)this->code);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->data.size()));
-    std::vector<FriendRequest> ::const_iterator _iter46;
-    for (_iter46 = this->data.begin(); _iter46 != this->data.end(); ++_iter46)
+    std::vector<FriendRequest> ::const_iterator _iter47;
+    for (_iter47 = this->data.begin(); _iter47 != this->data.end(); ++_iter47)
     {
-      xfer += (*_iter46).write(oprot);
+      xfer += (*_iter47).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -1417,26 +1419,26 @@ uint32_t pingResult::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
 void swap(pingResult &a, pingResult &b) {
   using ::std::swap;
-  swap(a.haveData, b.haveData);
+  swap(a.code, b.code);
   swap(a.data, b.data);
   swap(a.__isset, b.__isset);
 }
 
-pingResult::pingResult(const pingResult& other47) {
-  haveData = other47.haveData;
-  data = other47.data;
-  __isset = other47.__isset;
-}
-pingResult& pingResult::operator=(const pingResult& other48) {
-  haveData = other48.haveData;
+pingResult::pingResult(const pingResult& other48) {
+  code = other48.code;
   data = other48.data;
   __isset = other48.__isset;
+}
+pingResult& pingResult::operator=(const pingResult& other49) {
+  code = other49.code;
+  data = other49.data;
+  __isset = other49.__isset;
   return *this;
 }
 void pingResult::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "pingResult(";
-  out << "haveData=" << to_string(haveData);
+  out << "code=" << to_string(code);
   out << ", " << "data=" << to_string(data);
   out << ")";
 }
@@ -1503,14 +1505,14 @@ uint32_t listFriendResult::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->friendList.clear();
-            uint32_t _size49;
-            ::apache::thrift::protocol::TType _etype52;
-            xfer += iprot->readListBegin(_etype52, _size49);
-            this->friendList.resize(_size49);
-            uint32_t _i53;
-            for (_i53 = 0; _i53 < _size49; ++_i53)
+            uint32_t _size50;
+            ::apache::thrift::protocol::TType _etype53;
+            xfer += iprot->readListBegin(_etype53, _size50);
+            this->friendList.resize(_size50);
+            uint32_t _i54;
+            for (_i54 = 0; _i54 < _size50; ++_i54)
             {
-              xfer += this->friendList[_i53].read(iprot);
+              xfer += this->friendList[_i54].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1521,9 +1523,9 @@ uint32_t listFriendResult::read(::apache::thrift::protocol::TProtocol* iprot) {
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast54;
-          xfer += iprot->readI32(ecast54);
-          this->code = (ErrorCode::type)ecast54;
+          int32_t ecast55;
+          xfer += iprot->readI32(ecast55);
+          this->code = (ErrorCode::type)ecast55;
           this->__isset.code = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1557,10 +1559,10 @@ uint32_t listFriendResult::write(::apache::thrift::protocol::TProtocol* oprot) c
   xfer += oprot->writeFieldBegin("friendList", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->friendList.size()));
-    std::vector<FriendData> ::const_iterator _iter55;
-    for (_iter55 = this->friendList.begin(); _iter55 != this->friendList.end(); ++_iter55)
+    std::vector<FriendData> ::const_iterator _iter56;
+    for (_iter56 = this->friendList.begin(); _iter56 != this->friendList.end(); ++_iter56)
     {
-      xfer += (*_iter55).write(oprot);
+      xfer += (*_iter56).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -1584,19 +1586,19 @@ void swap(listFriendResult &a, listFriendResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-listFriendResult::listFriendResult(const listFriendResult& other56) {
-  size = other56.size;
-  idx = other56.idx;
-  friendList = other56.friendList;
-  code = other56.code;
-  __isset = other56.__isset;
-}
-listFriendResult& listFriendResult::operator=(const listFriendResult& other57) {
+listFriendResult::listFriendResult(const listFriendResult& other57) {
   size = other57.size;
   idx = other57.idx;
   friendList = other57.friendList;
   code = other57.code;
   __isset = other57.__isset;
+}
+listFriendResult& listFriendResult::operator=(const listFriendResult& other58) {
+  size = other58.size;
+  idx = other58.idx;
+  friendList = other58.friendList;
+  code = other58.code;
+  __isset = other58.__isset;
   return *this;
 }
 void listFriendResult::printTo(std::ostream& out) const {
@@ -1645,9 +1647,9 @@ uint32_t loginResult::read(::apache::thrift::protocol::TProtocol* iprot) {
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast58;
-          xfer += iprot->readI32(ecast58);
-          this->code = (ErrorCode::type)ecast58;
+          int32_t ecast59;
+          xfer += iprot->readI32(ecast59);
+          this->code = (ErrorCode::type)ecast59;
           this->__isset.code = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1698,15 +1700,15 @@ void swap(loginResult &a, loginResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-loginResult::loginResult(const loginResult& other59) {
-  code = other59.code;
-  profile = other59.profile;
-  __isset = other59.__isset;
-}
-loginResult& loginResult::operator=(const loginResult& other60) {
+loginResult::loginResult(const loginResult& other60) {
   code = other60.code;
   profile = other60.profile;
   __isset = other60.__isset;
+}
+loginResult& loginResult::operator=(const loginResult& other61) {
+  code = other61.code;
+  profile = other61.profile;
+  __isset = other61.__isset;
   return *this;
 }
 void loginResult::printTo(std::ostream& out) const {
@@ -1775,14 +1777,14 @@ uint32_t PostList::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->listFeed.clear();
-            uint32_t _size61;
-            ::apache::thrift::protocol::TType _etype64;
-            xfer += iprot->readListBegin(_etype64, _size61);
-            this->listFeed.resize(_size61);
-            uint32_t _i65;
-            for (_i65 = 0; _i65 < _size61; ++_i65)
+            uint32_t _size62;
+            ::apache::thrift::protocol::TType _etype65;
+            xfer += iprot->readListBegin(_etype65, _size62);
+            this->listFeed.resize(_size62);
+            uint32_t _i66;
+            for (_i66 = 0; _i66 < _size62; ++_i66)
             {
-              xfer += iprot->readI32(this->listFeed[_i65]);
+              xfer += iprot->readI32(this->listFeed[_i66]);
             }
             xfer += iprot->readListEnd();
           }
@@ -1819,10 +1821,10 @@ uint32_t PostList::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("listFeed", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->listFeed.size()));
-    std::vector<int32_t> ::const_iterator _iter66;
-    for (_iter66 = this->listFeed.begin(); _iter66 != this->listFeed.end(); ++_iter66)
+    std::vector<int32_t> ::const_iterator _iter67;
+    for (_iter67 = this->listFeed.begin(); _iter67 != this->listFeed.end(); ++_iter67)
     {
-      xfer += oprot->writeI32((*_iter66));
+      xfer += oprot->writeI32((*_iter67));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1841,17 +1843,17 @@ void swap(PostList &a, PostList &b) {
   swap(a.__isset, b.__isset);
 }
 
-PostList::PostList(const PostList& other67) {
-  id = other67.id;
-  count = other67.count;
-  listFeed = other67.listFeed;
-  __isset = other67.__isset;
-}
-PostList& PostList::operator=(const PostList& other68) {
+PostList::PostList(const PostList& other68) {
   id = other68.id;
   count = other68.count;
   listFeed = other68.listFeed;
   __isset = other68.__isset;
+}
+PostList& PostList::operator=(const PostList& other69) {
+  id = other69.id;
+  count = other69.count;
+  listFeed = other69.listFeed;
+  __isset = other69.__isset;
   return *this;
 }
 void PostList::printTo(std::ostream& out) const {
@@ -2001,21 +2003,21 @@ void swap(NewsFeed &a, NewsFeed &b) {
   swap(a.__isset, b.__isset);
 }
 
-NewsFeed::NewsFeed(const NewsFeed& other69) {
-  id = other69.id;
-  owner = other69.owner;
-  content = other69.content;
-  edit_time = other69.edit_time;
-  status = other69.status;
-  __isset = other69.__isset;
-}
-NewsFeed& NewsFeed::operator=(const NewsFeed& other70) {
+NewsFeed::NewsFeed(const NewsFeed& other70) {
   id = other70.id;
   owner = other70.owner;
   content = other70.content;
   edit_time = other70.edit_time;
   status = other70.status;
   __isset = other70.__isset;
+}
+NewsFeed& NewsFeed::operator=(const NewsFeed& other71) {
+  id = other71.id;
+  owner = other71.owner;
+  content = other71.content;
+  edit_time = other71.edit_time;
+  status = other71.status;
+  __isset = other71.__isset;
   return *this;
 }
 void NewsFeed::printTo(std::ostream& out) const {
@@ -2133,17 +2135,17 @@ void swap(FeedCreateResult &a, FeedCreateResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-FeedCreateResult::FeedCreateResult(const FeedCreateResult& other71) {
-  exitCode = other71.exitCode;
-  message = other71.message;
-  result = other71.result;
-  __isset = other71.__isset;
-}
-FeedCreateResult& FeedCreateResult::operator=(const FeedCreateResult& other72) {
+FeedCreateResult::FeedCreateResult(const FeedCreateResult& other72) {
   exitCode = other72.exitCode;
   message = other72.message;
   result = other72.result;
   __isset = other72.__isset;
+}
+FeedCreateResult& FeedCreateResult::operator=(const FeedCreateResult& other73) {
+  exitCode = other73.exitCode;
+  message = other73.message;
+  result = other73.result;
+  __isset = other73.__isset;
   return *this;
 }
 void FeedCreateResult::printTo(std::ostream& out) const {
@@ -2242,15 +2244,15 @@ void swap(FeedUpdateResult &a, FeedUpdateResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-FeedUpdateResult::FeedUpdateResult(const FeedUpdateResult& other73) {
-  exitCode = other73.exitCode;
-  message = other73.message;
-  __isset = other73.__isset;
-}
-FeedUpdateResult& FeedUpdateResult::operator=(const FeedUpdateResult& other74) {
+FeedUpdateResult::FeedUpdateResult(const FeedUpdateResult& other74) {
   exitCode = other74.exitCode;
   message = other74.message;
   __isset = other74.__isset;
+}
+FeedUpdateResult& FeedUpdateResult::operator=(const FeedUpdateResult& other75) {
+  exitCode = other75.exitCode;
+  message = other75.message;
+  __isset = other75.__isset;
   return *this;
 }
 void FeedUpdateResult::printTo(std::ostream& out) const {
@@ -2348,15 +2350,15 @@ void swap(FeedDeleteResult &a, FeedDeleteResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-FeedDeleteResult::FeedDeleteResult(const FeedDeleteResult& other75) {
-  exitCode = other75.exitCode;
-  message = other75.message;
-  __isset = other75.__isset;
-}
-FeedDeleteResult& FeedDeleteResult::operator=(const FeedDeleteResult& other76) {
+FeedDeleteResult::FeedDeleteResult(const FeedDeleteResult& other76) {
   exitCode = other76.exitCode;
   message = other76.message;
   __isset = other76.__isset;
+}
+FeedDeleteResult& FeedDeleteResult::operator=(const FeedDeleteResult& other77) {
+  exitCode = other77.exitCode;
+  message = other77.message;
+  __isset = other77.__isset;
   return *this;
 }
 void FeedDeleteResult::printTo(std::ostream& out) const {
@@ -2471,17 +2473,17 @@ void swap(FeedResult &a, FeedResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-FeedResult::FeedResult(const FeedResult& other77) {
-  exitCode = other77.exitCode;
-  message = other77.message;
-  result = other77.result;
-  __isset = other77.__isset;
-}
-FeedResult& FeedResult::operator=(const FeedResult& other78) {
+FeedResult::FeedResult(const FeedResult& other78) {
   exitCode = other78.exitCode;
   message = other78.message;
   result = other78.result;
   __isset = other78.__isset;
+}
+FeedResult& FeedResult::operator=(const FeedResult& other79) {
+  exitCode = other79.exitCode;
+  message = other79.message;
+  result = other79.result;
+  __isset = other79.__isset;
   return *this;
 }
 void FeedResult::printTo(std::ostream& out) const {
@@ -2580,15 +2582,15 @@ void swap(Item &a, Item &b) {
   swap(a.__isset, b.__isset);
 }
 
-Item::Item(const Item& other79) {
-  post = other79.post;
-  id = other79.id;
-  __isset = other79.__isset;
-}
-Item& Item::operator=(const Item& other80) {
+Item::Item(const Item& other80) {
   post = other80.post;
   id = other80.id;
   __isset = other80.__isset;
+}
+Item& Item::operator=(const Item& other81) {
+  post = other81.post;
+  id = other81.id;
+  __isset = other81.__isset;
   return *this;
 }
 void Item::printTo(std::ostream& out) const {
@@ -2703,17 +2705,17 @@ void swap(FeedCountResult &a, FeedCountResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-FeedCountResult::FeedCountResult(const FeedCountResult& other81) {
-  exitCode = other81.exitCode;
-  message = other81.message;
-  result = other81.result;
-  __isset = other81.__isset;
-}
-FeedCountResult& FeedCountResult::operator=(const FeedCountResult& other82) {
+FeedCountResult::FeedCountResult(const FeedCountResult& other82) {
   exitCode = other82.exitCode;
   message = other82.message;
   result = other82.result;
   __isset = other82.__isset;
+}
+FeedCountResult& FeedCountResult::operator=(const FeedCountResult& other83) {
+  exitCode = other83.exitCode;
+  message = other83.message;
+  result = other83.result;
+  __isset = other83.__isset;
   return *this;
 }
 void FeedCountResult::printTo(std::ostream& out) const {
@@ -2775,14 +2777,14 @@ uint32_t ListFeed::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->feedlist.clear();
-            uint32_t _size83;
-            ::apache::thrift::protocol::TType _etype86;
-            xfer += iprot->readListBegin(_etype86, _size83);
-            this->feedlist.resize(_size83);
-            uint32_t _i87;
-            for (_i87 = 0; _i87 < _size83; ++_i87)
+            uint32_t _size84;
+            ::apache::thrift::protocol::TType _etype87;
+            xfer += iprot->readListBegin(_etype87, _size84);
+            this->feedlist.resize(_size84);
+            uint32_t _i88;
+            for (_i88 = 0; _i88 < _size84; ++_i88)
             {
-              xfer += this->feedlist[_i87].read(iprot);
+              xfer += this->feedlist[_i88].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2823,10 +2825,10 @@ uint32_t ListFeed::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeFieldBegin("feedlist", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->feedlist.size()));
-    std::vector<NewsFeed> ::const_iterator _iter88;
-    for (_iter88 = this->feedlist.begin(); _iter88 != this->feedlist.end(); ++_iter88)
+    std::vector<NewsFeed> ::const_iterator _iter89;
+    for (_iter89 = this->feedlist.begin(); _iter89 != this->feedlist.end(); ++_iter89)
     {
-      xfer += (*_iter88).write(oprot);
+      xfer += (*_iter89).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -2849,17 +2851,17 @@ void swap(ListFeed &a, ListFeed &b) {
   swap(a.__isset, b.__isset);
 }
 
-ListFeed::ListFeed(const ListFeed& other89) {
-  count = other89.count;
-  feedlist = other89.feedlist;
-  nex = other89.nex;
-  __isset = other89.__isset;
-}
-ListFeed& ListFeed::operator=(const ListFeed& other90) {
+ListFeed::ListFeed(const ListFeed& other90) {
   count = other90.count;
   feedlist = other90.feedlist;
   nex = other90.nex;
   __isset = other90.__isset;
+}
+ListFeed& ListFeed::operator=(const ListFeed& other91) {
+  count = other91.count;
+  feedlist = other91.feedlist;
+  nex = other91.nex;
+  __isset = other91.__isset;
   return *this;
 }
 void ListFeed::printTo(std::ostream& out) const {
@@ -2975,17 +2977,17 @@ void swap(ListFeedResult &a, ListFeedResult &b) {
   swap(a.__isset, b.__isset);
 }
 
-ListFeedResult::ListFeedResult(const ListFeedResult& other91) {
-  exitCode = other91.exitCode;
-  message = other91.message;
-  result = other91.result;
-  __isset = other91.__isset;
-}
-ListFeedResult& ListFeedResult::operator=(const ListFeedResult& other92) {
+ListFeedResult::ListFeedResult(const ListFeedResult& other92) {
   exitCode = other92.exitCode;
   message = other92.message;
   result = other92.result;
   __isset = other92.__isset;
+}
+ListFeedResult& ListFeedResult::operator=(const ListFeedResult& other93) {
+  exitCode = other93.exitCode;
+  message = other93.message;
+  result = other93.result;
+  __isset = other93.__isset;
   return *this;
 }
 void ListFeedResult::printTo(std::ostream& out) const {

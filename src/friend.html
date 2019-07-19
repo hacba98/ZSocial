@@ -1,46 +1,64 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
 	<head>
-		<title>TODO supply a title</title>
+		<title>Z-Social</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="friend/friend.css">
+		<script language="javascript">
+			function addFriend(){
+				var friend_username = document.addfriendForm.friend_username.value;
+				var message = document.addfriendForm.message.value;
+				var url = "/friend/add";
+				var params = "friend_username=" + friend_username + "&message=" + message;
+				
+				var http = new XMLHttpRequest();
+				http.open('POST', url, true);
+				http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				http.onreadystatechange = function (){
+					if(http.readyState == 4 && http.status == 200){
+						alert("Your request had been sent.");
+					} else if (http.status == 500){
+						alert("Username " + friend_username + " doesn't existed");
+					}
+				}
+				http.send(params);
+			}
+		</script>
 	</head>
 	<body>
-		<form action="/addFriend" method="POST">
-			<h2>Add Friend</h2>
-			<label>Your Id </label><br>
-			<input type="text" name="addfriend.userid" required>
-			<br><br>
-			<label>Your Friend Id </label><br>
-			<input type="text" name="addfriend.friendid" required>
-			<br><br>
-			<label>Say something to your friend</label><br>
-			<textarea name="addfriend.greeting" rows="2" cols="20">Hi! Let's make friend.</textarea><br>
-			<input type="submit" value="Add Friend">
-			<br><br>
-		</form>
-		<hr width="10%" align="left">
-		<form action="/viewRequest" method="POST">
+		<div class="topnav">
+			<a href="/profile/logout">Logout</a>
+			<a class="active" href="/friend">Friend</a>
+			<a href="/message">Contact</a>
+			<a href="/profile">Profile</a>
+			<a href="/feed">My Feed</a>
+			<a href="/dashboard">Wall</a>
+		</div>
+
+		<div class="split left">
+			<form name="addfriendForm" onsubmit="addFriend()">
+				<h2>Add Friend</h2>
+				<label>Your Friend's Username </label><br>
+				<input type="text" name="friend_username" required>
+				<br><br>
+				<label>Say something to your friend</label><br>
+				<textarea name="message" rows="3" cols="25">Hi! Let's make friend!</textarea><br>
+				<input type="button" value="Add Friend" onclick="addFriend()">
+				<br><br>
+			</form>
+		</div>
+
+		<div class="split right">
 			<h2>View Friend Request</h2>
-			<label>Your Id </label><br>
-			<input type="text" name="viewrequest.userid" required>
-			<input type="submit" value="View">
 			<br><br>
-		</form>
-		<hr width="10%" align="left">
-		<form action="/viewFriend" method="POST">
+			<!--This will be load as list of pending requests-->
+			%s
+			<br><br>
 			<h2>View Friend List</h2>
-			<label>Your Id </label><br>
-			<input type="text" name="viewfriend.userid" required>
-			<input type="hidden" name="viewfriend.page" value=0>
-			<input type="hidden" name="viewfriend.pageSize" value=2>
-			<input type="submit" value="View">
 			<br><br>
-		</form>
+			<!--This will be load as friends list-->
+			%s
+			<br><br>
+		</div>
 	</body>
 </html>
