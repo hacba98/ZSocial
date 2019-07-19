@@ -13,8 +13,17 @@
 
 #include "ZRequestHandler.h"
 
+boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
+
+std::map<string, int> ZRequestHandlerFactory::_session_management;
+Poco::UUIDGenerator ZRequestHandlerFactory::_zuidGen;
+
+using namespace std;
+using namespace Poco;
+using namespace Poco::Util;
+using namespace Poco::Net;
 
 string ZRequestHandlerFactory::dashboardString;
 string ZRequestHandlerFactory::loginString;
@@ -96,3 +105,5 @@ void NewsFeedRequestHandler::handleUpdateRequest(Poco::Net::HTTPServerRequest &r
     }
     res.send().flush();
 };
+
+

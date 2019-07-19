@@ -694,7 +694,7 @@ class listFriendResult {
   virtual ~listFriendResult() throw();
   int32_t size;
   int32_t idx;
-  std::vector<FriendData>  friendList;
+  std::vector<int32_t>  friendList;
   ErrorCode::type code;
 
   _listFriendResult__isset __isset;
@@ -703,7 +703,7 @@ class listFriendResult {
 
   void __set_idx(const int32_t val);
 
-  void __set_friendList(const std::vector<FriendData> & val);
+  void __set_friendList(const std::vector<int32_t> & val);
 
   void __set_code(const ErrorCode::type val);
 

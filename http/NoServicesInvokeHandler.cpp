@@ -16,10 +16,17 @@ using namespace Poco::Net;
 void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerResponse &res) {
     string url = req.getURI();
 
-    // check for cookie
-    NameValueCollection nvc;
-    req.getCookies(nvc);
-    string uid = nvc.get("zuid", "no_cookies");
+	// check for cookie
+	NameValueCollection nvc;
+	req.getCookies(nvc);
+	string uid = nvc.get("zuid", "no_cookies");
+	
+	// serve icon request from browser
+	if (url == "/favicon.ico"){
+		url = "./src/icon.png";
+		res.sendFile(url, "image/png");
+		return;
+	}
 
     // serve register page
     if (url.find("/register") == 0) {
@@ -83,18 +90,19 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 
         try {
             // retrieve list friend's newsfeed
+            int user_id = ZRequestHandlerFactory::getUIDfromCookie(uid);
             FeedCountResult feedRet;
             ListFeedResult listFeed;
             NewsFeedConnection *feedConn;
             while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
-            feedConn->client()->getFeedCount(feedRet, atoi(uid.c_str()));
-            feedConn->client()->getListFeed(listFeed, atoi(uid.c_str()), feedRet.result, 5);
+            feedConn->client()->getFeedCount(feedRet, user_id);
+            feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 5);
 
             // user data
             ProfileConnection *profileConn;
             GetUserResult userRet;
             while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
-            profileConn->client()->GetProfile(userRet, atoi(uid.c_str()));
+            profileConn->client()->GetProfile(userRet, user_id);
 
             string result, feedString;
             if (listFeed.exitCode == 0) {
@@ -127,7 +135,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
             GetUserResult ret;
             ProfileConnection *profileConn;
             while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100))); // timeout 100 miliseconds
-            profileConn->client()->GetProfile(ret, atoi(uid.c_str()));
+            profileConn->client()->GetProfile(ret, ZRequestHandlerFactory::getUIDfromCookie(uid));
 
             int d, m, y;
             TOOL::getDMY(ret.profile.birth, d, m, y);

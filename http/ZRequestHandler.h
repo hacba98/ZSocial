@@ -31,6 +31,8 @@
 #include "Poco/FileStream.h"
 #include "Poco/Format.h"
 #include "Poco/NumberFormatter.h"
+#include "Poco/UUIDGenerator.h"
+#include "Poco/UUID.h"
 
 #include "thrift/TToString.h"
 
@@ -83,6 +85,18 @@ public:
     static Poco::ObjectPool<NewsFeedConnection> * newsfeedPool() {
         return ZRequestHandlerFactory::_pool_newsfeed.get();
     }
+    static int getUIDfromCookie(std::string zuid) {
+        return ZRequestHandlerFactory::_session_management[zuid];
+    };
+
+    // function that return unique id for cookie storing and also auto 
+    // map that unique id to userid in session management
+
+    static string genUIDforCookie(int uid) {
+        Poco::UUID ran_id = ZRequestHandlerFactory::_zuidGen.create();
+        ZRequestHandlerFactory::_session_management[ran_id.toString()] = uid;
+        return ran_id.toString();
+    }
     
     static string dashboardString;
     static string loginString;
@@ -95,6 +109,10 @@ private:
     static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
     static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
     static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
+    
+    // mapping from zuid in cookie to real user id in DB
+    static std::map<string, int> _session_management;
+    static Poco::UUIDGenerator _zuidGen;
     
     void loadString(string& result, string path) {
         Poco::FileInputStream htmlFile(path);
@@ -174,6 +192,12 @@ public:
 		std::string uid);
 	
 	void handleLoadPage(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		std::string uid,
+		int paging_index);
+	
+	void handleAcceptRequest(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
 		std::string uid);

@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Z-Social</title>
+		<title> Z-Social </title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="friend/friend.css">
@@ -19,6 +19,8 @@
 						alert("Your request had been sent.");
 					} else if (http.status == 500){
 						alert("Username " + friend_username + " doesn't existed");
+					} else if (http.status == 412){
+						alert("You have already sent this request. Please wait for your friend to accept it");
 					}
 				}
 				http.send(params);
@@ -30,7 +32,7 @@
 			<a href="/profile/logout">Logout</a>
 			<a class="active" href="/friend">Friend</a>
 			<a href="/message">Contact</a>
-			<a href="/profile">Profile</a>
+			<a href="/myprofile">Profile</a>
 			<a href="/feed">My Feed</a>
 			<a href="/dashboard">Wall</a>
 		</div>
@@ -50,15 +52,12 @@
 
 		<div class="split right">
 			<h2>View Friend Request</h2>
-			<br><br>
 			<!--This will be load as list of pending requests-->
 			%s
-			<br><br>
+			<hr>
 			<h2>View Friend List</h2>
-			<br><br>
 			<!--This will be load as friends list-->
 			%s
-			<br><br>
 		</div>
 	</body>
 </html>
