@@ -70,7 +70,8 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 //	req.getCookies(nvc);
 	try {
 		// connect to friend service
-		int user_id = stoi(uid);
+		// get id from session management
+		int user_id = ZRequestHandlerFactory::getUIDfromCookie(uid);
 		
 		// check for pending requests
 		{
@@ -115,7 +116,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 			// string paging_index = nvc.get("CURRENT_IDX", "0");
 			
 			listFriendResult ret;
-			_conn->client()->viewFriendList(ret, stoi(uid), paging_index, 1);
+			_conn->client()->viewFriendList(ret, user_id, paging_index, 1);
 			
 			if (ret.code == ErrorCode::SUCCESS){
 				if (ret.size == 0){
@@ -231,7 +232,7 @@ void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerRes
 		
 		// Create a new friend request
 		FriendRequest request;
-		request.p_send_req = stoi(uid);
+		request.p_send_req = ZRequestHandlerFactory::getUIDfromCookie(uid);
 		request.p_recv_req = fr_id;
 		request.greeting = greeting;
 		
@@ -256,7 +257,8 @@ void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req
 		istream& body_stream = req.stream();
 		HTMLForm form(req, body_stream);
 		int requestId = stoi(form.get("friend.requestId"));
-		int userId = stoi(uid);
+		// get id from session management
+		int userId = ZRequestHandlerFactory::getUIDfromCookie(uid);
 		
 		// call api
 		ErrorCode::type code = _conn->client()->acceptRequest(userId, requestId);

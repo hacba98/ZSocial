@@ -112,7 +112,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 			GetUserResult ret;
 			ProfileConnection *profileConn;
 			while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100))); // timeout 100 miliseconds
-			profileConn->client()->GetProfile(ret, atoi(uid.c_str()));
+			profileConn->client()->GetProfile(ret, ZRequestHandlerFactory::getUIDfromCookie(uid));
 
 			int d, m, y;
 			TOOL::getDMY(ret.profile.birth, d, m, y);

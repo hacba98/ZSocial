@@ -17,6 +17,9 @@ boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
 
+std::map<string, int> ZRequestHandlerFactory::_session_management;
+Poco::UUIDGenerator ZRequestHandlerFactory::_zuidGen;
+
 using namespace std;
 using namespace Poco;
 using namespace Poco::Util;
@@ -68,3 +71,5 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
     res.send().flush();
 };
+
+

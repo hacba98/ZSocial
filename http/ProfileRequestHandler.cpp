@@ -82,7 +82,9 @@ void ProfileRequestHandler::handleLogin(
 		HTTPCookie cookie;
 		cookie.setMaxAge(60*60*24); // 1 year life time
 		cookie.setName("zuid");
-		cookie.setValue(to_string(loginRet.profile.id));
+		
+		// call function to get UUID
+		cookie.setValue(ZRequestHandlerFactory::genUIDforCookie(loginRet.profile.id));
 		cookie.setDomain("localhost");
 		cookie.setPath("/");
 		res.set(res.SET_COOKIE, cookie.toString());
@@ -112,8 +114,10 @@ void ProfileRequestHandler::handleUpdate(Poco::Net::HTTPServerRequest &req,Poco:
         return;
     }
     HTMLForm form(req, req.stream());
-
-    int id = atoi(uid.c_str());
+    
+    // get id from session management
+    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    //int id = atoi(uid.c_str());
     string name = form.get("name", "No one will name like this");
     string gender = form.get("gender", "");
     
@@ -161,7 +165,9 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
         return;
     }
     
-    int id = atoi(uid.c_str());
+    // get id from session management
+    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    //int id = atoi(uid.c_str());
     
     ErrorCode::type ret;
     if (id != -1) {
