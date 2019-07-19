@@ -99,7 +99,8 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 						<< ". User Id: " << freq.p_send_req
 						<< ". Message: " << freq.greeting
 						<< ". Time: " << std::ctime(&t_ptr) << "</label>";
-					oss << "<input type=\"Submit\" value=\"Add\">";
+					oss << "<input type=\"Submit\" name=\"button_accept\" value=\"Accept\">";
+					oss << "<input type=\"Submit\" name=\"button_decline\" value=\"Decline\">";
 					oss << "</form>";
 
 					string eachRequestCode = oss.str();
@@ -248,6 +249,13 @@ void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req
 		istream& body_stream = req.stream();
 		HTMLForm form(req, body_stream);
 		int requestId = stoi(form.get("friend.requestId"));
+		string isAccept = form.get("button_accept", "decline");
+		
+		// check whether user accept or reject the friend request
+		if (isAccept == "decline"){
+			return handleRejectRequest(req, res, uid, requestId);
+		}
+		
 		// get id from session management
 		int userId = ZRequestHandlerFactory::getUIDfromCookie(uid);
 		
@@ -266,6 +274,30 @@ void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req
 		res.send().flush();
 	} catch (...){
 		Application::instance().logger().error("Error-Accept Friend Request");
+		return res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+	}
+}
+
+void FriendRequestHandler::handleRejectRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, std::string uid, int requestId){
+	try {
+		// get id from session management
+		int userId = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		
+		// call api
+		ErrorCode::type code = _conn->client()->declineRequest(userId, requestId);
+		
+		// handle response
+		if (code == ErrorCode::INVALID_PARAMETER){
+			string reason = "Request Id is incorrect!";
+			res.setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR, reason);
+		} else {
+			res.setStatus(HTTPResponse::HTTP_OK);
+			res.redirect("/friend");
+		}
+		
+		res.send().flush();
+	} catch (...){
+		Application::instance().logger().error("Error-Reject Friend Request");
 		return res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
 	}
 }

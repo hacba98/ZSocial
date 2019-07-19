@@ -75,7 +75,7 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    int id = atoi(uid.c_str());
+    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
     
     FeedCreateResult ret;
     _conn->client()->createNewsFeed(ret,id,content,0);//status is 0 because no IDEA what it do

@@ -201,6 +201,12 @@ public:
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
 		std::string uid);
+	
+	void handleRejectRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		std::string uid,
+		int requestId);
 
 private:
     FriendConnection *_conn;
