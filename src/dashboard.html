@@ -60,7 +60,8 @@ and open the template in the editor.
 			}
 			
 			.center {
-				width: 100%%;
+                                left:0;
+				width: 80%%;
 				background-color: cornsilk;
 			}
 			
@@ -111,6 +112,27 @@ and open the template in the editor.
                         .card button:hover {
                             background-color: #1a64d9;
                         }
+                        
+                        .friend {
+                            border: none;
+                            outline: 0;
+                            padding: 12px;
+                            color: white;
+                            
+                            text-align: center;
+                            cursor: pointer;
+                            width: 100%%;
+                            font-size: 18px;
+                        }
+                        .friend:nth-child(odd) {
+                            background-color: burlywood;
+                        }
+                        .friend:nth-child(even) {
+                            background-color:coral;
+                        }
+                        .friend:hover {
+                            background-color: brown;
+                        }
 		</style>
 	</head>
 	<body>
@@ -134,7 +156,9 @@ and open the template in the editor.
 				%s
 			</div>
 		</div>
-		
+            <div class="split right">
+                %s
+            </div>
 		
 	</body>
 </html>

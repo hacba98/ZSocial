@@ -5,195 +5,240 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-	<head>
-                <meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-                <script language="javascript">
-			function updateFeed(name){
-                                console.log(name);
-                                var x = document.getElementsByName('feed_no_'+ name)[0];
-                                var content = x.content.value;
-				var url = "/newsFeed/update";
-				var params = "id=" + name + "&content=" + content;
-				console.log(params);
-				
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.open('POST', url, true);
-				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                                xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
-					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-					    location.replace("/feed/");
-					} else if (xmlHttp.status == 404){
-					    alert("Error 500 not work");
-					}
-				}
-				xmlHttp.send(params);
-			}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script language="javascript">
+            var nextId = %d;
+            var nextPost = %d;
+            
+            function loadmore(){
+                var params = "next.id=" + nextId + "&next.post=" + nextPost;
+                var url = "/newsFeed/loadmore-myfeed";
+                console.log(params);
+                
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('POST', url, false);
+                xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                    if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        nextId = xmlHttp.getResponseHeader("next.id");
+                        nextPost = xmlHttp.getResponseHeader("next.post");
+                        let div = document.createElement('div');
+                        div.innerHTML = xmlHttp.getResponseHeader("data");
                         
-                        function removeFeed(name){
-                                console.log(name);
-                                
-				var url = "/newsFeed/delete";
-				var params = "id=" + name;
-				console.log(params);
-				
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.open('POST', url, true);
-				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                                xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
-					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-					    location.replace("/feed/");
-					} else if (xmlHttp.status == 404){
-					    alert("Error 500 not work");
-					}
-				}
-				xmlHttp.send(params);
-			}
-		</script>
-		<style>
-			body {
-				margin: 0;
-				font-family: Arial, Helvetica, sans-serif;
-			}
+                        document.getElementById("feeds").appendChild(div);
+                    } else if (xmlHttp.status == 404){
+                        alert("Error 404 not work");
+                    }
+                }
+                xmlHttp.send(params);
+            }
+            
+            function updateFeed(name){
+                console.log(name);
+                var x = document.getElementsByName('feed_no_'+ name)[0];
+                var content = x.content.value;
+                var url = "/newsFeed/update";
+                var params = "id=" + name + "&content=" + content;
+                console.log(params);
 
-			.topnav {
-				overflow: hidden;
-				background-color: #007acc;
-			}
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('POST', url, true);
+                xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                    if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        location.replace("/feed/");
+                    } else if (xmlHttp.status == 404){
+                    alert("Error 500 not work");
+                    }
+                }
+                xmlHttp.send(params);
+            }
 
-			.topnav a {
-				float: right;
-				color: #f2f2f2;
-				text-align: center;
-				padding: 14px 32px;
-				text-decoration: none;
-				font-size: 17px;
-			}
+            function removeFeed(name){
+                console.log(name);
 
-			.topnav a:hover {
-				background-color: #ddd;
-				color: black;
-			}
+                var url = "/newsFeed/delete";
+                var params = "id=" + name;
+                console.log(params);
 
-			.topnav a.active {
-				background-color: #4CAF50;
-				color: white;
-			}
-			
-			.split {
-				height: 95%%;
-				width: 20%%;
-				position: fixed;
-				z-index: 1;
-				top: 0;
-				overflow-x: hidden;
-				padding-top: 20px;
-				top: 5%%;
-			}
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('POST', url, true);
+                xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                    if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        location.replace("/feed/");
+                    } else if (xmlHttp.status == 404){
+                        alert("Error 500 not work");
+                    }
+                }
+                xmlHttp.send(params);
+            }
+        </script>
+        <style>
+            body {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
 
-			.left {
-				left: 0;
-				background-color: aqua;
-			}
+            .topnav {
+                overflow: hidden;
+                background-color: #007acc;
+            }
 
-			.right {
-				right: 0;
-				background-color: red;
-			}
-			
-			.center {
-				width: 100%%;
-				background-color: cornsilk;
-			}
-			
-			.centered {
-				position: absolute;
-				top: 10%%;
-				left: 50%%;
-				transform: translate(-50%%, 0%%);
-				text-align: center;
-			}
-			
-			.status_post {
-				min-height: 100px;
-				width: 350px;
-				border: solid 1px silver;
-				background: #fff;
-			}
-			
-			.post_button{
-				
-			}
-                        .card {
-                            box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
-                            max-width: 500px;
-                            margin: auto;
-                            text-align: center;
-                            font-family: countryside;
-                            background-color: white;
-                        }
+            .topnav a {
+                float: right;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 32px;
+                text-decoration: none;
+                font-size: 17px;
+            }
 
-                        .price {
-                            color: grey;
-                            font-size: 22px;
-                        }
+            .topnav a:hover {
+                background-color: #ddd;
+                color: black;
+            }
 
-                        .updateBTN {
-                            border: white;
-                            outline: 0;
-                            padding: 12px;
-                            color: white;
-                            background-color: #2479ff;
-                            text-align: center;
-                            cursor: pointer;
-                            width: 50%%;
-                            font-size: 18px;
-                            left : 0;
-                            position: fixed;
-                        }
-                        .deleteBTN {
-                            border: white;
-                            outline: 0;
-                            padding: 12px;
-                            color: white;
-                            background-color: blue;
-                            text-align: center;
-                            cursor: pointer;
-                            width: 50%%;
-                            font-size: 18px;
-                            right: 0;
-                            position: fixed;
-                        }
-                        .updateBTN:hover {
-                            background-color: #1a64d9;
-                        }
-                        .deleteBTN:hover {
-                            background-color: #1a64d9;
-                        }
-		</style>
-	</head>
-	<body>
-		<div class="topnav">
-			<a href="/profile/logout">Logout</a>
-			<a href="/friend">Friend</a>
-			<a href="/message">Contact</a>
-			<a href="/myprofile">Profile</a>
-			<a class="active" href="/feed">My Feed</a>
-			<a href="/dashboard">Wall</a>
-		</div>
-		
-		<div class="split center">
-			<div class="centered">
-				<form method="POST" action="/newsFeed/create">
-					<p>What is in your mind?</p>
-					<textarea class="status_post" rows="4" name="content"></textarea><br>
-                                        <button type ="submit" class="post_button">Post</button>
-				</form>
-				<hr>
-				%s
-			</div>
-		</div>
-		
-		
-	</body>
+            .topnav a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .split {
+                height: 95%%;
+                width: 20%%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                overflow-x: hidden;
+                padding-top: 20px;
+                top: 5%%;
+            }
+
+            .left {
+                left: 0;
+                background-color: aqua;
+            }
+
+            .right {
+                right: 0;
+                background-color: red;
+            }
+
+            .center {
+                width: 100%%;
+                background-color: cornsilk;
+            }
+
+            .centered {
+                position: absolute;
+                top: 10%%;
+                left: 50%%;
+                transform: translate(-50%%, 0%%);
+                text-align: center;
+            }
+
+            .status_post {
+                min-height: 100px;
+                width: 350px;
+                border: solid 1px silver;
+                background: #fff;
+            }
+
+            .post_button{
+
+            }
+            .card {
+                box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+                max-width: 500px;
+                margin: auto;
+                text-align: center;
+                font-family: countryside;
+                background-color: white;
+            }
+
+            .price {
+                color: grey;
+                font-size: 22px;
+            }
+
+            .updateBTN {
+                border: white;
+                outline: 0;
+                padding: 12px;
+                color: white;
+                background-color: #2479ff;
+                text-align: center;
+                cursor: pointer;
+                width: 50%%;
+                font-size: 18px;
+                left : 0;
+                position: fixed;
+            }
+            .deleteBTN {
+                border: white;
+                outline: 0;
+                padding: 12px;
+                color: white;
+                background-color: blue;
+                text-align: center;
+                cursor: pointer;
+                width: 50%%;
+                font-size: 18px;
+                right: 0;
+                position: fixed;
+            }
+            .updateBTN:hover {
+                background-color: #1a64d9;
+            }
+            .deleteBTN:hover {
+                background-color: #1a64d9;
+            }
+            .loadmoreBTN {
+                border: white;
+                padding: 12px;
+                color: white;
+                background-color: blue;
+                text-align: center;
+                width: 100%%;
+                font-size: 18px;
+            }
+            .loadmoreBTN:hover {
+                background-color: #1a64d9;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="topnav">
+            <a href="/profile/logout">Logout</a>
+            <a href="/friend">Friend</a>
+            <a href="/message">Contact</a>
+            <a href="/myprofile">Profile</a>
+            <a class="active" href="/feed">My Feed</a>
+            <a href="/dashboard">Wall</a>
+        </div>
+
+        <div class="split center">
+            <div class="centered" id = "listfeed">
+                <div id="feeds">
+                    <form method="POST" action="/newsFeed/create">
+                        <p>What is in your mind?</p>
+                        <textarea class="status_post" rows="4" name="content"></textarea><br>
+                        <button type ="submit" class="post_button">Post</button>
+                    </form>
+                    <hr>
+                    %s
+                    <br>
+                    <br>
+                </div>
+                
+                <div>
+                    <button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
+                </div>
+            </div>
+            
+        </div>
+    </body>
 </html>
