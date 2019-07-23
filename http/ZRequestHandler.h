@@ -132,6 +132,10 @@ public:
     void handleRequest(
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
+    
+    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
+    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
+    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
 };
 
 class ProfileRequestHandler : public Poco::Net::HTTPRequestHandler {
@@ -230,6 +234,10 @@ public:
     void handleUpdateRequest(Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     void handleDeleteRequest(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
+    void handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
+    void handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
 private:
     NewsFeedConnection *_conn;
