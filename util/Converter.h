@@ -37,6 +37,7 @@ public:
 	};
 
 	~Converter() {
+		_trans->close();
 	};
 
 	// serialize object o into string

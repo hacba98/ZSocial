@@ -24,9 +24,15 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
 		return res.redirect("/login");
 	}
 	
+	// valid cookie: false -> redirect login
+	token token_;
+	if (!ZRequestHandlerFactory::validCookie(token_, uid)) {
+		return res.redirect("/login");
+	}
+	
 	// serve load friend page first time
 	if (req.getMethod() == "GET" && (url == "/friend/page" || url == "/friend/" || url == "/friend")){
-		return handleLoadPage(req, res, uid, 0);
+		return handleLoadPage(req, res, token_.zuid, 0);
 	}
 	
 	// serve load friend page with click next button in render friend list
@@ -35,17 +41,17 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
 			res.redirect("/friend");
 			return;
 		}
-		return handleLoadPage(req, res, uid, stoi(paging_index));
+		return handleLoadPage(req, res, token_.zuid, stoi(paging_index));
 	}
 	
 	// serve add friend request
 	if (req.getMethod() == "POST" && url == "/friend/add"){
-		return handleAddFriend(req, res, uid);
+		return handleAddFriend(req, res, token_.zuid);
 	} 
 	
 	// serve accept friend request
 	if (req.getMethod() == "GET" && url.find("/friend/acceptRequest") == 0){
-		return handleAcceptRequest(req, res, uid);
+		return handleAcceptRequest(req, res, token_.zuid);
 	}
 	
 	// serve css file
@@ -62,7 +68,7 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
  * @param res
  * @param uid - userID getting from cookies
  */
-void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResponse& res, string uid, int paging_index){
+void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResponse& res, int uid, int paging_index){
 	string pendingHTMLCode; // code for render pending list
 	string friendListHTMLCode; // code for render friend list
 	string htmlCode; // code for return to render html page
@@ -71,7 +77,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 	try {
 		// connect to friend service
 		// get id from session management
-		int user_id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		int user_id = uid;
 		
 		// check for pending requests
 		{
@@ -201,7 +207,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
  * @param res
  * @param uid - userID getting from cookies
  */
-void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerResponse& res, string uid){
+void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerResponse& res, int uid){
 	try {
 		istream& body_stream = req.stream();
 		HTMLForm form(req, body_stream);
@@ -224,7 +230,7 @@ void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerRes
 		
 		// Create a new friend request
 		FriendRequest request;
-		request.p_send_req = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		request.p_send_req = uid;
 		request.p_recv_req = fr_id;
 		request.greeting = greeting;
 		
@@ -244,7 +250,7 @@ void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerRes
 	}
 }
 
-void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, std::string uid){
+void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, int uid){
 	try {
 		istream& body_stream = req.stream();
 		HTMLForm form(req, body_stream);
@@ -257,7 +263,7 @@ void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req
 		}
 		
 		// get id from session management
-		int userId = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		int userId = uid;
 		
 		// call api
 		ErrorCode::type code = _conn->client()->acceptRequest(userId, requestId);
@@ -278,10 +284,10 @@ void FriendRequestHandler::handleAcceptRequest(Poco::Net::HTTPServerRequest& req
 	}
 }
 
-void FriendRequestHandler::handleRejectRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, std::string uid, int requestId){
+void FriendRequestHandler::handleRejectRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, int uid, int requestId){
 	try {
 		// get id from session management
-		int userId = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		int userId = uid;
 		
 		// call api
 		ErrorCode::type code = _conn->client()->declineRequest(userId, requestId);

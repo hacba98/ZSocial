@@ -16,14 +16,16 @@
 boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
+boost::shared_ptr<Poco::ObjectPool<Converter<token> > > ZRequestHandlerFactory::_pool_convert_token;
 
-std::map<string, int> ZRequestHandlerFactory::_session_management;
-Poco::UUIDGenerator ZRequestHandlerFactory::_zuidGen;
+std::string ZRequestHandlerFactory::_secret;
+
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Util;
 using namespace Poco::Net;
+using namespace Poco::Crypto;
 
 string ZRequestHandlerFactory::dashboardString;
 string ZRequestHandlerFactory::loginString;
@@ -53,81 +55,72 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
     }
 }
 
-//////////////////////////////////////
-void NewsFeedRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res) {
-    std::string url = req.getURI();
-    if (url.find("/newsFeed/create") == 0)
-        return handleCreateRequest(req, res);
-    else if (url.find("/newsFeed/update") == 0)
-        return handleUpdateRequest(req, res);
-    else if (url.find("/newsFeed/delete") == 0)
-        return handleDeleteRequest(req, res);
-    else {
-        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-        res.send().flush();
-    }
-};
+string ZRequestHandlerFactory::genCookie(int zuid){
+	// create new thrift token object and set required data
+	token token_;
+	token_.zuid = zuid;
+	
+	// convert that to string
+	//Converter<token> borrowObj;
+	Converter<token> *borrowObj;
+	while (!(borrowObj = converterPool()->borrowObject(100))); // timeout 100 miliseconds
+	
+	string serialized_str;
+	borrowObj->serialize(token_, serialized_str);
+	converterPool()->returnObject(borrowObj);
+	
+	// need to turn string from serialized obj to base64 encode for transferable 
+	stringstream ss;
+	Poco::Base64Encoder b64encode(ss);
+	b64encode << serialized_str;
+	b64encode.close(); // must have this for encoder to complete the processing
+	string payload = ss.str();
+	
+	// hash the string result with secret running variable of server to get signature
+	Poco::HMACEngine<SHA1Engine> hmac(ZRequestHandlerFactory::_secret);
+	hmac.update(payload);
+	string signature = Poco::DigestEngine::digestToHex(hmac.digest()); //string 
+	
+	// append payload and signature to have token
+	return (payload + "." + signature);
+}
 
-void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res) {
-    Poco::Util::Application::instance().logger().information("ADD FEED Request from " + req.clientAddress().toString());
-    istream& body_stream = req.stream();
-    HTMLForm form(req, body_stream);
-    string content = form.get("content");
-    
-    NameValueCollection nvc;
-    req.getCookies(nvc);
-    string uid = nvc.get("zuid", "no_cookies");
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
-    
-    FeedCreateResult ret;
-    _conn->client()->createNewsFeed(ret,id,content,0);//status is 0 because no IDEA what it do
-    if (ret.exitCode == 0){
-        res.setStatus(HTTPResponse::HTTP_OK);
-    }else{
-        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-    }
-    res.redirect("/feed");
-};
+bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
+	// read the payload part and signature part from token string
+	string delimiter = ".";
+	string payload = cookie.substr(0, cookie.find(delimiter));
+	string signature = cookie.substr(cookie.find(delimiter) + delimiter.length(), cookie.length());
+	
+	// check if signature is valid
+	Poco::HMACEngine<SHA1Engine> hmac(ZRequestHandlerFactory::_secret);
+	hmac.update(payload);
+	if (!(signature == Poco::DigestEngine::digestToHex(hmac.digest()))){
+		// signature is not valid -> return false immediately
+		return false;
+	}
+	
+	// signature is correct -> get data from payload and put into token
+	stringstream iss;
+	iss << payload;
+	Poco::Base64Decoder b64decode(iss);
+	string serialized_str;
+	b64decode >> serialized_str;
 
-void NewsFeedRequestHandler::handleUpdateRequest(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
-    Poco::Util::Application::instance().logger().information("UPDATE FEED Request from " + req.clientAddress().toString());
-    istream& body_stream = req.stream();
-    HTMLForm form(req, body_stream);
-    string content = form.get("content");
-    int f_id = atoi(form.get("id").c_str());
-    
-    FeedUpdateResult ret;
-    _conn->client()->updateNewsFeed(ret,f_id,content,0);//status is 0 because no IDEA what it do
-    if (ret.exitCode == 0){
-        res.setStatus(HTTPResponse::HTTP_OK);
-        res.set("valid", "true");
-    }else{
-        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-        res.set("valid", "false");
-    }
-    res.send().flush();
-};
-void NewsFeedRequestHandler::handleDeleteRequest(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
-    Poco::Util::Application::instance().logger().information("Delete FEED Request from " + req.clientAddress().toString());
-    istream& body_stream = req.stream();
-    HTMLForm form(req, body_stream);
-    int f_id = atoi(form.get("id").c_str());
-    
-    NameValueCollection nvc;
-    req.getCookies(nvc);
-    string uid = nvc.get("zuid", "no_cookies");
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
-    
-    FeedDeleteResult ret;
-    _conn->client()->deleteNewsFeed(ret,f_id,id);//status is 0 because no IDEA what it do
-    if (ret.exitCode == 0){
-        res.setStatus(HTTPResponse::HTTP_OK);
-        res.set("valid", "true");
-    }else{
-        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-        res.set("valid", "false");
-    }
-    res.send().flush();
-};
-
-
+	// invoke converter to deserialize string back to thrift object
+	token tmp;
+	//Converter<token> borrowObj;
+	Converter<token> *borrowObj;
+	while (!(borrowObj = converterPool()->borrowObject(100))); // timeout 100 miliseconds
+	
+	try {
+		borrowObj->deserialize(serialized_str, tmp);
+		token_ = tmp;
+	} catch (...){
+		Application::instance().logger().information("Debug");
+	}
+	
+	converterPool()->returnObject(borrowObj);
+	
+	// return true for token validity
+	return true;
+}
