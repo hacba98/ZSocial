@@ -155,7 +155,7 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
         res.set("next.post", std::to_string(-1));
         res.set("data" , "<p> no more feed ... </p>");
         res.set("valid", "true");
-      
+        
         res.send().flush();
         return;
     }
@@ -165,29 +165,53 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
     string uid = nvc.get("zuid", "no_cookies");
     int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
     
-    ListFeedResult ret;
+    //ListFeedResult ret;
     
-    _conn->client()->getListFeed(ret,id,item,2);
+    FeedResult ret;
+    _conn->client()->getFeed(ret,item.id);
     if (ret.exitCode == 0){
         
         string feedString;
         
-        for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
             int d, m, y, hh, pp;
-            TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+            TOOL::getDMY(ret.result.edit_time, d, m, y, hh, pp);
             string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
                     + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
             string feed = "<div class=\"card\"> <h1> </h1> <p class=\"price\">" + date + "</p>" +
-                            "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+                            "<p>" + ret.result.content + "</p><p><button>Like</button></p></div><br><br>";
             feedString.append(feed);
-        }
-        
-        res.set("next.id", std::to_string(ret.result.nex.id));
-        res.set("next.post", std::to_string(ret.result.nex.post));
         res.set("data" , feedString);
         res.set("valid", "true");
     }else{
         res.set("valid", "false");
     }
+    
+    res.set("next.id", std::to_string(++ret.result.id));
+    res.set("next.post", std::to_string(-1));
+        
     res.send().flush();
+    
+//    _conn->client()->getListFeed(ret,id,item,2);
+//    if (ret.exitCode == 0){
+//        
+//        string feedString;
+//        
+//        for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
+//            int d, m, y, hh, pp;
+//            TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+//            string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
+//                    + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
+//            string feed = "<div class=\"card\"> <h1> </h1> <p class=\"price\">" + date + "</p>" +
+//                            "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+//            feedString.append(feed);
+//        }
+//        
+//        res.set("next.id", std::to_string(ret.result.nex.id));
+//        res.set("next.post", std::to_string(ret.result.nex.post));
+//        res.set("data" , feedString);
+//        res.set("valid", "true");
+//    }else{
+//        res.set("valid", "false");
+//    }
+//    res.send().flush();
 };

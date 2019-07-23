@@ -155,7 +155,8 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
         ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
         ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
         ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
-        Poco::format(result, ZRequestHandlerFactory::dashboardString,listFeed.result.nex.id,listFeed.result.nex.post, feedString, friendString);
+        //Poco::format(result, ZRequestHandlerFactory::dashboardString,listFeed.result.nex.id,listFeed.result.nex.post, feedString, friendString);
+        Poco::format(result, ZRequestHandlerFactory::dashboardString,0,listFeed.result.nex.post, feedString, friendString);
         std::ostream& ostr = res.send();
         ostr << result;
     } catch (Exception e) {
