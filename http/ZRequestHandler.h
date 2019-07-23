@@ -231,6 +231,8 @@ public:
             Poco::Net::HTTPServerResponse &res);
     void handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
+    void handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
 private:
     NewsFeedConnection *_conn;
 };

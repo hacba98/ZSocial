@@ -173,19 +173,18 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
     if (id != -1) {
         ret = _conn->client()->Logout(id);
     }
+    
+    HTTPCookie cookie;
+    cookie.setMaxAge(0);
+    cookie.setName("zuid");
+    cookie.setValue("0");
+    cookie.setDomain("localhost");
+    cookie.setPath("/");
+    res.set(res.SET_COOKIE, cookie.toString());
+    
     if (ret == ErrorCode::SUCCESS) {
-        
-        HTTPCookie cookie;
-        cookie.setMaxAge(0);
-        cookie.setName("zuid");
-	cookie.setValue("0");
-	cookie.setDomain("localhost");
-	cookie.setPath("/");
-        res.set(res.SET_COOKIE, cookie.toString());
         res.setStatus(HTTPResponse::HTTP_OK);
         res.set("valid", "true");
-        res.redirect("/login");
-	return;
     } else {
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
         res.set("valid", "false");

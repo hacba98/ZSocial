@@ -129,7 +129,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 
         for (auto fr = friRet.friendList.begin(); fr != friRet.friendList.end(); ++fr) {
             feedConn->client()->getFeedCount(feedRet, *fr);
-            feedConn->client()->getListFeed(listFeed, *fr, feedRet.result, 10);
+            feedConn->client()->getListFeed(listFeed, *fr, feedRet.result, 1);
 
 
             profileConn->client()->GetProfile(userRet, *fr);
@@ -155,7 +155,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
         ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
         ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
         ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
-        Poco::format(result, ZRequestHandlerFactory::dashboardString, feedString, friendString);
+        Poco::format(result, ZRequestHandlerFactory::dashboardString,listFeed.result.nex.id,listFeed.result.nex.post, feedString, friendString);
         std::ostream& ostr = res.send();
         ostr << result;
     } catch (Exception e) {
