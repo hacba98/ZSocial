@@ -77,15 +77,15 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		}
 	}
 	if (url.find("/dashboard") == 0) {
-		dashBoard(req, res, uid);
+		dashBoard(req, res, token_.zuid);
 		return;
 	}
 	if (url.find("/feed") == 0) {
-		myFeed(req, res, uid);
+		myFeed(req, res, token_.zuid);
 		return;
 	}
 	if (url.find("/myprofile") == 0) {
-		myProfile(req, res, uid);
+		myProfile(req, res, token_.zuid);
 		return;
 	}
 	// serve add friend page
@@ -106,7 +106,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 	return;
 }
 
-void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, string uid) {
+void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, int uid) {
 	res.setChunkedTransferEncoding(true);
 	res.setContentType("text/html");
 
@@ -114,7 +114,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 
 		string result;
 		string feedString, friendString;
-		int user_id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		int user_id = uid;
 
 		FriendConnection * friendConn;
 		listFriendResult friRet;
@@ -171,7 +171,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 	}
 };
 
-void NoServicesInvokeHandler::myProfile(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, string uid) {
+void NoServicesInvokeHandler::myProfile(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, int uid) {
 	res.setChunkedTransferEncoding(true);
 	res.setContentType("text/html");
 
@@ -179,7 +179,7 @@ void NoServicesInvokeHandler::myProfile(Poco::Net::HTTPServerRequest &req, Poco:
 		GetUserResult ret;
 		ProfileConnection *profileConn;
 		while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100))); // timeout 100 miliseconds
-		profileConn->client()->GetProfile(ret, ZRequestHandlerFactory::getUIDfromCookie(uid));
+		profileConn->client()->GetProfile(ret, uid);
 
 		ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
 
@@ -197,13 +197,13 @@ void NoServicesInvokeHandler::myProfile(Poco::Net::HTTPServerRequest &req, Poco:
 	}
 };
 
-void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, string uid) {
+void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, int uid) {
 	res.setChunkedTransferEncoding(true);
 	res.setContentType("text/html");
 
 	try {
 		// retrieve list friend's newsfeed
-		int user_id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+		int user_id = uid;
 		FeedCountResult feedRet;
 		ListFeedResult listFeed;
 		NewsFeedConnection *feedConn;

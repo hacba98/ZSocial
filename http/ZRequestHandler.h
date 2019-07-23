@@ -157,9 +157,9 @@ public:
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     
-    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
-    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
-    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
+    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
 };
 
 class ProfileRequestHandler : public Poco::Net::HTTPRequestHandler {
