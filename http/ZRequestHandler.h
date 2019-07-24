@@ -289,7 +289,7 @@ class WebSocketHandler : public Poco::Net::HTTPRequestHandler {
 public:
 	void handleRequest(
 		Poco::Net::HTTPServerRequest& req, 
-		Poco::Net::HTTPServerResponse& res);
+		Poco::Net::HTTPServerResponse& res){};
 };
 
 class TOOL {
