@@ -104,10 +104,12 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		} catch (Exception e) {
 			cout << e.message() << endl;
 		}
+		return;
 	}
 
 	// serve unknow path
-	res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+	//res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+	res.redirect("/login");
 	return;
 }
 
