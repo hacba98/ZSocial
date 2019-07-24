@@ -19,6 +19,7 @@ boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory:
 boost::shared_ptr<Poco::ObjectPool<Converter<token> > > ZRequestHandlerFactory::_pool_convert_token;
 
 std::string ZRequestHandlerFactory::_secret;
+map<int, Poco::Net::WebSocket*> ZRequestHandlerFactory::_clients;
 
 
 using namespace std;
@@ -36,23 +37,29 @@ string ZRequestHandlerFactory::myfeedString;
 
 Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &req) {
     Application::instance().logger().information(req.getURI());
-    std::string url = req.getURI();
+	std::string url = req.getURI();
 
-    if (url.find("/profile") == 0) {
-        ProfileConnection *borrowObj;
-        while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
-        return new ProfileRequestHandler(borrowObj);
-    } else if (url.find("/friend") == 0) {
-        FriendConnection *borrowObj;
-        while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
-        return new FriendRequestHandler(borrowObj);
-    } else if (url.find("/newsFeed") == 0) {
-        NewsFeedConnection *borrowObj;
-        while (!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
-        return new NewsFeedRequestHandler(borrowObj);
-    } else {
-        return new NoServicesInvokeHandler;
-    }
+	if (url.find("/profile") == 0) {
+		ProfileConnection *borrowObj;
+		while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
+		return new ProfileRequestHandler(borrowObj);
+	} else if (url.find("/friend") == 0) {
+		FriendConnection *borrowObj;
+		while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
+		return new FriendRequestHandler(borrowObj);
+	} else if (url.find("/newsFeed") == 0) {
+		NewsFeedConnection *borrowObj;
+		while (!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
+		return new NewsFeedRequestHandler(borrowObj);
+	} else {
+		// handle socket connection
+		if (req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0) {
+			return new WebSocketHandler;
+		}
+
+		// if not web-socket -> return page load handler
+		return new NoServicesInvokeHandler;
+	}
 }
 
 string ZRequestHandlerFactory::genCookie(int zuid){
@@ -123,4 +130,14 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 	
 	// return true for token validity
 	return true;
+}
+
+void ZRequestHandlerFactory::onClientConnect(int zuid) {
+	// retrieve user friend list
+	listFriendResult friends;
+	FriendConnection *borrowObj;
+	while (!(borrowObj = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
+	borrowObj->client()->viewFriendList(friends, zuid, 0, 100); // get 100 friends - TODO: get all
+	
+	// 
 }

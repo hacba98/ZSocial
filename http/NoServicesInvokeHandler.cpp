@@ -141,9 +141,9 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 
 
 			profileConn->client()->GetProfile(userRet, *fr);
-
-			string stt = userRet.profile.last_active_time == -1 ? "online." : "offline.";
-			string friends = "<div class=\"friend\"> <p> " + userRet.profile.name + "</p> <p>" + stt + "</p> </div>";
+			bool online = userRet.profile.last_active_time == -1;
+			string stt = online ? "online" : "offline";
+			string friends = "<div class=\"friend friend_" + stt + "\"> <h2> " + userRet.profile.name + "</h2> <p>" + stt + "</p> </div>";
 			friendString.append(friends);
 
 			if (listFeed.exitCode == 0) {
@@ -209,7 +209,7 @@ void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Ne
 		NewsFeedConnection *feedConn;
 		while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 		feedConn->client()->getFeedCount(feedRet, user_id);
-		feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 1);
+		feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 3);
 
 		string result, feedString;
 		if (listFeed.exitCode == 0) {
@@ -236,3 +236,84 @@ void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Ne
 		Poco::Util::Application::instance().logger().error(e.message());
 	}
 };
+
+////////////////////////////////////////////
+
+void handleRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res){
+	try {
+		// check for cookie
+		NameValueCollection nvc;
+		req.getCookies(nvc);
+		string uid = nvc.get("zuid", "no_cookies");
+		if (uid == "no_cookies")
+			res.redirect("/login");
+		
+		// read token in request
+		token token_;
+		bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
+		if (!valid)
+			res.redirect("/login");
+		
+		// data from cookie
+		int zuid = token_.zuid;
+		
+		// establish new connection between client and server
+		WebSocket ws(req, res);
+		Application::instance().logger().information("Web-socket established successfully.");
+		ZRequestHandlerFactory::clients().at(zuid, &ws);
+		
+		char buffer[1024];
+		int flags, n;
+		
+		// we need to sepecify timeout - 5s
+		ws.setReceiveTimeout(Poco::Timespan(0, 0, 0, 30, 0));
+		do {
+			// ws will be blocked and waiting for new data to send back to client
+			// in most case, receiveFrame will throw an exception
+			// then we will gather new data from some way storage for this socket, mapping maybe
+			// in case it return 0 value, that mean peer had been closed or shutdown
+			try {
+				n = ws.receiveFrame(buffer, sizeof(buffer), flags);
+			} catch (Poco::TimeoutException e){
+				// get new data
+				// if new data existed
+				buffer = "Nothing new"
+				ws.sendFrame(buffer, sizeof(buffer), flags);
+				
+				// continue waiting
+				continue;
+			}
+			
+			// handle case where peer had been disconnected
+			if (n == 0) {
+				// storing user logout status in DB
+				ProfileConnection *borrowObj;
+				while(!(borrowObj = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
+				borrowObj->client()->Logout(zuid);
+				
+				// notificate all friends user logout status
+				// TODO
+				
+				// remove from list of current clients
+				ZRequestHandlerFactory::clients().erase(zuid);
+				
+				// stop looping
+				break;
+			}
+		} while ((flags & WebSocket::FRAME_OP_BITMASK) != WebSocket::FRAME_OP_CLOSE);
+		
+		
+	} catch (Poco::Net::WebSocketException e){
+		switch (e.code()){
+			case WebSocket::WS_ERR_HANDSHAKE_UNSUPPORTED_VERSION:
+				res.set("Sec-WebSocket-Version", WebSocket::WEBSOCKET_VERSION);
+			case WebSocket::WS_ERR_NO_HANDSHAKE:
+			case WebSocket::WS_ERR_HANDSHAKE_NO_VERSION:
+			case WebSocket::WS_ERR_HANDSHAKE_NO_KEY:
+				res.setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST);
+				res.setContentLength(0);
+				res.send().flush();
+				break;
+		}
+	}
+}
