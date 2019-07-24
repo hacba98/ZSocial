@@ -15,7 +15,7 @@ using namespace Poco::Net;
 
 void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerResponse &res) {
 	string url = req.getURI();
-
+	res.set("Cache-Control", "no-cache");
 	// check for cookie
 	NameValueCollection nvc;
 	req.getCookies(nvc);
@@ -62,7 +62,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		if (flag) {
 			res.setStatus(HTTPResponse::HTTP_OK);
 			res.setContentType("text/html");
-			res.set("Cache-Control", "no cache");
+			//res.set("Cache-Control", "no cache");
 
 			try {
 				url = "./src/index.html";
