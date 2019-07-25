@@ -139,5 +139,43 @@ void ZRequestHandlerFactory::onClientConnect(int zuid) {
 	while (!(borrowObj = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
 	borrowObj->client()->viewFriendList(friends, zuid, 0, 100); // get 100 friends - TODO: get all
 	
-	// 
+	// loop for friend list, if they are connected to server
+	// then send them a notification
+	if (friends.code == ErrorCode::SUCCESS){
+		WebSocket *ws;
+		for (int i=0; i < friends.friendList.size(); i++){
+			int friend_id = friends.friendList.at(i);
+			map<int, WebSocket*>::iterator it = clients()->find(friend_id);
+			if (it != clients()->end() && it->first == friend_id) {
+				ws = it->second;
+				string payload = "online:" + to_string(zuid);
+				ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+				Application::instance().logger().information(payload);
+			}
+		}
+	}
+}
+
+void ZRequestHandlerFactory::onClientDisconnect(int zuid){
+	// retrieve user friend list
+	listFriendResult friends;
+	FriendConnection *borrowObj;
+	while (!(borrowObj = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
+	borrowObj->client()->viewFriendList(friends, zuid, 0, 100); // get 100 friends - TODO: get all
+	
+	// loop for friend list, if they are connected to server
+	// then send them a notification
+	if (friends.code == ErrorCode::SUCCESS){
+		WebSocket *ws;
+		for (int i=0; i < friends.friendList.size(); i++){
+			int friend_id = friends.friendList.at(i);
+			map<int, WebSocket*>::iterator it = clients()->find(friend_id);
+			if (it != clients()->end() && it->first == friend_id) {
+				ws = it->second;
+				string payload = "offline:" + to_string(zuid);
+				ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+				Application::instance().logger().information(payload);
+			}
+		}
+	}
 }
