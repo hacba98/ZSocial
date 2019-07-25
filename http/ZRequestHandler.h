@@ -58,6 +58,7 @@
 #include "Connection.h"
 //#include "Crypto.h"
 
+#include <map>
 #include <iostream>
 #include <string>
 
@@ -118,13 +119,17 @@ public:
 	    return ZRequestHandlerFactory::_pool_convert_token.get();
     }
     
-    static map<int, Poco::Net::WebSocket*> clients(){
-	    return ZRequestHandlerFactory::_clients;
+    static map<int, Poco::Net::WebSocket*> * clients(){
+	    return &ZRequestHandlerFactory::_clients;
     }
     
     // function called when a client connect to server
     // broadcast notfication to all current listening client in list friend
     static void onClientConnect(int zuid);
+    
+    // function called when a client disconnected from server
+    // broadcast notfication to all current listening client in list friend
+    static void onClientDisconnect(int zuid);
     
     // generate string which payload and signature token from given data
     static string genCookie(int zuid);
@@ -160,7 +165,7 @@ private:
     static std::string _secret;
     
     // store current clients connected
-    static map<int, Poco::Net::WebSocket*> _clients;
+    static std::map<int, Poco::Net::WebSocket*> _clients;
 };
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
@@ -248,6 +253,11 @@ public:
 		Poco::Net::HTTPServerResponse &res,
 		int uid,
 		int requestId);
+	
+	void handleLoadmoreRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		int uid);
 
 private:
     FriendConnection *_conn;
@@ -289,7 +299,7 @@ class WebSocketHandler : public Poco::Net::HTTPRequestHandler {
 public:
 	void handleRequest(
 		Poco::Net::HTTPServerRequest& req, 
-		Poco::Net::HTTPServerResponse& res){};
+		Poco::Net::HTTPServerResponse& res);
 };
 
 class TOOL {
