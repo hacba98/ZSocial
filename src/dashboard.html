@@ -39,7 +39,6 @@ and open the template in the editor.
 		    
 		    var socketURL = 'ws://localhost:8000/online';
 		    var socket = new WebSocket(socketURL);
-		    console.log(socketURL);
 		    
 		    socket.addEventListener('open', function (event){
 			console.log('Open WS: ', socketURL);
@@ -68,7 +67,13 @@ and open the template in the editor.
 				socket.send("ok");
 			}
 		    });
-		  
+		    
+		    window.onbeforeunload = function (){
+			socket.onclose = function (){
+				console.log("web socket closing");
+			}
+			socket.close();
+		    }
 		    
                 </script>
 		<style>
