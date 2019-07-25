@@ -253,6 +253,11 @@ public:
 		Poco::Net::HTTPServerResponse &res,
 		int uid,
 		int requestId);
+	
+	void handleLoadmoreRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		int uid);
 
 private:
     FriendConnection *_conn;

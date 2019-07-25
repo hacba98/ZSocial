@@ -13,7 +13,7 @@ and open the template in the editor.
                 <script>
                     var nextId = %d;
                     var nextPost = %d;
-
+		    
                     function loadmore(){
                         var params = "next.id=" + nextId + "&next.post=" + nextPost;
                         var url = "/newsFeed/loadmore-mywall";
@@ -36,6 +36,32 @@ and open the template in the editor.
                         }
                         xmlHttp.send(params);
                     }    
+		    
+    		    var nextFriendPos = 20;
+
+		    // function to load more friends data in the list
+		    function loadmore_friends(){
+			var params = "next=" + nextFriendPos;
+			var url = "/friend/loadmore";
+			
+			var http = new XMLHttpRequest();
+			http.open('POST', url, false);
+			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                                // nextId = xmlHttp.getResponseHeader("next");
+                                nextPost = xmlHttp.getResponseHeader("next");
+                                let div = document.createElement('div');
+                                div.innerHTML = xmlHttp.getResponseHeader("data");
+
+                                document.getElementById("friends").appendChild(div);
+				
+                            } else if (xmlHttp.status == 404){
+                                alert("Error 404 not work");
+                            }
+                        }
+                        xmlHttp.send(params);
+		    }
 		    
 		    var socketURL = 'ws://localhost:8000/online';
 		    var socket = new WebSocket(socketURL);
@@ -227,29 +253,43 @@ and open the template in the editor.
 		</div>
 		
 		<div class="split center">
-                <div class="centered" id = "listfeed">
-                    <div id="feeds">
-                        <form method="POST" action="/newsFeed/create">
-                            <p>What is in your mind?</p>
-                            <textarea class="status_post" rows="4" name="content"></textarea><br>
-                            <button type ="submit" class="post_button">Post</button>
-                        </form>
-                        <hr>
-                        %s
+			<div class="centered" id = "listfeed" onscroll="scrolled_feeds(this)">
+				<div id="feeds">
+					<form method="POST" action="/newsFeed/create">
+						<p>What is in your mind?</p>
+						<textarea class="status_post" rows="4" name="content"></textarea><br>
+						<button type ="submit" class="post_button">Post</button>
+					</form>
+					<hr>
+					%s
 
-                    </div>
+				</div>
 
-                    <div>
-                        <br>
-                        <br>
-                        <button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
-                    </div>
-                </div>
-
+				<div>
+					<br><br>
+					<button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
+				</div>
+			</div>
             </div>
-            <div class="split left">
+		<div class="split left" onscroll="scrolled_friends(this)" id="friends">
                 %s
             </div>
 		
+		<script>
+			function scrolled_feeds(o){
+				// check if reach end of page
+				if (o.offsetHeight + o.scrollTop == o.scrollHeight && nextId != -1){
+					loadmore();
+				}
+			}
+			
+			function scrolled_friends(o){
+				// check if reach end of page
+				if (o.offsetHeight + o.scrollTop == o.scrollHeight && nextFriendPos != -1){
+					loadmore_friends();
+				}
+			}
+		</script>
 	</body>
+	
 </html>

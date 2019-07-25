@@ -108,6 +108,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 
 	// serve unknow path
 	res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
+	res.redirect("/");
 	return;
 }
 
@@ -125,7 +126,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 		listFriendResult friRet;
 		while (!(friendConn = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
 
-		friendConn->client()->viewFriendList(friRet, user_id, 0, 20);
+		friendConn->client()->viewFriendList(friRet, user_id, 0, 20); // get first 20 friends
 
 		FeedCountResult feedRet;
 		ListFeedResult listFeed;
