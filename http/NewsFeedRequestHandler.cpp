@@ -36,10 +36,10 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     token token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
-    if (uid == "no_cookies" || !valid){
-        res.redirect("/");
-        return;
-    }
+    if (!valid) // redirect to /login
+	    return res.redirect("/login");
+    
+    int id = token_.zuid;
     
     FeedCreateResult ret;
     _conn->client()->createNewsFeed(ret,token_.zuid,content,0);//status is 0 because no IDEA what it do
@@ -78,13 +78,15 @@ void NewsFeedRequestHandler::handleDeleteRequest(Poco::Net::HTTPServerRequest &r
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
+    
+    // token handle
     token token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
-    if (uid == "no_cookies" || !valid){
-        res.redirect("/");
-        return;
-    }
+    if (!valid) // redirect to /login
+	    return res.redirect("/login");
+    
+    int id = token_.zuid;
     
     FeedDeleteResult ret;
     _conn->client()->deleteNewsFeed(ret,f_id,token_.zuid);
@@ -122,13 +124,16 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerR
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
+    
+    // token handle
     token token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
-    if (uid == "no_cookies" || !valid){
-        res.redirect("/");
-        return;
-    }
+    if (!valid) // redirect to /login
+	    return res.redirect("/login");
+    
+    int id = token_.zuid;
+    
     ListFeedResult ret;
     
     _conn->client()->getListFeed(ret,token_.zuid,item,2);
@@ -181,13 +186,15 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
+    
+    // token handle
     token token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
-    if (uid == "no_cookies" || !valid){
-        res.redirect("/");
-        return;
-    }
+    if (!valid) // redirect to /login
+	    return res.redirect("/login");
+    
+    int id = token_.zuid;
     
     ListFeedResult ret;
     
@@ -213,8 +220,6 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
                     if (*it == '\n' || *it == '\r') *it = '-';
                 }
                 feedString.append(feed);
-                Poco::Util::Application::instance().logger().information(i->content);
-                Poco::Util::Application::instance().logger().information(feed);
         }
         ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
         res.set("next.id", std::to_string(ret.result.nex.id));

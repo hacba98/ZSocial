@@ -23,6 +23,7 @@
 #include "Poco/Net/HTMLForm.h"
 #include "Poco/Net/NameValueCollection.h"
 #include "Poco/Net/HTTPCookie.h"
+#include "Poco/Net/WebSocket.h"
 #include "Poco/ObjectPool.h"
 #include "Poco/Util/Application.h"
 #include "Poco/Net/HTMLForm.h"
@@ -42,6 +43,7 @@
 #include "Poco/Base64Decoder.h"
 #include "Poco/Base64Encoder.h"
 #include "Poco/StreamCopier.h"
+#include "Poco/String.h"
 
 #include "thrift/TToString.h"
 #include "thrift/protocol/TBase64Utils.h"
@@ -56,6 +58,7 @@
 #include "Connection.h"
 //#include "Crypto.h"
 
+#include <map>
 #include <iostream>
 #include <string>
 
@@ -116,6 +119,18 @@ public:
 	    return ZRequestHandlerFactory::_pool_convert_token.get();
     }
     
+    static map<int, Poco::Net::WebSocket*> * clients(){
+	    return &ZRequestHandlerFactory::_clients;
+    }
+    
+    // function called when a client connect to server
+    // broadcast notfication to all current listening client in list friend
+    static void onClientConnect(int zuid);
+    
+    // function called when a client disconnected from server
+    // broadcast notfication to all current listening client in list friend
+    static void onClientDisconnect(int zuid);
+    
     // generate string which payload and signature token from given data
     static string genCookie(int zuid);
     
@@ -148,6 +163,9 @@ private:
     
     // secret for token
     static std::string _secret;
+    
+    // store current clients connected
+    static std::map<int, Poco::Net::WebSocket*> _clients;
 };
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
@@ -235,6 +253,11 @@ public:
 		Poco::Net::HTTPServerResponse &res,
 		int uid,
 		int requestId);
+	
+	void handleLoadmoreRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		int uid);
 
 private:
     FriendConnection *_conn;
@@ -265,6 +288,18 @@ public:
             Poco::Net::HTTPServerResponse &res);
 private:
     NewsFeedConnection *_conn;
+};
+
+///////////////////
+// Web Socket Handler
+///////////////////
+// handle websocket connection
+// using for friend online/offline mode
+class WebSocketHandler : public Poco::Net::HTTPRequestHandler {
+public:
+	void handleRequest(
+		Poco::Net::HTTPServerRequest& req, 
+		Poco::Net::HTTPServerResponse& res);
 };
 
 class TOOL {
