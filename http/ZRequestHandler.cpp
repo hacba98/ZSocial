@@ -74,6 +74,8 @@ string ZRequestHandlerFactory::genCookie(int zuid){
 	
 	string serialized_str;
 	borrowObj->serialize(token_, serialized_str);
+        token tmp;
+        borrowObj->deserialize(serialized_str, tmp);
 	converterPool()->returnObject(borrowObj);
 	
 	// need to turn string from serialized obj to base64 encode for transferable 
@@ -106,12 +108,25 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 		return false;
 	}
 	
-	// signature is correct -> get data from payload and put into token
-	stringstream iss;
+//	// signature is correct -> get data from payload and put into token
+//	stringstream iss;
+//	iss << payload;
+//	Poco::Base64Decoder b64decode(iss);
+//	string serialized_str;
+//	b64decode >> serialized_str;
+        
+        // signature is correct -> get data from payload and put into token
+	stringstream iss, oss;
 	iss << payload;
 	Poco::Base64Decoder b64decode(iss);
-	string serialized_str;
-	b64decode >> serialized_str;
+	copy(std::istreambuf_iterator<char>(b64decode),
+		std::istreambuf_iterator<char>(),
+		std::ostreambuf_iterator<char>(oss));
+	
+	
+	//b64decode>> buff;
+	//b64decode.getline(buff, 128);
+	string serialized_str = oss.str();
 
 	// invoke converter to deserialize string back to thrift object
 	token tmp;

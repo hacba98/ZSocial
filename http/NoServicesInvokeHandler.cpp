@@ -127,7 +127,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 		listFriendResult friRet;
 		while (!(friendConn = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
 
-		friendConn->client()->viewFriendList(friRet, user_id, 0, 20); // get first 20 friends
+		friendConn->client()->viewFriendList(friRet, user_id, 0, 10); // get first 20 friends
 
 		FeedCountResult feedRet;
 		ListFeedResult listFeed;

@@ -173,6 +173,7 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req, Poco
 	if (uid == "no_cookies") {
 		res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
 		res.set("valid", "false");
+                res.redirect("/login");
 		res.send().flush();
 		return;
 	}
@@ -182,6 +183,7 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req, Poco
 	if (!ZRequestHandlerFactory::validCookie(token_, uid)) {
 		res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
 		res.set("valid", "false");
+                res.redirect("/login");
 		res.send().flush();
 		return;
 	}

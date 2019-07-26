@@ -37,7 +37,7 @@ and open the template in the editor.
                         xmlHttp.send(params);
                     }    
 		    
-    		    var nextFriendPos = 20;
+    		    var nextFriendPos = 10;
 
 		    // function to load more friends data in the list
 		    function loadmore_friends(){
@@ -47,20 +47,20 @@ and open the template in the editor.
 			var http = new XMLHttpRequest();
 			http.open('POST', url, false);
 			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
-                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                                // nextId = xmlHttp.getResponseHeader("next");
-                                nextPost = xmlHttp.getResponseHeader("next");
+			http.onreadystatechange = function() {//Call a function when the state changes.
+                            if(http.readyState == 4 && http.status == 200) {
+                                // nextId = http.getResponseHeader("next");
+                                nextFriendPos = http.getResponseHeader("next");
                                 let div = document.createElement('div');
-                                div.innerHTML = xmlHttp.getResponseHeader("data");
+                                div.innerHTML = http.getResponseHeader("data");
 
                                 document.getElementById("friends").appendChild(div);
 				
-                            } else if (xmlHttp.status == 404){
+                            } else if (http.status == 404){
                                 alert("Error 404 not work");
                             }
                         }
-                        xmlHttp.send(params);
+                        http.send(params);
 		    }
 		    
 		    var socketURL = 'ws://localhost:8000/online';
@@ -215,7 +215,7 @@ and open the template in the editor.
                             text-align: center;
                             cursor: pointer;
                             width: 100%%;
-                            font-size: 14px;
+                            font-size: 20px;
 			    margin: 15px;
 			    border-radius: 20px;
                         }
@@ -252,8 +252,8 @@ and open the template in the editor.
 			<a class="active" href="/dashboard">Wall</a>
 		</div>
 		
-		<div class="split center">
-			<div class="centered" id = "listfeed" onscroll="scrolled_feeds(this)">
+		<div class="split center" onscroll="scrolled_feeds(this)">
+			<div class="centered" id = "listfeed">
 				<div id="feeds">
 					<form method="POST" action="/newsFeed/create">
 						<p>What is in your mind?</p>
@@ -271,7 +271,7 @@ and open the template in the editor.
 				</div>
 			</div>
             </div>
-		<div class="split left" onscroll="scrolled_friends(this)" id="friends">
+	    <div class="split left" onscroll="scrolled_friends(this)" id="friends">
                 %s
             </div>
 		
@@ -285,7 +285,7 @@ and open the template in the editor.
 			
 			function scrolled_friends(o){
 				// check if reach end of page
-				if (o.offsetHeight + o.scrollTop == o.scrollHeight && nextFriendPos != -1){
+				if (o.offsetHeight + o.scrollTop <= o.scrollHeight && nextFriendPos != -1){
 					loadmore_friends();
 				}
 			}
