@@ -106,12 +106,22 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 		return false;
 	}
 	
+//	// signature is correct -> get data from payload and put into token
+	// this code with sometime missing special char in the end 
+//	stringstream iss;
+//	iss << payload;
+//	Poco::Base64Decoder b64decode(iss);
+//	string serialized_str;
+//	b64decode >> serialized_str;
+	
 	// signature is correct -> get data from payload and put into token
-	stringstream iss;
+	stringstream iss, oss;
 	iss << payload;
 	Poco::Base64Decoder b64decode(iss);
-	string serialized_str;
-	b64decode >> serialized_str;
+	copy(std::istreambuf_iterator<char>(b64decode),
+		std::istreambuf_iterator<char>(),
+		std::ostreambuf_iterator<char>(oss));
+	string serialized_str = oss.str();
 
 	// invoke converter to deserialize string back to thrift object
 	token tmp;
