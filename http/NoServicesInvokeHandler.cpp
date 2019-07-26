@@ -134,39 +134,40 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 		NewsFeedConnection *feedConn;
 		while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 
-
 		// user data
 		ProfileConnection *profileConn;
-		GetUserResult userRet;
 		while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
+                ListProfileResult listFriend;
+                profileConn->client()->getList(listFriend,friRet.friendList);
+                
+		feedConn->client()->getWallCount(feedRet, user_id);
+                feedConn->client()->getListWall(listFeed, user_id, feedRet.result, 2);
 
+                for (auto userRet = listFriend.profiles.begin(); userRet != listFriend.profiles.end(); ++userRet){
+                    bool online = userRet->last_active_time == -1;
+                    string stt = online ? "online" : "offline";
+                    //string friends = "<div class=\"friend\"> <p> " + userRet->name + "</p> <p>" + stt + "</p> </div>";
+                    string friends = "<div id=\"friend_" + to_string(userRet->id) + "\" class=\"friend friend_" + stt + "\"> <h2> " + userRet->name + "</h2></div>";
+                    friendString.append(friends);
+                }
 
+                if (listFeed.exitCode == 0) {
 
-		for (auto fr = friRet.friendList.begin(); fr != friRet.friendList.end(); ++fr) {
-			feedConn->client()->getFeedCount(feedRet, *fr);
-			feedConn->client()->getListFeed(listFeed, *fr, feedRet.result, 1);
-
-
-			profileConn->client()->GetProfile(userRet, *fr);
-			bool online = userRet.profile.last_active_time == -1;
-			string stt = online ? "online" : "offline";
-			string friends = "<div id=\"friend_" + to_string(userRet.profile.id) + "\" class=\"friend friend_" + stt + "\"> <h2> " + userRet.profile.name + "</h2></div>";
-			friendString.append(friends);
-
-			if (listFeed.exitCode == 0) {
-
-				for (auto i = listFeed.result.feedlist.begin(); i != listFeed.result.feedlist.end(); ++i) {
-					int d, m, y, hh, pp;
-					TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
-					string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
-						+ "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
-					string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
-						"<p class=\"price\">" + date + "</p>" +
-						"<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
-					feedString.append(feed);
-				}
-			}
-		}
+                        for (auto i = listFeed.result.feedlist.begin(); i != listFeed.result.feedlist.end(); ++i) {
+                            int d, m, y, hh, pp;
+                            TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+                            GetUserResult userRet;
+                            profileConn->client()->GetProfile(userRet,i->owner);
+                            string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
+                                    + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
+                            string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
+                                    "<p class=\"price\">" + date + "</p>" +
+                                    "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+                            
+                            feedString.append(feed);
+                        }
+                }
+                        
 		ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
 		ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
 		ZRequestHandlerFactory::friendPool()->returnObject(friendConn);

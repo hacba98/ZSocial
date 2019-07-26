@@ -234,4 +234,6 @@ service NewsFeedService {
     FeedResult          getFeed(       1: i32 id),
     FeedCountResult     getFeedCount(  1: i32 owner),
     ListFeedResult      getListFeed(   1: i32 owner,   2: Item post,       3: i32 count),
+    ListFeedResult      getListWall(   1: i32 owner,   2: Item post,       3: i32 count),
+    FeedCountResult     getWallCount(  1: i32 owner),
 }
