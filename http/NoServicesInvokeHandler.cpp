@@ -141,7 +141,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
                 profileConn->client()->getList(listFriend,friRet.friendList);
                 
 		feedConn->client()->getWallCount(feedRet, user_id);
-                feedConn->client()->getListWall(listFeed, user_id, feedRet.result, 2);
+                feedConn->client()->getListWall(listFeed, user_id, feedRet.result, 10);
 
                 for (auto userRet = listFriend.profiles.begin(); userRet != listFriend.profiles.end(); ++userRet){
                     bool online = userRet->last_active_time == -1;
@@ -158,6 +158,11 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
                             TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
                             GetUserResult userRet;
                             profileConn->client()->GetProfile(userRet,i->owner);
+			    
+			    // filter userRet
+			    if (i->edit_time == 0)
+				    continue;
+			    
                             string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
                                     + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
                             string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
