@@ -79,17 +79,16 @@ void ProfileRequestHandler::handleLogin(
 	
 	if (loginRet.code == ErrorCode::SUCCESS){ // valid case need to response token
 		res.setStatus(HTTPResponse::HTTP_OK);
+		
+		// store token object in cookie
 		HTTPCookie cookie;
 		cookie.setMaxAge(60*60*24); // 1 year(day :v) life time
 		cookie.setName("zuid");
-		
-		// call function to get UUID
-		cookie.setValue(ZRequestHandlerFactory::genUIDforCookie(loginRet.profile.id));
+		cookie.setValue(ZRequestHandlerFactory::genCookie(loginRet.profile.id));
 		cookie.setDomain("localhost");
 		cookie.setPath("/");
 		res.set(res.SET_COOKIE, cookie.toString());
-
-		//string cookie = sprintf("ZUID=%s", to_string(loginRet.profile.id));
+		
 		res.set("valid", "true");
 	} else if (loginRet.code == ErrorCode::USER_NOT_FOUND){
 		res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
@@ -107,16 +106,27 @@ void ProfileRequestHandler::handleUpdate(Poco::Net::HTTPServerRequest &req,Poco:
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
     
+    // no cookie case -> redirect login
     if (uid == "no_cookies"){
         res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
         res.set("valid", "false");
         res.send().flush();
         return;
     }
+    
+    // valid cookie: false -> redirect login
+    token token_;
+    if (!ZRequestHandlerFactory::validCookie(token_, uid)){
+	res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
+        res.set("valid", "false");
+        res.send().flush();
+        return;
+    }
+    
     HTMLForm form(req, req.stream());
     
-    // get id from session management
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    // get id from token
+    int id = token_.zuid;
     //int id = atoi(uid.c_str());
     string name = form.get("name", "No one will name like this");
     string gender = form.get("gender", "");
@@ -158,16 +168,25 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req,Poco:
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
     
+    // no cookie case -> redirect login
     if (uid == "no_cookies"){
         res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
         res.set("valid", "false");
-        res.redirect("/login");
+        res.send().flush();
+        return;
+    }
+    
+    // valid cookie: false -> redirect login
+    token token_;
+    if (!ZRequestHandlerFactory::validCookie(token_, uid)){
+	res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
+        res.set("valid", "false");
+        res.send().flush();
         return;
     }
     
     // get id from session management
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
-    //int id = atoi(uid.c_str());
+    int id = token_.zuid;
     
     ErrorCode::type ret;
     if (id != -1) {

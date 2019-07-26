@@ -33,14 +33,28 @@
 #include "Poco/NumberFormatter.h"
 #include "Poco/UUIDGenerator.h"
 #include "Poco/UUID.h"
+#include "Poco/DateTime.h"
+#include "Poco/Crypto/Crypto.h"
+#include "Poco/Crypto/DigestEngine.h"
+#include "Poco/DigestEngine.h"
+#include "Poco/HMACEngine.h"
+#include "Poco/SHA1Engine.h"
+#include "Poco/Base64Decoder.h"
+#include "Poco/Base64Encoder.h"
+#include "Poco/StreamCopier.h"
 
 #include "thrift/TToString.h"
+#include "thrift/protocol/TBase64Utils.h"
 
 #include "../gen-cpp/ProfileServices.h"
 #include "../gen-cpp/FriendServices.h"
 #include "../gen-cpp/NewsFeedService.h"
+#include "../gen-cpp/token_types.h"
+
+#include "../util/Converter.h"
 
 #include "Connection.h"
+//#include "Crypto.h"
 
 #include <iostream>
 #include <string>
@@ -52,17 +66,20 @@ using namespace Poco::Net;
 class ZRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
 public:
 
-    ZRequestHandlerFactory() {
+    ZRequestHandlerFactory(){
         int poolCapacity = Poco::Util::Application::instance().config().getInt("http.connectionPoolCapacity", 50);
         int poolPeakCapacity = Poco::Util::Application::instance().config().getInt("http.connectionPoolPeakCapacity", 100);
 
         boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > pool_profiles(new Poco::ObjectPool<ProfileConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<FriendConnection> > pool_friends(new Poco::ObjectPool<FriendConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > pool_newsfeed(new Poco::ObjectPool<NewsFeedConnection>(poolCapacity, poolPeakCapacity));
+        boost::shared_ptr<Poco::ObjectPool<Converter<token> > > pool_convert_token(new Poco::ObjectPool<Converter<token> >(poolCapacity, poolPeakCapacity));
+
 
         ZRequestHandlerFactory::_pool_profiles = pool_profiles;
         ZRequestHandlerFactory::_pool_friends = pool_friends;
         ZRequestHandlerFactory::_pool_newsfeed = pool_newsfeed;
+	ZRequestHandlerFactory::_pool_convert_token = pool_convert_token;
         
         loadString(dashboardString,"./src/dashboard.html");
         loadString(loginString,"./src/index.html");
@@ -70,6 +87,15 @@ public:
         loadString(profileString,"./src/profile.html");
         loadString(friendString,"./src/friend.html");
         loadString(myfeedString,"./src/myfeed.html");
+	
+	// load secret key and set to a running variable of server
+	ZRequestHandlerFactory::_secret = Poco::Util::Application::instance().config().getString("token.secret", "this is a secret");
+	ZRequestHandlerFactory::_secret.append(ZRequestHandlerFactory::_secret);
+	if (Poco::Util::Application::instance().config().getInt("token.type", 0) == 1){
+		Poco::DateTime now;
+		ZRequestHandlerFactory::_secret = ZRequestHandlerFactory::_secret.append(to_string(now.microsecond()));
+	}
+	
     }
 
     virtual Poco::Net::HTTPRequestHandler * createRequestHandler(const Poco::Net::HTTPServerRequest &req);
@@ -85,18 +111,16 @@ public:
     static Poco::ObjectPool<NewsFeedConnection> * newsfeedPool() {
         return ZRequestHandlerFactory::_pool_newsfeed.get();
     }
-    static int getUIDfromCookie(std::string zuid) {
-        return ZRequestHandlerFactory::_session_management[zuid];
-    };
-
-    // function that return unique id for cookie storing and also auto 
-    // map that unique id to userid in session management
-
-    static string genUIDforCookie(int uid) {
-        Poco::UUID ran_id = ZRequestHandlerFactory::_zuidGen.create();
-        ZRequestHandlerFactory::_session_management[ran_id.toString()] = uid;
-        return ran_id.toString();
+    
+    static Poco::ObjectPool<Converter<token> > * converterPool(){
+	    return ZRequestHandlerFactory::_pool_convert_token.get();
     }
+    
+    // generate string which payload and signature token from given data
+    static string genCookie(int zuid);
+    
+    // valid cookie and return token object for retrievable information
+    static bool validCookie(token& token_, std::string cookie);
     
     static string dashboardString;
     static string loginString;
@@ -109,10 +133,7 @@ private:
     static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
     static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
     static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
-    
-    // mapping from zuid in cookie to real user id in DB
-    static std::map<string, int> _session_management;
-    static Poco::UUIDGenerator _zuidGen;
+    static boost::shared_ptr<Poco::ObjectPool<Converter<token> > > _pool_convert_token;
     
     void loadString(string& result, string path) {
         Poco::FileInputStream htmlFile(path);
@@ -124,6 +145,9 @@ private:
             result.append("\n");
         }
     }
+    
+    // secret for token
+    static std::string _secret;
 };
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
@@ -133,9 +157,9 @@ public:
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     
-    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
-    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
-    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, string uid);
+    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
 };
 
 class ProfileRequestHandler : public Poco::Net::HTTPRequestHandler {
@@ -193,18 +217,24 @@ public:
 	void handleAddFriend(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
-		std::string uid);
+		int uid);
 	
 	void handleLoadPage(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
-		std::string uid,
+		int uid,
 		int paging_index);
 	
 	void handleAcceptRequest(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
-		std::string uid);
+		int uid);
+	
+	void handleRejectRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		int uid,
+		int requestId);
 
 private:
     FriendConnection *_conn;

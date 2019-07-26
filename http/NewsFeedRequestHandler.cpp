@@ -33,10 +33,16 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    token token_;
+    bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
+    
+    if (uid == "no_cookies" || !valid){
+        res.redirect("/");
+        return;
+    }
     
     FeedCreateResult ret;
-    _conn->client()->createNewsFeed(ret,id,content,0);//status is 0 because no IDEA what it do
+    _conn->client()->createNewsFeed(ret,token_.zuid,content,0);//status is 0 because no IDEA what it do
     if (ret.exitCode == 0){
         res.setStatus(HTTPResponse::HTTP_OK);
     }else{
@@ -72,10 +78,16 @@ void NewsFeedRequestHandler::handleDeleteRequest(Poco::Net::HTTPServerRequest &r
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    token token_;
+    bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
+    
+    if (uid == "no_cookies" || !valid){
+        res.redirect("/");
+        return;
+    }
     
     FeedDeleteResult ret;
-    _conn->client()->deleteNewsFeed(ret,f_id,id);
+    _conn->client()->deleteNewsFeed(ret,f_id,token_.zuid);
     if (ret.exitCode == 0){
         res.setStatus(HTTPResponse::HTTP_OK);
         res.set("valid", "true");
@@ -110,10 +122,16 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerR
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    token token_;
+    bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
+    
+    if (uid == "no_cookies" || !valid){
+        res.redirect("/");
+        return;
+    }
     ListFeedResult ret;
     
-    _conn->client()->getListFeed(ret,id,item,2);
+    _conn->client()->getListFeed(ret,token_.zuid,item,2);
     if (ret.exitCode == 0){
         string feedString;
         for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
@@ -140,7 +158,7 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerR
 };
 
 void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
-    Poco::Util::Application::instance().logger().information("Load more owner FEED Request from " + req.clientAddress().toString());
+    Poco::Util::Application::instance().logger().information("Load more wall FEED Request from " + req.clientAddress().toString());
     istream& body_stream = req.stream();
     HTMLForm form(req, body_stream);
     Item item;
@@ -163,55 +181,48 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    int id = ZRequestHandlerFactory::getUIDfromCookie(uid);
+    token token_;
+    bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
-    //ListFeedResult ret;
+    if (uid == "no_cookies" || !valid){
+        res.redirect("/");
+        return;
+    }
     
-    FeedResult ret;
-    _conn->client()->getFeed(ret,item.id);
+    ListFeedResult ret;
+    
+    _conn->client()->getListWall(ret,token_.zuid,item,2);
     if (ret.exitCode == 0){
+        ProfileConnection *profileConn;
+	while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
         
         string feedString;
         
+        for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
             int d, m, y, hh, pp;
-            TOOL::getDMY(ret.result.edit_time, d, m, y, hh, pp);
-            string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
-                    + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
-            string feed = "<div class=\"card\"> <h1> </h1> <p class=\"price\">" + date + "</p>" +
-                            "<p>" + ret.result.content + "</p><p><button>Like</button></p></div><br><br>";
-            feedString.append(feed);
+                TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+                GetUserResult userRet;
+                profileConn->client()->GetProfile(userRet,i->owner);
+                string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
+                        + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
+                
+                string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
+                        "<p class=\"price\">" + date + "</p>" +
+                        "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+                for(auto it = feed.begin() ; it != feed.end() ; ++it){
+                    if (*it == '\n' || *it == '\r') *it = '-';
+                }
+                feedString.append(feed);
+                Poco::Util::Application::instance().logger().information(i->content);
+                Poco::Util::Application::instance().logger().information(feed);
+        }
+        ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
+        res.set("next.id", std::to_string(ret.result.nex.id));
+        res.set("next.post", std::to_string(ret.result.nex.post));
         res.set("data" , feedString);
         res.set("valid", "true");
     }else{
         res.set("valid", "false");
     }
-    
-    res.set("next.id", std::to_string(++ret.result.id));
-    res.set("next.post", std::to_string(-1));
-        
     res.send().flush();
-    
-//    _conn->client()->getListFeed(ret,id,item,2);
-//    if (ret.exitCode == 0){
-//        
-//        string feedString;
-//        
-//        for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
-//            int d, m, y, hh, pp;
-//            TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
-//            string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
-//                    + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
-//            string feed = "<div class=\"card\"> <h1> </h1> <p class=\"price\">" + date + "</p>" +
-//                            "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
-//            feedString.append(feed);
-//        }
-//        
-//        res.set("next.id", std::to_string(ret.result.nex.id));
-//        res.set("next.post", std::to_string(ret.result.nex.post));
-//        res.set("data" , feedString);
-//        res.set("valid", "true");
-//    }else{
-//        res.set("valid", "false");
-//    }
-//    res.send().flush();
 };
