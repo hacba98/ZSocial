@@ -270,9 +270,17 @@ void WebSocketHandler::handleRequest(Poco::Net::HTTPServerRequest& req, Poco::Ne
 		(*ZRequestHandlerFactory::clients())[zuid] = &ws; //register connected client 
 		ZRequestHandlerFactory::onClientConnect(zuid);
 		
+		// update login status to user DB
+		loginResult ret;
+		ProfileConnection *borrowObj;
+		while (!(borrowObj = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
+		borrowObj->client()->LoginById(ret, zuid);
+		ZRequestHandlerFactory::profilePool()->returnObject(borrowObj);
+		
 		// TODO - Bug: client turn off connection will set them to be logout in DB
 		// next time they visit home page they will be bypass login page with cookie
 		// so their status need to set to online again
+		// DONE
 
 		char buffer[1024];
 		int flags, n;

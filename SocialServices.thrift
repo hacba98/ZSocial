@@ -174,6 +174,7 @@ service ProfileServices {
 	// Login / Logout
 	loginResult Login(1:string username, 2:string password),
 	ErrorCode Logout(1:i32 userId), 
+	loginResult LoginById(1:i32 userId),
 
 	// Create new user
 	CreateUserResult CreateProfile(1:UserProfile profile),

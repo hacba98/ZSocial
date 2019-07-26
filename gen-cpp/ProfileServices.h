@@ -23,6 +23,7 @@ class ProfileServicesIf {
   virtual ~ProfileServicesIf() {}
   virtual void Login(loginResult& _return, const std::string& username, const std::string& password) = 0;
   virtual ErrorCode::type Logout(const int32_t userId) = 0;
+  virtual void LoginById(loginResult& _return, const int32_t userId) = 0;
   virtual void CreateProfile(CreateUserResult& _return, const UserProfile& profile) = 0;
   virtual void GetProfile(GetUserResult& _return, const int32_t userId) = 0;
   virtual ErrorCode::type UpdateProfile(const UserProfile& profile, const int32_t userId) = 0;
@@ -68,6 +69,9 @@ class ProfileServicesNull : virtual public ProfileServicesIf {
   ErrorCode::type Logout(const int32_t /* userId */) {
     ErrorCode::type _return = (ErrorCode::type)0;
     return _return;
+  }
+  void LoginById(loginResult& /* _return */, const int32_t /* userId */) {
+    return;
   }
   void CreateProfile(CreateUserResult& /* _return */, const UserProfile& /* profile */) {
     return;
@@ -317,6 +321,110 @@ class ProfileServices_Logout_presult {
   ErrorCode::type* success;
 
   _ProfileServices_Logout_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ProfileServices_LoginById_args__isset {
+  _ProfileServices_LoginById_args__isset() : userId(false) {}
+  bool userId :1;
+} _ProfileServices_LoginById_args__isset;
+
+class ProfileServices_LoginById_args {
+ public:
+
+  ProfileServices_LoginById_args(const ProfileServices_LoginById_args&);
+  ProfileServices_LoginById_args& operator=(const ProfileServices_LoginById_args&);
+  ProfileServices_LoginById_args() : userId(0) {
+  }
+
+  virtual ~ProfileServices_LoginById_args() throw();
+  int32_t userId;
+
+  _ProfileServices_LoginById_args__isset __isset;
+
+  void __set_userId(const int32_t val);
+
+  bool operator == (const ProfileServices_LoginById_args & rhs) const
+  {
+    if (!(userId == rhs.userId))
+      return false;
+    return true;
+  }
+  bool operator != (const ProfileServices_LoginById_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ProfileServices_LoginById_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ProfileServices_LoginById_pargs {
+ public:
+
+
+  virtual ~ProfileServices_LoginById_pargs() throw();
+  const int32_t* userId;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ProfileServices_LoginById_result__isset {
+  _ProfileServices_LoginById_result__isset() : success(false) {}
+  bool success :1;
+} _ProfileServices_LoginById_result__isset;
+
+class ProfileServices_LoginById_result {
+ public:
+
+  ProfileServices_LoginById_result(const ProfileServices_LoginById_result&);
+  ProfileServices_LoginById_result& operator=(const ProfileServices_LoginById_result&);
+  ProfileServices_LoginById_result() {
+  }
+
+  virtual ~ProfileServices_LoginById_result() throw();
+  loginResult success;
+
+  _ProfileServices_LoginById_result__isset __isset;
+
+  void __set_success(const loginResult& val);
+
+  bool operator == (const ProfileServices_LoginById_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const ProfileServices_LoginById_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ProfileServices_LoginById_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ProfileServices_LoginById_presult__isset {
+  _ProfileServices_LoginById_presult__isset() : success(false) {}
+  bool success :1;
+} _ProfileServices_LoginById_presult__isset;
+
+class ProfileServices_LoginById_presult {
+ public:
+
+
+  virtual ~ProfileServices_LoginById_presult() throw();
+  loginResult* success;
+
+  _ProfileServices_LoginById_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1407,6 +1515,9 @@ class ProfileServicesClient : virtual public ProfileServicesIf {
   ErrorCode::type Logout(const int32_t userId);
   void send_Logout(const int32_t userId);
   ErrorCode::type recv_Logout();
+  void LoginById(loginResult& _return, const int32_t userId);
+  void send_LoginById(const int32_t userId);
+  void recv_LoginById(loginResult& _return);
   void CreateProfile(CreateUserResult& _return, const UserProfile& profile);
   void send_CreateProfile(const UserProfile& profile);
   void recv_CreateProfile(CreateUserResult& _return);
@@ -1454,6 +1565,7 @@ class ProfileServicesProcessor : public ::apache::thrift::TDispatchProcessor {
   ProcessMap processMap_;
   void process_Login(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Logout(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_LoginById(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_CreateProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_GetProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_UpdateProfile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1469,6 +1581,7 @@ class ProfileServicesProcessor : public ::apache::thrift::TDispatchProcessor {
     iface_(iface) {
     processMap_["Login"] = &ProfileServicesProcessor::process_Login;
     processMap_["Logout"] = &ProfileServicesProcessor::process_Logout;
+    processMap_["LoginById"] = &ProfileServicesProcessor::process_LoginById;
     processMap_["CreateProfile"] = &ProfileServicesProcessor::process_CreateProfile;
     processMap_["GetProfile"] = &ProfileServicesProcessor::process_GetProfile;
     processMap_["UpdateProfile"] = &ProfileServicesProcessor::process_UpdateProfile;
@@ -1524,6 +1637,16 @@ class ProfileServicesMultiface : virtual public ProfileServicesIf {
       ifaces_[i]->Logout(userId);
     }
     return ifaces_[i]->Logout(userId);
+  }
+
+  void LoginById(loginResult& _return, const int32_t userId) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->LoginById(_return, userId);
+    }
+    ifaces_[i]->LoginById(_return, userId);
+    return;
   }
 
   void CreateProfile(CreateUserResult& _return, const UserProfile& profile) {
@@ -1656,6 +1779,9 @@ class ProfileServicesConcurrentClient : virtual public ProfileServicesIf {
   ErrorCode::type Logout(const int32_t userId);
   int32_t send_Logout(const int32_t userId);
   ErrorCode::type recv_Logout(const int32_t seqid);
+  void LoginById(loginResult& _return, const int32_t userId);
+  int32_t send_LoginById(const int32_t userId);
+  void recv_LoginById(loginResult& _return, const int32_t seqid);
   void CreateProfile(CreateUserResult& _return, const UserProfile& profile);
   int32_t send_CreateProfile(const UserProfile& profile);
   void recv_CreateProfile(CreateUserResult& _return, const int32_t seqid);
