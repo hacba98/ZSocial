@@ -14,6 +14,7 @@ and open the template in the editor.
                     var nextId = %d;
                     var nextPost = %d;
 		    var newfeed = 0;
+                    var newfriend = %d;
                     function loadmore(){
                         var params = "next.id=" + nextId + "&next.post=" + nextPost;
                         var url = "/newsFeed/loadmore-mywall";
@@ -91,9 +92,16 @@ and open the template in the editor.
 				
                                 if (data[0] == "new_feed_come"){
                                     newfeed = newfeed + 1;
-                                    console.log("U got new feed " + newfeed);
-                                    $("#wall").css("background-color", "red");
-                                    //$("#wall").value = "Wall(" + newfeed + ")";
+                                    //console.log("U got new feed " + newfeed);
+                                    $("#wall").css("background-color", "gold");
+                                    $("#wall").text("Wall(" + newfeed + ")");
+                                }
+                                
+                                if (data[0] == "new_friend_come"){
+                                    newfriend = newfriend + 1;
+                                    //console.log("U got new friend " + newfriend);
+                                    
+                                    $("#friend_link").text("Friend(" + newfriend + ")");
                                 }
                                 
 				console.log(data);
@@ -252,7 +260,7 @@ and open the template in the editor.
 	<body>
 		<div class="topnav">
 			<a href="/profile/logout">Logout</a>
-			<a href="/friend">Friend</a>
+			<a id ="friend_link" href="/friend">%s</a>
 			<a href="/message">Contact</a>
 			<a href="/myprofile">Profile</a>
 			<a href="/feed">My Feed</a>

@@ -120,15 +120,19 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 	try {
 
 		string result;
-		string feedString, friendString;
-		int user_id = uid;
+		string feedString, friendString, fReqNotify;
+		int user_id = uid , nFReqNotify;
 
 		FriendConnection * friendConn;
 		listFriendResult friRet;
+                pingResult pingRet;
 		while (!(friendConn = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
 
 		friendConn->client()->viewFriendList(friRet, user_id, 0, 10); // get first 20 friends
-
+		friendConn->client()->checkRequest(pingRet, user_id);
+                
+                nFReqNotify = pingRet.data.size();
+                fReqNotify = (nFReqNotify == 0) ? "Friend" : ("Friend("+to_string(pingRet.data.size()) + ")");
 		FeedCountResult feedRet;
 		ListFeedResult listFeed;
 		NewsFeedConnection *feedConn;
@@ -146,7 +150,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
                 for (auto userRet = listFriend.profiles.begin(); userRet != listFriend.profiles.end(); ++userRet){
                     bool online = userRet->last_active_time == -1;
                     string stt = online ? "online" : "offline";
-                    //string friends = "<div class=\"friend\"> <p> " + userRet->name + "</p> <p>" + stt + "</p> </div>";
+                    
                     string friends = "<div id=\"friend_" + to_string(userRet->id) + "\" class=\"friend friend_" + stt + "\"> <h2> " + userRet->name + "</h2></div>";
                     friendString.append(friends);
                 }
@@ -176,7 +180,7 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 		ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
 		ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
 		ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
-		Poco::format(result, ZRequestHandlerFactory::dashboardString, listFeed.result.nex.id, listFeed.result.nex.post, feedString, friendString);
+		Poco::format(result, ZRequestHandlerFactory::dashboardString, listFeed.result.nex.id, listFeed.result.nex.post,nFReqNotify,fReqNotify, feedString, friendString);
 		std::ostream& ostr = res.send();
 		ostr << result;
 	} catch (Exception e) {
@@ -189,6 +193,16 @@ void NoServicesInvokeHandler::myProfile(Poco::Net::HTTPServerRequest &req, Poco:
 	res.setContentType("text/html");
 
 	try {
+                FriendConnection * friendConn;
+		pingResult pingRet;
+		while (!(friendConn = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
+
+		friendConn->client()->checkRequest(pingRet, uid);
+                ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
+                
+                int nFReqNotify = pingRet.data.size();
+                string fReqNotify = (nFReqNotify == 0) ? "Friend" : ("Friend("+to_string(pingRet.data.size()) + ")");
+            
 		GetUserResult ret;
 		ProfileConnection *profileConn;
 		while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100))); // timeout 100 miliseconds
@@ -201,7 +215,7 @@ void NoServicesInvokeHandler::myProfile(Poco::Net::HTTPServerRequest &req, Poco:
 		string result, date, gender = ret.profile.gender ? "Nam" : "Nu";
 		date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2);
 
-		Poco::format(result, ZRequestHandlerFactory::profileString, ret.profile.username, ret.profile.name, gender, ret.profile.phoneNumber, date);
+		Poco::format(result, ZRequestHandlerFactory::profileString,nFReqNotify,fReqNotify, ret.profile.username, ret.profile.name, gender, ret.profile.phoneNumber, date);
 
 		std::ostream& ostr = res.send();
 		ostr << result;
@@ -215,6 +229,16 @@ void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Ne
 	res.setContentType("text/html");
 
 	try {
+                FriendConnection * friendConn;
+		pingResult pingRet;
+		while (!(friendConn = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
+
+		friendConn->client()->checkRequest(pingRet, uid);
+                ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
+                
+                int nFReqNotify = pingRet.data.size();
+                string fReqNotify = (nFReqNotify == 0) ? "Friend" : ("Friend("+to_string(pingRet.data.size()) + ")");
+                
 		// retrieve list friend's newsfeed
 		int user_id = uid;
 		FeedCountResult feedRet;
@@ -242,7 +266,7 @@ void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Ne
 		}
 		ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
 
-		Poco::format(result, ZRequestHandlerFactory::myfeedString, listFeed.result.nex.id, listFeed.result.nex.post, feedString);
+		Poco::format(result, ZRequestHandlerFactory::myfeedString, listFeed.result.nex.id, listFeed.result.nex.post,nFReqNotify , fReqNotify, feedString);
 		std::ostream& ostr = res.send();
 		ostr << result;
 	} catch (Exception e) {
@@ -273,8 +297,14 @@ void WebSocketHandler::handleRequest(Poco::Net::HTTPServerRequest& req, Poco::Ne
 		// establish new connection between client and server
 		WebSocket ws(req, res);
 		Application::instance().logger().information("Web-socket established successfully.");
-		(*ZRequestHandlerFactory::clients())[zuid] = &ws; //register connected client 
-		ZRequestHandlerFactory::onClientConnect(zuid);
+                auto it = (*ZRequestHandlerFactory::clients()).find(zuid);
+		if (it != (*ZRequestHandlerFactory::clients()).end()){
+                    it->second->push_back(&ws);
+                }else{
+                    (*ZRequestHandlerFactory::clients())[zuid] = new list<Poco::Net::WebSocket*>(); //register connected client
+                    (*ZRequestHandlerFactory::clients())[zuid]->push_back(&ws);
+                    ZRequestHandlerFactory::onClientConnect(zuid);
+                }
 		
 		// update login status to user DB
 		loginResult ret;
@@ -326,17 +356,25 @@ void WebSocketHandler::handleRequest(Poco::Net::HTTPServerRequest& req, Poco::Ne
 		Application::instance().logger().information("Timeout");
 		// handle case where peer had been disconnected
 		if (n == 0) {
-			// storing user logout status in DB
-			ProfileConnection *borrowObj;
-			while (!(borrowObj = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
-			borrowObj->client()->Logout(zuid);
-			ZRequestHandlerFactory::profilePool()->returnObject(borrowObj);
 			
-			// notificate all friends user logout status
-			ZRequestHandlerFactory::onClientDisconnect(zuid);
-
 			// remove from list of current clients
-			ZRequestHandlerFactory::clients()->erase(zuid);
+			it = ZRequestHandlerFactory::clients()->find(zuid);
+                        
+                        it->second->remove(&ws);
+                        if(it->second->empty()){
+                            // storing user logout status in DB
+                            ProfileConnection *borrowObj;
+                            while (!(borrowObj = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
+                            borrowObj->client()->Logout(zuid);
+                            ZRequestHandlerFactory::profilePool()->returnObject(borrowObj);
+                            
+                            ZRequestHandlerFactory::clients()->erase(zuid);
+                            delete it->second;
+                            
+                            // notificate all friends user logout status
+                            ZRequestHandlerFactory::onClientDisconnect(zuid);
+                            
+                        }
 
 			Application::instance().logger().information(Logger::format("User $0 disconnected.", to_string(zuid)));
 		}

@@ -19,7 +19,7 @@ boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory:
 boost::shared_ptr<Poco::ObjectPool<Converter<token> > > ZRequestHandlerFactory::_pool_convert_token;
 
 std::string ZRequestHandlerFactory::_secret;
-map<int, Poco::Net::WebSocket*> ZRequestHandlerFactory::_clients;
+map<int, list<Poco::Net::WebSocket*> *> ZRequestHandlerFactory::_clients;
 
 
 using namespace std;
@@ -74,8 +74,8 @@ string ZRequestHandlerFactory::genCookie(int zuid){
 	
 	string serialized_str;
 	borrowObj->serialize(token_, serialized_str);
-        token tmp;
-        borrowObj->deserialize(serialized_str, tmp);
+        //token tmp;
+        //borrowObj->deserialize(serialized_str, tmp);
 	converterPool()->returnObject(borrowObj);
 	
 	// need to turn string from serialized obj to base64 encode for transferable 
@@ -108,24 +108,13 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 		return false;
 	}
 	
-//	// signature is correct -> get data from payload and put into token
-//	stringstream iss;
-//	iss << payload;
-//	Poco::Base64Decoder b64decode(iss);
-//	string serialized_str;
-//	b64decode >> serialized_str;
-        
-        // signature is correct -> get data from payload and put into token
+	// signature is correct -> get data from payload and put into token
 	stringstream iss, oss;
 	iss << payload;
 	Poco::Base64Decoder b64decode(iss);
 	copy(std::istreambuf_iterator<char>(b64decode),
 		std::istreambuf_iterator<char>(),
 		std::ostreambuf_iterator<char>(oss));
-	
-	
-	//b64decode>> buff;
-	//b64decode.getline(buff, 128);
 	string serialized_str = oss.str();
 
 	// invoke converter to deserialize string back to thrift object
@@ -157,14 +146,14 @@ void ZRequestHandlerFactory::onClientConnect(int zuid) {
 	// loop for friend list, if they are connected to server
 	// then send them a notification
 	if (friends.code == ErrorCode::SUCCESS){
-		WebSocket *ws;
 		for (int i=0; i < friends.friendList.size(); i++){
 			int friend_id = friends.friendList.at(i);
-			map<int, WebSocket*>::iterator it = clients()->find(friend_id);
-			if (it != clients()->end() && it->first == friend_id) {
-				ws = it->second;
+			map<int, list<WebSocket*>*>::iterator it = clients()->find(friend_id);
+			if (it != clients()->end() && it->first == friend_id){
 				string payload = "online:" + to_string(zuid);
-				ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+				for(auto i : *(it->second)){
+                                    i->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+                                }
 				Application::instance().logger().information(payload);
 			}
 		}
@@ -184,11 +173,12 @@ void ZRequestHandlerFactory::onClientDisconnect(int zuid){
 		WebSocket *ws;
 		for (int i=0; i < friends.friendList.size(); i++){
 			int friend_id = friends.friendList.at(i);
-			map<int, WebSocket*>::iterator it = clients()->find(friend_id);
+			map<int, list<WebSocket*>*>::iterator it = clients()->find(friend_id);
 			if (it != clients()->end() && it->first == friend_id) {
-				ws = it->second;
 				string payload = "offline:" + to_string(zuid);
-				ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+				for(auto i : *(it->second)){
+                                    i->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+                                }
 				Application::instance().logger().information(payload);
 			}
 		}
@@ -208,17 +198,28 @@ void ZRequestHandlerFactory::onClientPostFeed(int zuid) {
             // loop for friend list, if they are connected to server
             // then send them a notification
             if (friends.code == ErrorCode::SUCCESS){
-                    WebSocket *ws;
                     for (int i=0; i < friends.friendList.size(); i++){
                             int friend_id = friends.friendList.at(i);
-                            map<int, WebSocket*>::iterator it = clients()->find(friend_id);
+                            map<int, list<WebSocket*>*>::iterator it = clients()->find(friend_id);
                             if (it != clients()->end() && it->first == friend_id) {
-                                    ws = it->second;
                                     string payload = "new_feed_come:" + to_string(zuid);
-                                    ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+                                    for(auto i : *(it->second)){
+                                        i->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+                                    }
                                     Application::instance().logger().information(payload);
                             }
                     }
             }
         }
 }
+
+void ZRequestHandlerFactory::onAddFriend(int fid){
+    map<int, list<WebSocket*>*>::iterator it = clients()->find(fid);
+    if (it != clients()->end() && it->first == fid) {
+            string payload = "new_friend_come:" + to_string(fid);
+            for(auto i : *(it->second)){
+                i->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+            }
+            Application::instance().logger().information(payload);
+    }
+};

@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-                
+                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
                 <script language="javascript">
+                        var newfeed = 0;
+                        var newfriend = %d;
 			function update(){
+				var flag = true;
 				var password = document.profileForm.password.value;
 				var repassword = document.profileForm.repassword.value;
 				var name = document.profileForm.Name.value;
@@ -18,15 +21,57 @@
 				xmlHttp.open('POST', url, true);
 				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				xmlHttp.onreadystatechange = function() {
-					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200 && flag) {
+					    flag = false;
 					    alert("Success update your profile!", xmlHttp.responseText);
 					    location.replace("/myprofile");
-					} else if (xmlHttp.status == 404){
+					} else if (xmlHttp.status == 404 && flag){
+					    flag = false;
 					    alert("Error 500 not work");
 					}
 				}
 				xmlHttp.send(params);
 			}
+                        
+                        var socketURL = 'ws://localhost:8000/online';
+                        var socket = new WebSocket(socketURL);
+
+                        socket.addEventListener('open', function (event){
+                            console.log('Open WS: ', socketURL);
+                        });
+
+                        socket.addEventListener('message', function (event){
+                            console.log('Message receive', event.data);
+                            if (event.data == "ping"){
+                                    socket.send("pong");
+                            } else {
+                                    var data = event.data.split(":");
+
+                                    if (data[0] == "new_feed_come"){
+                                        newfeed = newfeed + 1;
+                                        //console.log("U got new feed " + newfeed);
+                                        $("#wall").css("background-color", "gold");
+                                        $("#wall").text("Wall(" + newfeed + ")");
+                                    }
+                                    
+                                    if (data[0] == "new_friend_come"){
+                                        newfriend = newfriend + 1;
+                                        //console.log("U got new friend " + newfriend);
+                                    
+                                        $("#friend_link").text("Friend(" + newfriend + ")");
+                                    }
+
+                                    console.log(data);
+                                    socket.send("ok");
+                            }
+                        });
+
+                        window.onbeforeunload = function (){
+                            socket.onclose = function (){
+                                    console.log("web socket closing");
+                            }
+                            socket.close();
+                        }
 		</script>
                 
 		<style>
@@ -110,11 +155,11 @@
 	<body>
 		<div class="topnav">
 			<a href="/profile/logout">Logout</a>
-			<a href="/friend">Friend</a>
+			<a id ="friend_link" href="/friend">%s</a>
 			<a href="/message">Contact</a>
 			<a class="active" href="/myprofile">Profile</a>
 			<a href="/feed">My Feed</a>
-			<a href="/dashboard">Wall</a>
+			<a id ="wall" href="/dashboard">Wall</a>
 		</div>
 		
 		

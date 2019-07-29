@@ -3,9 +3,12 @@
 		<title> Z-Social </title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" type="text/css" href="friend/friend.css">
 		<script language="javascript">
+                        var newfeed = 0;
 			function addFriend(){
+				var flag = true;
 				var friend_username = document.addfriendForm.friend_username.value;
 				var message = document.addfriendForm.message.value;
 				var url = "/friend/add";
@@ -17,14 +20,61 @@
 				http.onreadystatechange = function (){
 					if(http.readyState == 4 && http.status == 200){
 						alert("Your request had been sent.");
-					} else if (http.status == 500){
+					} else if (http.status == 500 && flag){
+						flag = false;
 						alert("Username " + friend_username + " doesn't existed");
-					} else if (http.status == 412){
+					} else if (http.status == 412 && flag){
+						flag = false;
 						alert("You have already sent this request. Please wait for your friend to accept it");
 					}
 				}
 				http.send(params);
 			}
+                        
+                        var socketURL = 'ws://localhost:8000/online';
+                        var socket = new WebSocket(socketURL);
+
+                        socket.addEventListener('open', function (event){
+                            console.log('Open WS: ', socketURL);
+                        });
+
+                        socket.addEventListener('message', function (event){
+                            console.log('Message receive', event.data);
+                            if (event.data == "ping"){
+                                    socket.send("pong");
+                            } else {
+                                    var data = event.data.split(":");
+
+                                    if (data[0] == "online"){
+                                            var id = "#friend_" + data[1];
+                                            console.log(id);
+                                            $(id).css("background-color", "yellowgreen");
+                                    }
+
+                                    if (data[0] == "offline"){
+                                            var id = "#friend_" + data[1];
+                                            console.log(id);
+                                            $(id).css("background-color", "burlywood");
+                                    }
+
+                                    if (data[0] == "new_feed_come"){
+                                        newfeed = newfeed + 1;
+                                        console.log("U got new feed " + newfeed);
+                                        $("#wall").css("background-color", "gold");
+                                        $("#wall").text("Wall(" + newfeed + ")");
+                                    }
+
+                                    console.log(data);
+                                    socket.send("ok");
+                            }
+                        });
+
+                        window.onbeforeunload = function (){
+                            socket.onclose = function (){
+                                    console.log("web socket closing");
+                            }
+                            socket.close();
+                        }
 		</script>
 	</head>
 	<body>
@@ -34,7 +84,7 @@
 			<a href="/message">Contact</a>
 			<a href="/myprofile">Profile</a>
 			<a href="/feed">My Feed</a>
-			<a href="/dashboard">Wall</a>
+			<a id ="wall" href="/dashboard">Wall</a>
 		</div>
 
 		<div class="split left">

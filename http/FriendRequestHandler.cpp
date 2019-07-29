@@ -242,6 +242,7 @@ void FriendRequestHandler::handleAddFriend(HTTPServerRequest& req, HTTPServerRes
 		ErrorCode::type code = _conn->client()->addFriend(request);
 		
 		if(code == ErrorCode::SUCCESS){
+                        ZRequestHandlerFactory::onAddFriend(fr_id);
 			res.setStatus(HTTPResponse::HTTP_OK);
 		} else if (code == ErrorCode::DUPLICATED_REQUEST){
 			res.setStatus(HTTPResponse::HTTP_PRECONDITION_FAILED);

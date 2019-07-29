@@ -59,6 +59,7 @@
 //#include "Crypto.h"
 
 #include <map>
+#include <list>
 #include <iostream>
 #include <string>
 
@@ -119,7 +120,7 @@ public:
 	    return ZRequestHandlerFactory::_pool_convert_token.get();
     }
     
-    static map<int, Poco::Net::WebSocket*> * clients(){
+    static map<int, list<Poco::Net::WebSocket*> *> * clients(){
 	    return &ZRequestHandlerFactory::_clients;
     }
     
@@ -132,6 +133,7 @@ public:
     static void onClientDisconnect(int zuid);
     
     static void onClientPostFeed(int zuid);
+    static void onAddFriend(int fid);
     
     // generate string which payload and signature token from given data
     static string genCookie(int zuid);
@@ -145,14 +147,8 @@ public:
     static string profileString;
     static string friendString;
     static string myfeedString;
-
-private:
-    static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
-    static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
-    static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
-    static boost::shared_ptr<Poco::ObjectPool<Converter<token> > > _pool_convert_token;
     
-    void loadString(string& result, string path) {
+    static void loadString(string& result, string path) {
         Poco::FileInputStream htmlFile(path);
         
         while (!htmlFile.eof()) {
@@ -162,12 +158,18 @@ private:
             result.append("\n");
         }
     }
+
+private:
+    static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
+    static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
+    static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
+    static boost::shared_ptr<Poco::ObjectPool<Converter<token> > > _pool_convert_token;
     
     // secret for token
     static std::string _secret;
     
     // store current clients connected
-    static std::map<int, Poco::Net::WebSocket*> _clients;
+    static std::map<int, list<Poco::Net::WebSocket*>*> _clients;
 };
 
 class NoServicesInvokeHandler : public Poco::Net::HTTPRequestHandler {
