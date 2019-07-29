@@ -131,6 +131,8 @@ public:
     // broadcast notfication to all current listening client in list friend
     static void onClientDisconnect(int zuid);
     
+    static void onClientPostFeed(int zuid);
+    
     // generate string which payload and signature token from given data
     static string genCookie(int zuid);
     

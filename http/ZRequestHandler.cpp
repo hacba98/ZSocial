@@ -194,3 +194,31 @@ void ZRequestHandlerFactory::onClientDisconnect(int zuid){
 		}
 	}
 }
+
+void ZRequestHandlerFactory::onClientPostFeed(int zuid) {
+	// retrieve user friend list
+	FriendConnection *borrowObj;
+	while (!(borrowObj = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
+        int idx = 0;
+        while(idx >= 0){
+            listFriendResult friends;
+            borrowObj->client()->viewFriendList(friends, zuid, idx, 100);
+            idx = friends.idx;
+
+            // loop for friend list, if they are connected to server
+            // then send them a notification
+            if (friends.code == ErrorCode::SUCCESS){
+                    WebSocket *ws;
+                    for (int i=0; i < friends.friendList.size(); i++){
+                            int friend_id = friends.friendList.at(i);
+                            map<int, WebSocket*>::iterator it = clients()->find(friend_id);
+                            if (it != clients()->end() && it->first == friend_id) {
+                                    ws = it->second;
+                                    string payload = "new_feed_come:" + to_string(zuid);
+                                    ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
+                                    Application::instance().logger().information(payload);
+                            }
+                    }
+            }
+        }
+}

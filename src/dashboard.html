@@ -13,7 +13,7 @@ and open the template in the editor.
                 <script>
                     var nextId = %d;
                     var nextPost = %d;
-		    
+		    var newfeed = 0;
                     function loadmore(){
                         var params = "next.id=" + nextId + "&next.post=" + nextPost;
                         var url = "/newsFeed/loadmore-mywall";
@@ -89,6 +89,13 @@ and open the template in the editor.
 					$(id).css("background-color", "burlywood");
 				}
 				
+                                if (data[0] == "new_feed_come"){
+                                    newfeed = newfeed + 1;
+                                    console.log("U got new feed " + newfeed);
+                                    $("#wall").css("background-color", "red");
+                                    //$("#wall").value = "Wall(" + newfeed + ")";
+                                }
+                                
 				console.log(data);
 				socket.send("ok");
 			}
@@ -249,7 +256,7 @@ and open the template in the editor.
 			<a href="/message">Contact</a>
 			<a href="/myprofile">Profile</a>
 			<a href="/feed">My Feed</a>
-			<a class="active" href="/dashboard">Wall</a>
+			<a id ="wall" class="active" href="/dashboard">Wall</a>
 		</div>
 		
 		<div class="split center" onscroll="scrolled_feeds(this)">

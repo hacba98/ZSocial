@@ -45,6 +45,7 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     _conn->client()->createNewsFeed(ret,token_.zuid,content,0);//status is 0 because no IDEA what it do
     if (ret.exitCode == 0){
         res.setStatus(HTTPResponse::HTTP_OK);
+        ZRequestHandlerFactory::onClientPostFeed(id);
     }else{
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
     }
