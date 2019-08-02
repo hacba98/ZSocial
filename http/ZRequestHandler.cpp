@@ -16,10 +16,10 @@
 boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
+boost::shared_ptr<Poco::ObjectPool<MessageConnection> > ZRequestHandlerFactory::_pool_message;
 boost::shared_ptr<Poco::ObjectPool<Converter<token> > > ZRequestHandlerFactory::_pool_convert_token;
 
 std::string ZRequestHandlerFactory::_secret;
-map<int, Poco::Net::WebSocket*> ZRequestHandlerFactory::_clients;
 
 
 using namespace std;
@@ -34,32 +34,35 @@ string ZRequestHandlerFactory::registerString;
 string ZRequestHandlerFactory::profileString;
 string ZRequestHandlerFactory::friendString;
 string ZRequestHandlerFactory::myfeedString;
+string ZRequestHandlerFactory::messageString;
 
 Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &req) {
     Application::instance().logger().information(req.getURI());
-	std::string url = req.getURI();
-
-	if (url.find("/profile") == 0) {
-		ProfileConnection *borrowObj;
-		while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
-		return new ProfileRequestHandler(borrowObj);
-	} else if (url.find("/friend") == 0) {
-		FriendConnection *borrowObj;
-		while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
-		return new FriendRequestHandler(borrowObj);
-	} else if (url.find("/newsFeed") == 0) {
-		NewsFeedConnection *borrowObj;
-		while (!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
-		return new NewsFeedRequestHandler(borrowObj);
-	} else {
-		// handle socket connection
-		if (req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0) {
-			return new WebSocketHandler;
-		}
-
-		// if not web-socket -> return page load handler
-		return new NoServicesInvokeHandler;
-	}
+    std::string url = req.getURI();
+    if(req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0)
+	return new WebSocketRequestHandler;
+    if (url.find("/profile") == 0) {
+        ProfileConnection *borrowObj;
+        while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
+        return new ProfileRequestHandler(borrowObj);
+    } else if (url.find("/friend") == 0) {
+        FriendConnection *borrowObj;
+        while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
+        return new FriendRequestHandler(borrowObj);
+    } else if (url.find("/newsFeed") == 0) {
+        NewsFeedConnection *borrowObj;
+        while (!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
+        return new NewsFeedRequestHandler(borrowObj);
+    } else if (url.find("/message") == 0){
+        MessageConnection *borrowObj;
+        while (!(borrowObj = messagePool()->borrowObject(100))); // timeout 100 miliseconds
+        return new MessageRequestHandler(borrowObj);
+//        MessageConnection *borrowObj = new MessageConnection();
+//        return new MessageRequestHandler(borrowObj);
+    }
+    else {
+        return new NoServicesInvokeHandler;
+    }
 }
 
 string ZRequestHandlerFactory::genCookie(int zuid){
@@ -107,13 +110,11 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 	}
 	
 	// signature is correct -> get data from payload and put into token
-	stringstream iss, oss;
+	stringstream iss;
 	iss << payload;
 	Poco::Base64Decoder b64decode(iss);
-	copy(std::istreambuf_iterator<char>(b64decode),
-		std::istreambuf_iterator<char>(),
-		std::ostreambuf_iterator<char>(oss));
-	string serialized_str = oss.str();
+	string serialized_str;
+	b64decode >> serialized_str;
 
 	// invoke converter to deserialize string back to thrift object
 	token tmp;
@@ -132,52 +133,4 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 	
 	// return true for token validity
 	return true;
-}
-
-void ZRequestHandlerFactory::onClientConnect(int zuid) {
-	// retrieve user friend list
-	listFriendResult friends;
-	FriendConnection *borrowObj;
-	while (!(borrowObj = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
-	borrowObj->client()->viewFriendList(friends, zuid, 0, 100); // get 100 friends - TODO: get all
-	
-	// loop for friend list, if they are connected to server
-	// then send them a notification
-	if (friends.code == ErrorCode::SUCCESS){
-		WebSocket *ws;
-		for (int i=0; i < friends.friendList.size(); i++){
-			int friend_id = friends.friendList.at(i);
-			map<int, WebSocket*>::iterator it = clients()->find(friend_id);
-			if (it != clients()->end() && it->first == friend_id) {
-				ws = it->second;
-				string payload = "online:" + to_string(zuid);
-				ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
-				Application::instance().logger().information(payload);
-			}
-		}
-	}
-}
-
-void ZRequestHandlerFactory::onClientDisconnect(int zuid){
-	// retrieve user friend list
-	listFriendResult friends;
-	FriendConnection *borrowObj;
-	while (!(borrowObj = ZRequestHandlerFactory::friendPool()->borrowObject(100)));
-	borrowObj->client()->viewFriendList(friends, zuid, 0, 100); // get 100 friends - TODO: get all
-	
-	// loop for friend list, if they are connected to server
-	// then send them a notification
-	if (friends.code == ErrorCode::SUCCESS){
-		WebSocket *ws;
-		for (int i=0; i < friends.friendList.size(); i++){
-			int friend_id = friends.friendList.at(i);
-			map<int, WebSocket*>::iterator it = clients()->find(friend_id);
-			if (it != clients()->end() && it->first == friend_id) {
-				ws = it->second;
-				string payload = "offline:" + to_string(zuid);
-				ws->sendFrame(payload.c_str(), payload.size(), WebSocket::FRAME_TEXT);
-				Application::instance().logger().information(payload);
-			}
-		}
-	}
 }

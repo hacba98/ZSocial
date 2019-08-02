@@ -4,16 +4,16 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "NewsFeedService.h"
+#include "MessageService.h"
 
 
 
 
-NewsFeedService_createNewsFeed_args::~NewsFeedService_createNewsFeed_args() throw() {
+MessageService_createMessage_args::~MessageService_createMessage_args() throw() {
 }
 
 
-uint32_t NewsFeedService_createNewsFeed_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t MessageService_createMessage_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -36,13 +36,21 @@ uint32_t NewsFeedService_createNewsFeed_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->owner);
-          this->__isset.owner = true;
+          xfer += iprot->readI32(this->id_from);
+          this->__isset.id_from = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->inbox_id);
+          this->__isset.inbox_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->content);
           this->__isset.content = true;
@@ -50,14 +58,6 @@ uint32_t NewsFeedService_createNewsFeed_args::read(::apache::thrift::protocol::T
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->status);
-          this->__isset.status = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -70,61 +70,61 @@ uint32_t NewsFeedService_createNewsFeed_args::read(::apache::thrift::protocol::T
   return xfer;
 }
 
-uint32_t NewsFeedService_createNewsFeed_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t MessageService_createMessage_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_createNewsFeed_args");
+  xfer += oprot->writeStructBegin("MessageService_createMessage_args");
 
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->owner);
+  xfer += oprot->writeFieldBegin("id_from", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->id_from);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->inbox_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString(this->content);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte(this->status);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-NewsFeedService_createNewsFeed_pargs::~NewsFeedService_createNewsFeed_pargs() throw() {
+MessageService_createMessage_pargs::~MessageService_createMessage_pargs() throw() {
 }
 
 
-uint32_t NewsFeedService_createNewsFeed_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t MessageService_createMessage_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_createNewsFeed_pargs");
+  xfer += oprot->writeStructBegin("MessageService_createMessage_pargs");
 
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->owner)));
+  xfer += oprot->writeFieldBegin("id_from", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->id_from)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->inbox_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 3);
   xfer += oprot->writeString((*(this->content)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte((*(this->status)));
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-NewsFeedService_createNewsFeed_result::~NewsFeedService_createNewsFeed_result() throw() {
+MessageService_createMessage_result::~MessageService_createMessage_result() throw() {
 }
 
 
-uint32_t NewsFeedService_createNewsFeed_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t MessageService_createMessage_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -165,11 +165,11 @@ uint32_t NewsFeedService_createNewsFeed_result::read(::apache::thrift::protocol:
   return xfer;
 }
 
-uint32_t NewsFeedService_createNewsFeed_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t MessageService_createMessage_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("NewsFeedService_createNewsFeed_result");
+  xfer += oprot->writeStructBegin("MessageService_createMessage_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -182,11 +182,11 @@ uint32_t NewsFeedService_createNewsFeed_result::write(::apache::thrift::protocol
 }
 
 
-NewsFeedService_createNewsFeed_presult::~NewsFeedService_createNewsFeed_presult() throw() {
+MessageService_createMessage_presult::~MessageService_createMessage_presult() throw() {
 }
 
 
-uint32_t NewsFeedService_createNewsFeed_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t MessageService_createMessage_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -228,11 +228,11 @@ uint32_t NewsFeedService_createNewsFeed_presult::read(::apache::thrift::protocol
 }
 
 
-NewsFeedService_updateNewsFeed_args::~NewsFeedService_updateNewsFeed_args() throw() {
+MessageService_getMessages_args::~MessageService_getMessages_args() throw() {
 }
 
 
-uint32_t NewsFeedService_updateNewsFeed_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t MessageService_getMessages_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -254,818 +254,14 @@ uint32_t NewsFeedService_updateNewsFeed_args::read(::apache::thrift::protocol::T
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->content);
-          this->__isset.content = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->status);
-          this->__isset.status = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_updateNewsFeed_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_updateNewsFeed_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->content);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte(this->status);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_updateNewsFeed_pargs::~NewsFeedService_updateNewsFeed_pargs() throw() {
-}
-
-
-uint32_t NewsFeedService_updateNewsFeed_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_updateNewsFeed_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("content", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->content)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("status", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte((*(this->status)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_updateNewsFeed_result::~NewsFeedService_updateNewsFeed_result() throw() {
-}
-
-
-uint32_t NewsFeedService_updateNewsFeed_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_updateNewsFeed_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("NewsFeedService_updateNewsFeed_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_updateNewsFeed_presult::~NewsFeedService_updateNewsFeed_presult() throw() {
-}
-
-
-uint32_t NewsFeedService_updateNewsFeed_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-NewsFeedService_deleteNewsFeed_args::~NewsFeedService_deleteNewsFeed_args() throw() {
-}
-
-
-uint32_t NewsFeedService_deleteNewsFeed_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
+          xfer += iprot->readString(this->inbox_id);
+          this->__isset.inbox_id = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->owner);
-          this->__isset.owner = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_deleteNewsFeed_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_deleteNewsFeed_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32(this->owner);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_deleteNewsFeed_pargs::~NewsFeedService_deleteNewsFeed_pargs() throw() {
-}
-
-
-uint32_t NewsFeedService_deleteNewsFeed_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_deleteNewsFeed_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32((*(this->owner)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_deleteNewsFeed_result::~NewsFeedService_deleteNewsFeed_result() throw() {
-}
-
-
-uint32_t NewsFeedService_deleteNewsFeed_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_deleteNewsFeed_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("NewsFeedService_deleteNewsFeed_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_deleteNewsFeed_presult::~NewsFeedService_deleteNewsFeed_presult() throw() {
-}
-
-
-uint32_t NewsFeedService_deleteNewsFeed_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-NewsFeedService_getFeed_args::~NewsFeedService_getFeed_args() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeed_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->id);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_getFeed_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_getFeed_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_getFeed_pargs::~NewsFeedService_getFeed_pargs() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeed_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_getFeed_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_getFeed_result::~NewsFeedService_getFeed_result() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeed_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_getFeed_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("NewsFeedService_getFeed_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_getFeed_presult::~NewsFeedService_getFeed_presult() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeed_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-NewsFeedService_getFeedCount_args::~NewsFeedService_getFeedCount_args() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeedCount_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->owner);
-          this->__isset.owner = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_getFeedCount_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_getFeedCount_args");
-
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->owner);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_getFeedCount_pargs::~NewsFeedService_getFeedCount_pargs() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeedCount_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_getFeedCount_pargs");
-
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->owner)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_getFeedCount_result::~NewsFeedService_getFeedCount_result() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeedCount_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t NewsFeedService_getFeedCount_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("NewsFeedService_getFeedCount_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-NewsFeedService_getFeedCount_presult::~NewsFeedService_getFeedCount_presult() throw() {
-}
-
-
-uint32_t NewsFeedService_getFeedCount_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-NewsFeedService_getListFeed_args::~NewsFeedService_getListFeed_args() throw() {
-}
-
-
-uint32_t NewsFeedService_getListFeed_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->owner);
-          this->__isset.owner = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->post.read(iprot);
-          this->__isset.post = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->count);
           this->__isset.count = true;
@@ -1085,20 +281,16 @@ uint32_t NewsFeedService_getListFeed_args::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-uint32_t NewsFeedService_getListFeed_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t MessageService_getMessages_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_getListFeed_args");
+  xfer += oprot->writeStructBegin("MessageService_getMessages_args");
 
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->owner);
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->inbox_id);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("post", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->post.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 2);
   xfer += oprot->writeI32(this->count);
   xfer += oprot->writeFieldEnd();
 
@@ -1108,24 +300,20 @@ uint32_t NewsFeedService_getListFeed_args::write(::apache::thrift::protocol::TPr
 }
 
 
-NewsFeedService_getListFeed_pargs::~NewsFeedService_getListFeed_pargs() throw() {
+MessageService_getMessages_pargs::~MessageService_getMessages_pargs() throw() {
 }
 
 
-uint32_t NewsFeedService_getListFeed_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t MessageService_getMessages_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("NewsFeedService_getListFeed_pargs");
+  xfer += oprot->writeStructBegin("MessageService_getMessages_pargs");
 
-  xfer += oprot->writeFieldBegin("owner", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->owner)));
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->inbox_id)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("post", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->post)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("count", ::apache::thrift::protocol::T_I32, 2);
   xfer += oprot->writeI32((*(this->count)));
   xfer += oprot->writeFieldEnd();
 
@@ -1135,11 +323,11 @@ uint32_t NewsFeedService_getListFeed_pargs::write(::apache::thrift::protocol::TP
 }
 
 
-NewsFeedService_getListFeed_result::~NewsFeedService_getListFeed_result() throw() {
+MessageService_getMessages_result::~MessageService_getMessages_result() throw() {
 }
 
 
-uint32_t NewsFeedService_getListFeed_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t MessageService_getMessages_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1180,11 +368,11 @@ uint32_t NewsFeedService_getListFeed_result::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t NewsFeedService_getListFeed_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t MessageService_getMessages_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("NewsFeedService_getListFeed_result");
+  xfer += oprot->writeStructBegin("MessageService_getMessages_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -1197,11 +385,11 @@ uint32_t NewsFeedService_getListFeed_result::write(::apache::thrift::protocol::T
 }
 
 
-NewsFeedService_getListFeed_presult::~NewsFeedService_getListFeed_presult() throw() {
+MessageService_getMessages_presult::~MessageService_getMessages_presult() throw() {
 }
 
 
-uint32_t NewsFeedService_getListFeed_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t MessageService_getMessages_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1242,21 +430,630 @@ uint32_t NewsFeedService_getListFeed_presult::read(::apache::thrift::protocol::T
   return xfer;
 }
 
-void NewsFeedServiceClient::createNewsFeed(FeedCreateResult& _return, const int32_t owner, const std::string& content, const int8_t status)
-{
-  send_createNewsFeed(owner, content, status);
-  recv_createNewsFeed(_return);
+
+MessageService_getKey_args::~MessageService_getKey_args() throw() {
 }
 
-void NewsFeedServiceClient::send_createNewsFeed(const int32_t owner, const std::string& content, const int8_t status)
+
+uint32_t MessageService_getKey_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id1);
+          this->__isset.id1 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->id2);
+          this->__isset.id2 = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t MessageService_getKey_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MessageService_getKey_args");
+
+  xfer += oprot->writeFieldBegin("id1", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->id1);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("id2", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->id2);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getKey_pargs::~MessageService_getKey_pargs() throw() {
+}
+
+
+uint32_t MessageService_getKey_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MessageService_getKey_pargs");
+
+  xfer += oprot->writeFieldBegin("id1", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->id1)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("id2", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->id2)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getKey_result::~MessageService_getKey_result() throw() {
+}
+
+
+uint32_t MessageService_getKey_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t MessageService_getKey_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("MessageService_getKey_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getKey_presult::~MessageService_getKey_presult() throw() {
+}
+
+
+uint32_t MessageService_getKey_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+MessageService_getBoxinfo_args::~MessageService_getBoxinfo_args() throw() {
+}
+
+
+uint32_t MessageService_getBoxinfo_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->inbox_id);
+          this->__isset.inbox_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t MessageService_getBoxinfo_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MessageService_getBoxinfo_args");
+
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->inbox_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getBoxinfo_pargs::~MessageService_getBoxinfo_pargs() throw() {
+}
+
+
+uint32_t MessageService_getBoxinfo_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MessageService_getBoxinfo_pargs");
+
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->inbox_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getBoxinfo_result::~MessageService_getBoxinfo_result() throw() {
+}
+
+
+uint32_t MessageService_getBoxinfo_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t MessageService_getBoxinfo_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("MessageService_getBoxinfo_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getBoxinfo_presult::~MessageService_getBoxinfo_presult() throw() {
+}
+
+
+uint32_t MessageService_getBoxinfo_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+MessageService_getNewMessages_args::~MessageService_getNewMessages_args() throw() {
+}
+
+
+uint32_t MessageService_getNewMessages_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->inbox_id);
+          this->__isset.inbox_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->old_count);
+          this->__isset.old_count = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->new_count);
+          this->__isset.new_count = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t MessageService_getNewMessages_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MessageService_getNewMessages_args");
+
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->inbox_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("old_count", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->old_count);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("new_count", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->new_count);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getNewMessages_pargs::~MessageService_getNewMessages_pargs() throw() {
+}
+
+
+uint32_t MessageService_getNewMessages_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MessageService_getNewMessages_pargs");
+
+  xfer += oprot->writeFieldBegin("inbox_id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->inbox_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("old_count", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->old_count)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("new_count", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32((*(this->new_count)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getNewMessages_result::~MessageService_getNewMessages_result() throw() {
+}
+
+
+uint32_t MessageService_getNewMessages_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t MessageService_getNewMessages_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("MessageService_getNewMessages_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+MessageService_getNewMessages_presult::~MessageService_getNewMessages_presult() throw() {
+}
+
+
+uint32_t MessageService_getNewMessages_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+void MessageServiceClient::createMessage(MessageCreateResult& _return, const int32_t id_from, const std::string& inbox_id, const std::string& content)
+{
+  send_createMessage(id_from, inbox_id, content);
+  recv_createMessage(_return);
+}
+
+void MessageServiceClient::send_createMessage(const int32_t id_from, const std::string& inbox_id, const std::string& content)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("createNewsFeed", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("createMessage", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  NewsFeedService_createNewsFeed_pargs args;
-  args.owner = &owner;
+  MessageService_createMessage_pargs args;
+  args.id_from = &id_from;
+  args.inbox_id = &inbox_id;
   args.content = &content;
-  args.status = &status;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1264,7 +1061,7 @@ void NewsFeedServiceClient::send_createNewsFeed(const int32_t owner, const std::
   oprot_->getTransport()->flush();
 }
 
-void NewsFeedServiceClient::recv_createNewsFeed(FeedCreateResult& _return)
+void MessageServiceClient::recv_createMessage(MessageCreateResult& _return)
 {
 
   int32_t rseqid = 0;
@@ -1284,12 +1081,12 @@ void NewsFeedServiceClient::recv_createNewsFeed(FeedCreateResult& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("createNewsFeed") != 0) {
+  if (fname.compare("createMessage") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  NewsFeedService_createNewsFeed_presult result;
+  MessageService_createMessage_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1299,258 +1096,22 @@ void NewsFeedServiceClient::recv_createNewsFeed(FeedCreateResult& _return)
     // _return pointer has now been filled
     return;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createNewsFeed failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createMessage failed: unknown result");
 }
 
-void NewsFeedServiceClient::updateNewsFeed(FeedUpdateResult& _return, const int32_t id, const std::string& content, const int8_t status)
+void MessageServiceClient::getMessages(ListMessageResult& _return, const std::string& inbox_id, const int32_t count)
 {
-  send_updateNewsFeed(id, content, status);
-  recv_updateNewsFeed(_return);
+  send_getMessages(inbox_id, count);
+  recv_getMessages(_return);
 }
 
-void NewsFeedServiceClient::send_updateNewsFeed(const int32_t id, const std::string& content, const int8_t status)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("updateNewsFeed", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_updateNewsFeed_pargs args;
-  args.id = &id;
-  args.content = &content;
-  args.status = &status;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void NewsFeedServiceClient::recv_updateNewsFeed(FeedUpdateResult& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("updateNewsFeed") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  NewsFeedService_updateNewsFeed_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "updateNewsFeed failed: unknown result");
-}
-
-void NewsFeedServiceClient::deleteNewsFeed(FeedDeleteResult& _return, const int32_t id, const int32_t owner)
-{
-  send_deleteNewsFeed(id, owner);
-  recv_deleteNewsFeed(_return);
-}
-
-void NewsFeedServiceClient::send_deleteNewsFeed(const int32_t id, const int32_t owner)
+void MessageServiceClient::send_getMessages(const std::string& inbox_id, const int32_t count)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("deleteNewsFeed", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("getMessages", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  NewsFeedService_deleteNewsFeed_pargs args;
-  args.id = &id;
-  args.owner = &owner;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void NewsFeedServiceClient::recv_deleteNewsFeed(FeedDeleteResult& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("deleteNewsFeed") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  NewsFeedService_deleteNewsFeed_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "deleteNewsFeed failed: unknown result");
-}
-
-void NewsFeedServiceClient::getFeed(FeedResult& _return, const int32_t id)
-{
-  send_getFeed(id);
-  recv_getFeed(_return);
-}
-
-void NewsFeedServiceClient::send_getFeed(const int32_t id)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("getFeed", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_getFeed_pargs args;
-  args.id = &id;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void NewsFeedServiceClient::recv_getFeed(FeedResult& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("getFeed") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  NewsFeedService_getFeed_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getFeed failed: unknown result");
-}
-
-void NewsFeedServiceClient::getFeedCount(FeedCountResult& _return, const int32_t owner)
-{
-  send_getFeedCount(owner);
-  recv_getFeedCount(_return);
-}
-
-void NewsFeedServiceClient::send_getFeedCount(const int32_t owner)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("getFeedCount", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_getFeedCount_pargs args;
-  args.owner = &owner;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void NewsFeedServiceClient::recv_getFeedCount(FeedCountResult& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("getFeedCount") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  NewsFeedService_getFeedCount_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getFeedCount failed: unknown result");
-}
-
-void NewsFeedServiceClient::getListFeed(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count)
-{
-  send_getListFeed(owner, post, count);
-  recv_getListFeed(_return);
-}
-
-void NewsFeedServiceClient::send_getListFeed(const int32_t owner, const Item& post, const int32_t count)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("getListFeed", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_getListFeed_pargs args;
-  args.owner = &owner;
-  args.post = &post;
+  MessageService_getMessages_pargs args;
+  args.inbox_id = &inbox_id;
   args.count = &count;
   args.write(oprot_);
 
@@ -1559,7 +1120,7 @@ void NewsFeedServiceClient::send_getListFeed(const int32_t owner, const Item& po
   oprot_->getTransport()->flush();
 }
 
-void NewsFeedServiceClient::recv_getListFeed(ListFeedResult& _return)
+void MessageServiceClient::recv_getMessages(ListMessageResult& _return)
 {
 
   int32_t rseqid = 0;
@@ -1579,12 +1140,12 @@ void NewsFeedServiceClient::recv_getListFeed(ListFeedResult& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("getListFeed") != 0) {
+  if (fname.compare("getMessages") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  NewsFeedService_getListFeed_presult result;
+  MessageService_getMessages_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1594,10 +1155,187 @@ void NewsFeedServiceClient::recv_getListFeed(ListFeedResult& _return)
     // _return pointer has now been filled
     return;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getListFeed failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getMessages failed: unknown result");
 }
 
-bool NewsFeedServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
+void MessageServiceClient::getKey(KeyMsgResult& _return, const int32_t id1, const int32_t id2)
+{
+  send_getKey(id1, id2);
+  recv_getKey(_return);
+}
+
+void MessageServiceClient::send_getKey(const int32_t id1, const int32_t id2)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("getKey", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  MessageService_getKey_pargs args;
+  args.id1 = &id1;
+  args.id2 = &id2;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void MessageServiceClient::recv_getKey(KeyMsgResult& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("getKey") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  MessageService_getKey_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getKey failed: unknown result");
+}
+
+void MessageServiceClient::getBoxinfo(IB_Info& _return, const std::string& inbox_id)
+{
+  send_getBoxinfo(inbox_id);
+  recv_getBoxinfo(_return);
+}
+
+void MessageServiceClient::send_getBoxinfo(const std::string& inbox_id)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("getBoxinfo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  MessageService_getBoxinfo_pargs args;
+  args.inbox_id = &inbox_id;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void MessageServiceClient::recv_getBoxinfo(IB_Info& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("getBoxinfo") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  MessageService_getBoxinfo_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getBoxinfo failed: unknown result");
+}
+
+void MessageServiceClient::getNewMessages(ListMessageResult& _return, const std::string& inbox_id, const int32_t old_count, const int32_t new_count)
+{
+  send_getNewMessages(inbox_id, old_count, new_count);
+  recv_getNewMessages(_return);
+}
+
+void MessageServiceClient::send_getNewMessages(const std::string& inbox_id, const int32_t old_count, const int32_t new_count)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("getNewMessages", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  MessageService_getNewMessages_pargs args;
+  args.inbox_id = &inbox_id;
+  args.old_count = &old_count;
+  args.new_count = &new_count;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void MessageServiceClient::recv_getNewMessages(ListMessageResult& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("getNewMessages") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  MessageService_getNewMessages_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getNewMessages failed: unknown result");
+}
+
+bool MessageServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
   ProcessMap::iterator pfn;
   pfn = processMap_.find(fname);
   if (pfn == processMap_.end()) {
@@ -1616,38 +1354,38 @@ bool NewsFeedServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtoco
   return true;
 }
 
-void NewsFeedServiceProcessor::process_createNewsFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void MessageServiceProcessor::process_createMessage(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("NewsFeedService.createNewsFeed", callContext);
+    ctx = this->eventHandler_->getContext("MessageService.createMessage", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "NewsFeedService.createNewsFeed");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "MessageService.createMessage");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "NewsFeedService.createNewsFeed");
+    this->eventHandler_->preRead(ctx, "MessageService.createMessage");
   }
 
-  NewsFeedService_createNewsFeed_args args;
+  MessageService_createMessage_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "NewsFeedService.createNewsFeed", bytes);
+    this->eventHandler_->postRead(ctx, "MessageService.createMessage", bytes);
   }
 
-  NewsFeedService_createNewsFeed_result result;
+  MessageService_createMessage_result result;
   try {
-    iface_->createNewsFeed(result.success, args.owner, args.content, args.status);
+    iface_->createMessage(result.success, args.id_from, args.inbox_id, args.content);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "NewsFeedService.createNewsFeed");
+      this->eventHandler_->handlerError(ctx, "MessageService.createMessage");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("createNewsFeed", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("createMessage", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1656,52 +1394,52 @@ void NewsFeedServiceProcessor::process_createNewsFeed(int32_t seqid, ::apache::t
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "NewsFeedService.createNewsFeed");
+    this->eventHandler_->preWrite(ctx, "MessageService.createMessage");
   }
 
-  oprot->writeMessageBegin("createNewsFeed", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("createMessage", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "NewsFeedService.createNewsFeed", bytes);
+    this->eventHandler_->postWrite(ctx, "MessageService.createMessage", bytes);
   }
 }
 
-void NewsFeedServiceProcessor::process_updateNewsFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void MessageServiceProcessor::process_getMessages(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("NewsFeedService.updateNewsFeed", callContext);
+    ctx = this->eventHandler_->getContext("MessageService.getMessages", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "NewsFeedService.updateNewsFeed");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "MessageService.getMessages");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "NewsFeedService.updateNewsFeed");
+    this->eventHandler_->preRead(ctx, "MessageService.getMessages");
   }
 
-  NewsFeedService_updateNewsFeed_args args;
+  MessageService_getMessages_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "NewsFeedService.updateNewsFeed", bytes);
+    this->eventHandler_->postRead(ctx, "MessageService.getMessages", bytes);
   }
 
-  NewsFeedService_updateNewsFeed_result result;
+  MessageService_getMessages_result result;
   try {
-    iface_->updateNewsFeed(result.success, args.id, args.content, args.status);
+    iface_->getMessages(result.success, args.inbox_id, args.count);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "NewsFeedService.updateNewsFeed");
+      this->eventHandler_->handlerError(ctx, "MessageService.getMessages");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("updateNewsFeed", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("getMessages", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1710,52 +1448,52 @@ void NewsFeedServiceProcessor::process_updateNewsFeed(int32_t seqid, ::apache::t
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "NewsFeedService.updateNewsFeed");
+    this->eventHandler_->preWrite(ctx, "MessageService.getMessages");
   }
 
-  oprot->writeMessageBegin("updateNewsFeed", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("getMessages", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "NewsFeedService.updateNewsFeed", bytes);
+    this->eventHandler_->postWrite(ctx, "MessageService.getMessages", bytes);
   }
 }
 
-void NewsFeedServiceProcessor::process_deleteNewsFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void MessageServiceProcessor::process_getKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("NewsFeedService.deleteNewsFeed", callContext);
+    ctx = this->eventHandler_->getContext("MessageService.getKey", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "NewsFeedService.deleteNewsFeed");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "MessageService.getKey");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "NewsFeedService.deleteNewsFeed");
+    this->eventHandler_->preRead(ctx, "MessageService.getKey");
   }
 
-  NewsFeedService_deleteNewsFeed_args args;
+  MessageService_getKey_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "NewsFeedService.deleteNewsFeed", bytes);
+    this->eventHandler_->postRead(ctx, "MessageService.getKey", bytes);
   }
 
-  NewsFeedService_deleteNewsFeed_result result;
+  MessageService_getKey_result result;
   try {
-    iface_->deleteNewsFeed(result.success, args.id, args.owner);
+    iface_->getKey(result.success, args.id1, args.id2);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "NewsFeedService.deleteNewsFeed");
+      this->eventHandler_->handlerError(ctx, "MessageService.getKey");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("deleteNewsFeed", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("getKey", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1764,52 +1502,52 @@ void NewsFeedServiceProcessor::process_deleteNewsFeed(int32_t seqid, ::apache::t
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "NewsFeedService.deleteNewsFeed");
+    this->eventHandler_->preWrite(ctx, "MessageService.getKey");
   }
 
-  oprot->writeMessageBegin("deleteNewsFeed", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("getKey", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "NewsFeedService.deleteNewsFeed", bytes);
+    this->eventHandler_->postWrite(ctx, "MessageService.getKey", bytes);
   }
 }
 
-void NewsFeedServiceProcessor::process_getFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void MessageServiceProcessor::process_getBoxinfo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("NewsFeedService.getFeed", callContext);
+    ctx = this->eventHandler_->getContext("MessageService.getBoxinfo", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "NewsFeedService.getFeed");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "MessageService.getBoxinfo");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "NewsFeedService.getFeed");
+    this->eventHandler_->preRead(ctx, "MessageService.getBoxinfo");
   }
 
-  NewsFeedService_getFeed_args args;
+  MessageService_getBoxinfo_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "NewsFeedService.getFeed", bytes);
+    this->eventHandler_->postRead(ctx, "MessageService.getBoxinfo", bytes);
   }
 
-  NewsFeedService_getFeed_result result;
+  MessageService_getBoxinfo_result result;
   try {
-    iface_->getFeed(result.success, args.id);
+    iface_->getBoxinfo(result.success, args.inbox_id);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "NewsFeedService.getFeed");
+      this->eventHandler_->handlerError(ctx, "MessageService.getBoxinfo");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("getFeed", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("getBoxinfo", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1818,52 +1556,52 @@ void NewsFeedServiceProcessor::process_getFeed(int32_t seqid, ::apache::thrift::
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "NewsFeedService.getFeed");
+    this->eventHandler_->preWrite(ctx, "MessageService.getBoxinfo");
   }
 
-  oprot->writeMessageBegin("getFeed", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("getBoxinfo", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "NewsFeedService.getFeed", bytes);
+    this->eventHandler_->postWrite(ctx, "MessageService.getBoxinfo", bytes);
   }
 }
 
-void NewsFeedServiceProcessor::process_getFeedCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void MessageServiceProcessor::process_getNewMessages(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("NewsFeedService.getFeedCount", callContext);
+    ctx = this->eventHandler_->getContext("MessageService.getNewMessages", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "NewsFeedService.getFeedCount");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "MessageService.getNewMessages");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "NewsFeedService.getFeedCount");
+    this->eventHandler_->preRead(ctx, "MessageService.getNewMessages");
   }
 
-  NewsFeedService_getFeedCount_args args;
+  MessageService_getNewMessages_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "NewsFeedService.getFeedCount", bytes);
+    this->eventHandler_->postRead(ctx, "MessageService.getNewMessages", bytes);
   }
 
-  NewsFeedService_getFeedCount_result result;
+  MessageService_getNewMessages_result result;
   try {
-    iface_->getFeedCount(result.success, args.owner);
+    iface_->getNewMessages(result.success, args.inbox_id, args.old_count, args.new_count);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "NewsFeedService.getFeedCount");
+      this->eventHandler_->handlerError(ctx, "MessageService.getNewMessages");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("getFeedCount", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("getNewMessages", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1872,97 +1610,43 @@ void NewsFeedServiceProcessor::process_getFeedCount(int32_t seqid, ::apache::thr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "NewsFeedService.getFeedCount");
+    this->eventHandler_->preWrite(ctx, "MessageService.getNewMessages");
   }
 
-  oprot->writeMessageBegin("getFeedCount", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("getNewMessages", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "NewsFeedService.getFeedCount", bytes);
+    this->eventHandler_->postWrite(ctx, "MessageService.getNewMessages", bytes);
   }
 }
 
-void NewsFeedServiceProcessor::process_getListFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("NewsFeedService.getListFeed", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "NewsFeedService.getListFeed");
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "NewsFeedService.getListFeed");
-  }
-
-  NewsFeedService_getListFeed_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "NewsFeedService.getListFeed", bytes);
-  }
-
-  NewsFeedService_getListFeed_result result;
-  try {
-    iface_->getListFeed(result.success, args.owner, args.post, args.count);
-    result.__isset.success = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "NewsFeedService.getListFeed");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("getListFeed", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "NewsFeedService.getListFeed");
-  }
-
-  oprot->writeMessageBegin("getListFeed", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "NewsFeedService.getListFeed", bytes);
-  }
-}
-
-::boost::shared_ptr< ::apache::thrift::TProcessor > NewsFeedServiceProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
-  ::apache::thrift::ReleaseHandler< NewsFeedServiceIfFactory > cleanup(handlerFactory_);
-  ::boost::shared_ptr< NewsFeedServiceIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
-  ::boost::shared_ptr< ::apache::thrift::TProcessor > processor(new NewsFeedServiceProcessor(handler));
+::boost::shared_ptr< ::apache::thrift::TProcessor > MessageServiceProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
+  ::apache::thrift::ReleaseHandler< MessageServiceIfFactory > cleanup(handlerFactory_);
+  ::boost::shared_ptr< MessageServiceIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
+  ::boost::shared_ptr< ::apache::thrift::TProcessor > processor(new MessageServiceProcessor(handler));
   return processor;
 }
 
-void NewsFeedServiceConcurrentClient::createNewsFeed(FeedCreateResult& _return, const int32_t owner, const std::string& content, const int8_t status)
+void MessageServiceConcurrentClient::createMessage(MessageCreateResult& _return, const int32_t id_from, const std::string& inbox_id, const std::string& content)
 {
-  int32_t seqid = send_createNewsFeed(owner, content, status);
-  recv_createNewsFeed(_return, seqid);
+  int32_t seqid = send_createMessage(id_from, inbox_id, content);
+  recv_createMessage(_return, seqid);
 }
 
-int32_t NewsFeedServiceConcurrentClient::send_createNewsFeed(const int32_t owner, const std::string& content, const int8_t status)
+int32_t MessageServiceConcurrentClient::send_createMessage(const int32_t id_from, const std::string& inbox_id, const std::string& content)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("createNewsFeed", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("createMessage", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  NewsFeedService_createNewsFeed_pargs args;
-  args.owner = &owner;
+  MessageService_createMessage_pargs args;
+  args.id_from = &id_from;
+  args.inbox_id = &inbox_id;
   args.content = &content;
-  args.status = &status;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1973,7 +1657,7 @@ int32_t NewsFeedServiceConcurrentClient::send_createNewsFeed(const int32_t owner
   return cseqid;
 }
 
-void NewsFeedServiceConcurrentClient::recv_createNewsFeed(FeedCreateResult& _return, const int32_t seqid)
+void MessageServiceConcurrentClient::recv_createMessage(MessageCreateResult& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2002,7 +1686,7 @@ void NewsFeedServiceConcurrentClient::recv_createNewsFeed(FeedCreateResult& _ret
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("createNewsFeed") != 0) {
+      if (fname.compare("createMessage") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2011,7 +1695,7 @@ void NewsFeedServiceConcurrentClient::recv_createNewsFeed(FeedCreateResult& _ret
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      NewsFeedService_createNewsFeed_presult result;
+      MessageService_createMessage_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -2023,7 +1707,7 @@ void NewsFeedServiceConcurrentClient::recv_createNewsFeed(FeedCreateResult& _ret
         return;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createNewsFeed failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createMessage failed: unknown result");
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);
@@ -2033,360 +1717,20 @@ void NewsFeedServiceConcurrentClient::recv_createNewsFeed(FeedCreateResult& _ret
   } // end while(true)
 }
 
-void NewsFeedServiceConcurrentClient::updateNewsFeed(FeedUpdateResult& _return, const int32_t id, const std::string& content, const int8_t status)
+void MessageServiceConcurrentClient::getMessages(ListMessageResult& _return, const std::string& inbox_id, const int32_t count)
 {
-  int32_t seqid = send_updateNewsFeed(id, content, status);
-  recv_updateNewsFeed(_return, seqid);
+  int32_t seqid = send_getMessages(inbox_id, count);
+  recv_getMessages(_return, seqid);
 }
 
-int32_t NewsFeedServiceConcurrentClient::send_updateNewsFeed(const int32_t id, const std::string& content, const int8_t status)
+int32_t MessageServiceConcurrentClient::send_getMessages(const std::string& inbox_id, const int32_t count)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("updateNewsFeed", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("getMessages", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  NewsFeedService_updateNewsFeed_pargs args;
-  args.id = &id;
-  args.content = &content;
-  args.status = &status;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void NewsFeedServiceConcurrentClient::recv_updateNewsFeed(FeedUpdateResult& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("updateNewsFeed") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      NewsFeedService_updateNewsFeed_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "updateNewsFeed failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
-}
-
-void NewsFeedServiceConcurrentClient::deleteNewsFeed(FeedDeleteResult& _return, const int32_t id, const int32_t owner)
-{
-  int32_t seqid = send_deleteNewsFeed(id, owner);
-  recv_deleteNewsFeed(_return, seqid);
-}
-
-int32_t NewsFeedServiceConcurrentClient::send_deleteNewsFeed(const int32_t id, const int32_t owner)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("deleteNewsFeed", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_deleteNewsFeed_pargs args;
-  args.id = &id;
-  args.owner = &owner;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void NewsFeedServiceConcurrentClient::recv_deleteNewsFeed(FeedDeleteResult& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("deleteNewsFeed") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      NewsFeedService_deleteNewsFeed_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "deleteNewsFeed failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
-}
-
-void NewsFeedServiceConcurrentClient::getFeed(FeedResult& _return, const int32_t id)
-{
-  int32_t seqid = send_getFeed(id);
-  recv_getFeed(_return, seqid);
-}
-
-int32_t NewsFeedServiceConcurrentClient::send_getFeed(const int32_t id)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("getFeed", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_getFeed_pargs args;
-  args.id = &id;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void NewsFeedServiceConcurrentClient::recv_getFeed(FeedResult& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("getFeed") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      NewsFeedService_getFeed_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getFeed failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
-}
-
-void NewsFeedServiceConcurrentClient::getFeedCount(FeedCountResult& _return, const int32_t owner)
-{
-  int32_t seqid = send_getFeedCount(owner);
-  recv_getFeedCount(_return, seqid);
-}
-
-int32_t NewsFeedServiceConcurrentClient::send_getFeedCount(const int32_t owner)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("getFeedCount", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_getFeedCount_pargs args;
-  args.owner = &owner;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void NewsFeedServiceConcurrentClient::recv_getFeedCount(FeedCountResult& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("getFeedCount") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      NewsFeedService_getFeedCount_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getFeedCount failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
-}
-
-void NewsFeedServiceConcurrentClient::getListFeed(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count)
-{
-  int32_t seqid = send_getListFeed(owner, post, count);
-  recv_getListFeed(_return, seqid);
-}
-
-int32_t NewsFeedServiceConcurrentClient::send_getListFeed(const int32_t owner, const Item& post, const int32_t count)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("getListFeed", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  NewsFeedService_getListFeed_pargs args;
-  args.owner = &owner;
-  args.post = &post;
+  MessageService_getMessages_pargs args;
+  args.inbox_id = &inbox_id;
   args.count = &count;
   args.write(oprot_);
 
@@ -2398,7 +1742,7 @@ int32_t NewsFeedServiceConcurrentClient::send_getListFeed(const int32_t owner, c
   return cseqid;
 }
 
-void NewsFeedServiceConcurrentClient::recv_getListFeed(ListFeedResult& _return, const int32_t seqid)
+void MessageServiceConcurrentClient::recv_getMessages(ListMessageResult& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2427,7 +1771,7 @@ void NewsFeedServiceConcurrentClient::recv_getListFeed(ListFeedResult& _return, 
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("getListFeed") != 0) {
+      if (fname.compare("getMessages") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2436,7 +1780,7 @@ void NewsFeedServiceConcurrentClient::recv_getListFeed(ListFeedResult& _return, 
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      NewsFeedService_getListFeed_presult result;
+      MessageService_getMessages_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -2448,7 +1792,262 @@ void NewsFeedServiceConcurrentClient::recv_getListFeed(ListFeedResult& _return, 
         return;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getListFeed failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getMessages failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void MessageServiceConcurrentClient::getKey(KeyMsgResult& _return, const int32_t id1, const int32_t id2)
+{
+  int32_t seqid = send_getKey(id1, id2);
+  recv_getKey(_return, seqid);
+}
+
+int32_t MessageServiceConcurrentClient::send_getKey(const int32_t id1, const int32_t id2)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("getKey", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  MessageService_getKey_pargs args;
+  args.id1 = &id1;
+  args.id2 = &id2;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void MessageServiceConcurrentClient::recv_getKey(KeyMsgResult& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("getKey") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      MessageService_getKey_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getKey failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void MessageServiceConcurrentClient::getBoxinfo(IB_Info& _return, const std::string& inbox_id)
+{
+  int32_t seqid = send_getBoxinfo(inbox_id);
+  recv_getBoxinfo(_return, seqid);
+}
+
+int32_t MessageServiceConcurrentClient::send_getBoxinfo(const std::string& inbox_id)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("getBoxinfo", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  MessageService_getBoxinfo_pargs args;
+  args.inbox_id = &inbox_id;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void MessageServiceConcurrentClient::recv_getBoxinfo(IB_Info& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("getBoxinfo") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      MessageService_getBoxinfo_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getBoxinfo failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void MessageServiceConcurrentClient::getNewMessages(ListMessageResult& _return, const std::string& inbox_id, const int32_t old_count, const int32_t new_count)
+{
+  int32_t seqid = send_getNewMessages(inbox_id, old_count, new_count);
+  recv_getNewMessages(_return, seqid);
+}
+
+int32_t MessageServiceConcurrentClient::send_getNewMessages(const std::string& inbox_id, const int32_t old_count, const int32_t new_count)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("getNewMessages", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  MessageService_getNewMessages_pargs args;
+  args.inbox_id = &inbox_id;
+  args.old_count = &old_count;
+  args.new_count = &new_count;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void MessageServiceConcurrentClient::recv_getNewMessages(ListMessageResult& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("getNewMessages") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      MessageService_getNewMessages_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getNewMessages failed: unknown result");
     }
     // seqid != rseqid
     this->sync_.updatePending(fname, mtype, rseqid);

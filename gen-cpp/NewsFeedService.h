@@ -27,8 +27,6 @@ class NewsFeedServiceIf {
   virtual void getFeed(FeedResult& _return, const int32_t id) = 0;
   virtual void getFeedCount(FeedCountResult& _return, const int32_t owner) = 0;
   virtual void getListFeed(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count) = 0;
-  virtual void getListWall(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count) = 0;
-  virtual void getWallCount(FeedCountResult& _return, const int32_t owner) = 0;
 };
 
 class NewsFeedServiceIfFactory {
@@ -74,12 +72,6 @@ class NewsFeedServiceNull : virtual public NewsFeedServiceIf {
     return;
   }
   void getListFeed(ListFeedResult& /* _return */, const int32_t /* owner */, const Item& /* post */, const int32_t /* count */) {
-    return;
-  }
-  void getListWall(ListFeedResult& /* _return */, const int32_t /* owner */, const Item& /* post */, const int32_t /* count */) {
-    return;
-  }
-  void getWallCount(FeedCountResult& /* _return */, const int32_t /* owner */) {
     return;
   }
 };
@@ -757,228 +749,6 @@ class NewsFeedService_getListFeed_presult {
 
 };
 
-typedef struct _NewsFeedService_getListWall_args__isset {
-  _NewsFeedService_getListWall_args__isset() : owner(false), post(false), count(false) {}
-  bool owner :1;
-  bool post :1;
-  bool count :1;
-} _NewsFeedService_getListWall_args__isset;
-
-class NewsFeedService_getListWall_args {
- public:
-
-  NewsFeedService_getListWall_args(const NewsFeedService_getListWall_args&);
-  NewsFeedService_getListWall_args& operator=(const NewsFeedService_getListWall_args&);
-  NewsFeedService_getListWall_args() : owner(0), count(0) {
-  }
-
-  virtual ~NewsFeedService_getListWall_args() throw();
-  int32_t owner;
-  Item post;
-  int32_t count;
-
-  _NewsFeedService_getListWall_args__isset __isset;
-
-  void __set_owner(const int32_t val);
-
-  void __set_post(const Item& val);
-
-  void __set_count(const int32_t val);
-
-  bool operator == (const NewsFeedService_getListWall_args & rhs) const
-  {
-    if (!(owner == rhs.owner))
-      return false;
-    if (!(post == rhs.post))
-      return false;
-    if (!(count == rhs.count))
-      return false;
-    return true;
-  }
-  bool operator != (const NewsFeedService_getListWall_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const NewsFeedService_getListWall_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class NewsFeedService_getListWall_pargs {
- public:
-
-
-  virtual ~NewsFeedService_getListWall_pargs() throw();
-  const int32_t* owner;
-  const Item* post;
-  const int32_t* count;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _NewsFeedService_getListWall_result__isset {
-  _NewsFeedService_getListWall_result__isset() : success(false) {}
-  bool success :1;
-} _NewsFeedService_getListWall_result__isset;
-
-class NewsFeedService_getListWall_result {
- public:
-
-  NewsFeedService_getListWall_result(const NewsFeedService_getListWall_result&);
-  NewsFeedService_getListWall_result& operator=(const NewsFeedService_getListWall_result&);
-  NewsFeedService_getListWall_result() {
-  }
-
-  virtual ~NewsFeedService_getListWall_result() throw();
-  ListFeedResult success;
-
-  _NewsFeedService_getListWall_result__isset __isset;
-
-  void __set_success(const ListFeedResult& val);
-
-  bool operator == (const NewsFeedService_getListWall_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    return true;
-  }
-  bool operator != (const NewsFeedService_getListWall_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const NewsFeedService_getListWall_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _NewsFeedService_getListWall_presult__isset {
-  _NewsFeedService_getListWall_presult__isset() : success(false) {}
-  bool success :1;
-} _NewsFeedService_getListWall_presult__isset;
-
-class NewsFeedService_getListWall_presult {
- public:
-
-
-  virtual ~NewsFeedService_getListWall_presult() throw();
-  ListFeedResult* success;
-
-  _NewsFeedService_getListWall_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _NewsFeedService_getWallCount_args__isset {
-  _NewsFeedService_getWallCount_args__isset() : owner(false) {}
-  bool owner :1;
-} _NewsFeedService_getWallCount_args__isset;
-
-class NewsFeedService_getWallCount_args {
- public:
-
-  NewsFeedService_getWallCount_args(const NewsFeedService_getWallCount_args&);
-  NewsFeedService_getWallCount_args& operator=(const NewsFeedService_getWallCount_args&);
-  NewsFeedService_getWallCount_args() : owner(0) {
-  }
-
-  virtual ~NewsFeedService_getWallCount_args() throw();
-  int32_t owner;
-
-  _NewsFeedService_getWallCount_args__isset __isset;
-
-  void __set_owner(const int32_t val);
-
-  bool operator == (const NewsFeedService_getWallCount_args & rhs) const
-  {
-    if (!(owner == rhs.owner))
-      return false;
-    return true;
-  }
-  bool operator != (const NewsFeedService_getWallCount_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const NewsFeedService_getWallCount_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class NewsFeedService_getWallCount_pargs {
- public:
-
-
-  virtual ~NewsFeedService_getWallCount_pargs() throw();
-  const int32_t* owner;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _NewsFeedService_getWallCount_result__isset {
-  _NewsFeedService_getWallCount_result__isset() : success(false) {}
-  bool success :1;
-} _NewsFeedService_getWallCount_result__isset;
-
-class NewsFeedService_getWallCount_result {
- public:
-
-  NewsFeedService_getWallCount_result(const NewsFeedService_getWallCount_result&);
-  NewsFeedService_getWallCount_result& operator=(const NewsFeedService_getWallCount_result&);
-  NewsFeedService_getWallCount_result() {
-  }
-
-  virtual ~NewsFeedService_getWallCount_result() throw();
-  FeedCountResult success;
-
-  _NewsFeedService_getWallCount_result__isset __isset;
-
-  void __set_success(const FeedCountResult& val);
-
-  bool operator == (const NewsFeedService_getWallCount_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    return true;
-  }
-  bool operator != (const NewsFeedService_getWallCount_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const NewsFeedService_getWallCount_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _NewsFeedService_getWallCount_presult__isset {
-  _NewsFeedService_getWallCount_presult__isset() : success(false) {}
-  bool success :1;
-} _NewsFeedService_getWallCount_presult__isset;
-
-class NewsFeedService_getWallCount_presult {
- public:
-
-
-  virtual ~NewsFeedService_getWallCount_presult() throw();
-  FeedCountResult* success;
-
-  _NewsFeedService_getWallCount_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
 class NewsFeedServiceClient : virtual public NewsFeedServiceIf {
  public:
   NewsFeedServiceClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1022,12 +792,6 @@ class NewsFeedServiceClient : virtual public NewsFeedServiceIf {
   void getListFeed(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count);
   void send_getListFeed(const int32_t owner, const Item& post, const int32_t count);
   void recv_getListFeed(ListFeedResult& _return);
-  void getListWall(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count);
-  void send_getListWall(const int32_t owner, const Item& post, const int32_t count);
-  void recv_getListWall(ListFeedResult& _return);
-  void getWallCount(FeedCountResult& _return, const int32_t owner);
-  void send_getWallCount(const int32_t owner);
-  void recv_getWallCount(FeedCountResult& _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1049,8 +813,6 @@ class NewsFeedServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getFeedCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getListFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_getListWall(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_getWallCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   NewsFeedServiceProcessor(boost::shared_ptr<NewsFeedServiceIf> iface) :
     iface_(iface) {
@@ -1060,8 +822,6 @@ class NewsFeedServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getFeed"] = &NewsFeedServiceProcessor::process_getFeed;
     processMap_["getFeedCount"] = &NewsFeedServiceProcessor::process_getFeedCount;
     processMap_["getListFeed"] = &NewsFeedServiceProcessor::process_getListFeed;
-    processMap_["getListWall"] = &NewsFeedServiceProcessor::process_getListWall;
-    processMap_["getWallCount"] = &NewsFeedServiceProcessor::process_getWallCount;
   }
 
   virtual ~NewsFeedServiceProcessor() {}
@@ -1150,26 +910,6 @@ class NewsFeedServiceMultiface : virtual public NewsFeedServiceIf {
     return;
   }
 
-  void getListWall(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getListWall(_return, owner, post, count);
-    }
-    ifaces_[i]->getListWall(_return, owner, post, count);
-    return;
-  }
-
-  void getWallCount(FeedCountResult& _return, const int32_t owner) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getWallCount(_return, owner);
-    }
-    ifaces_[i]->getWallCount(_return, owner);
-    return;
-  }
-
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -1218,12 +958,6 @@ class NewsFeedServiceConcurrentClient : virtual public NewsFeedServiceIf {
   void getListFeed(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count);
   int32_t send_getListFeed(const int32_t owner, const Item& post, const int32_t count);
   void recv_getListFeed(ListFeedResult& _return, const int32_t seqid);
-  void getListWall(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count);
-  int32_t send_getListWall(const int32_t owner, const Item& post, const int32_t count);
-  void recv_getListWall(ListFeedResult& _return, const int32_t seqid);
-  void getWallCount(FeedCountResult& _return, const int32_t owner);
-  int32_t send_getWallCount(const int32_t owner);
-  void recv_getWallCount(FeedCountResult& _return, const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

@@ -75,13 +75,6 @@ and open the template in the editor.
                 }
                 xmlHttp.send(params);
             }
-	    
-	    function scrolled(o){
-		// check if reach end of page
-		if (o.offsetHeight + o.scrollTop == o.scrollHeight && nextId != -1){
-			loadmore();
-		}
-	    }
         </script>
         <style>
             body {
@@ -227,26 +220,26 @@ and open the template in the editor.
             <a href="/dashboard">Wall</a>
         </div>
 
-        <div class="split center" onscroll="scrolled(this)">
-		<div class="centered" id = "listfeed">
-			<div id="feeds">
-				<form method="POST" action="/newsFeed/create">
-					<p>What is in your mind?</p>
-					<textarea class="status_post" rows="4" name="content"></textarea><br>
-					<button type ="submit" class="post_button">Post</button>
-				</form>
-				<hr>
-				%s
-
-			</div>
-
-			<div>
-				<br>
-				<br>
-				<button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
-			</div>
-		</div>
-
+        <div class="split center">
+            <div class="centered" id = "listfeed">
+                <div id="feeds">
+                    <form method="POST" action="/newsFeed/create">
+                        <p>What is in your mind?</p>
+                        <textarea class="status_post" rows="4" name="content"></textarea><br>
+                        <button type ="submit" class="post_button">Post</button>
+                    </form>
+                    <hr>
+                    %s
+                    
+                </div>
+                
+                <div>
+                    <br>
+                    <br>
+                    <button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
+                </div>
+            </div>
+            
         </div>
     </body>
 </html>

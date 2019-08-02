@@ -6,7 +6,6 @@
 		<link rel="stylesheet" type="text/css" href="friend/friend.css">
 		<script language="javascript">
 			function addFriend(){
-				var flag = true;
 				var friend_username = document.addfriendForm.friend_username.value;
 				var message = document.addfriendForm.message.value;
 				var url = "/friend/add";
@@ -18,11 +17,9 @@
 				http.onreadystatechange = function (){
 					if(http.readyState == 4 && http.status == 200){
 						alert("Your request had been sent.");
-					} else if (http.status == 500 && flag){
-						flag = false;
+					} else if (http.status == 500){
 						alert("Username " + friend_username + " doesn't existed");
-					} else if (http.status == 412 && flag){
-						flag = false;
+					} else if (http.status == 412){
 						alert("You have already sent this request. Please wait for your friend to accept it");
 					}
 				}

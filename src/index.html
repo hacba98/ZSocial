@@ -11,26 +11,12 @@ and open the template in the editor.
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<script language="javascript">
-			addEventListener("keyup", function(event) {
-				if (event.keyCode === 13) {
-					event.preventDefault();
-					document.getElementById("loginBtn").click();
-				}
-			});
-			
 			function login(){
-				var flag = true;
 				var username = document.loginform.username.value;
 				var password = document.loginform.password.value;
-				
-				// filter empty params case
-				if (!username || !password){
-					alert("You need to fill in all data");
-					return;
-				}
-				
 				var url = "/profile/login/";
 				var params = "username=" + username + "&password=" + password;
+				console.log(params);
 				
 				var xmlHttp = new XMLHttpRequest();
 				xmlHttp.open('POST', url, true);
@@ -38,9 +24,7 @@ and open the template in the editor.
                                 xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
 					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 					    location.replace("/dashboard");
-					} 
-					if (xmlHttp.status == 404 && flag){
-					    flag = false;
+					} else if (xmlHttp.status == 404){
 					    alert("Username or password is not correct.");
 					}
 				}
@@ -58,14 +42,14 @@ and open the template in the editor.
 					<tr>
 						<td align="right" width="81"><b><font color="#000080">User
 								Name:</font></b></td>
-						<td width="184"><input type="text" name="username" id="user" size="20" value="" required/></td>
+						<td width="184"><input type="text" name="username" id="user" size="20" value="" /></td>
 					</tr>
 					<tr>
 						<td align="right" width="81"><b><font color="#000080">Password:</font></b></td>
-						<td width="184"><input type="password" name="password" size="20" value="" required/></td>
+						<td width="184"><input type="password" name="password" size="20" value="" /></td>
 					</tr>
 					<tr>
-						<td colspan="2" align="center" width="275"><input type="button" id="loginBtn" value="Login" onclick="login()"></td>
+						<td colspan="2" align="center" width="275"><input type="button" name="a1" value="Login" onclick="login()"></td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center" width="275"><a href="/register">Click Here To Sign Up</a></td>

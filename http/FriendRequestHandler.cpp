@@ -54,11 +54,6 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
 		return handleAcceptRequest(req, res, token_.zuid);
 	}
 	
-	// serve loadmore data request
-	if (req.getMethod() == "POST" && url.find("/friend/loadmore") == 0){
-		return handleLoadmoreRequest(req, res, token_.zuid);
-	}
-	
 	// serve css file
 	if (url == "/friend/friend.css" || url == "/friend/friend/friend.css"){
 		res.setStatus(HTTPResponse::HTTP_OK);
@@ -121,6 +116,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 		}
 		
 		
+		// TODO - add code for friend list
 		// render friend list
 		{
 			// retreive session cookie for paging current index
@@ -309,48 +305,5 @@ void FriendRequestHandler::handleRejectRequest(Poco::Net::HTTPServerRequest& req
 	} catch (...){
 		Application::instance().logger().error("Error-Reject Friend Request");
 		return res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
-	}
-}
-
-void FriendRequestHandler::handleLoadmoreRequest(Poco::Net::HTTPServerRequest& req, Poco::Net::HTTPServerResponse& res, int uid){
-	try {
-		istream& body_stream = req.stream();
-		HTMLForm form(req, body_stream);
-		string nextPos = form.get("next");
-		
-		// filter case call with next=-1 (already render all friends). Just return bcz it will never happen
-		if (nextPos == "-1"){
-			return;
-		}
-		
-		// call API
-		listFriendResult ret;
-		_conn->client()->viewFriendList(ret, uid, stoi(nextPos), 20);
-		
-		// set header
-		res.set("next", to_string(ret.idx));
-		
-		// render list
-		// user data
-		ProfileConnection *profileConn;
-		GetUserResult userRet;
-		while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
-		string data;
-		for (int i=0; i < ret.friendList.size(); i++){
-			int fr_id = ret.friendList[i];
-			profileConn->client()->GetProfile(userRet, fr_id);
-			bool online = userRet.profile.last_active_time == -1;
-			string stt = online ? "online" : "offline";
-			string friends = "<div id=\"friend_" + to_string(userRet.profile.id) + "\" class=\"friend friend_" + stt + "\"> <h2> " + userRet.profile.name + "</h2></div>";
-			data.append(friends);
-		}
-		res.set("data", data);
-		
-		res.setStatus(HTTPResponse::HTTP_OK);
-		res.setContentType("text/html");
-		res.send().flush();
-	} catch (...){
-		Application::instance().logger().information("Error - load more friends");
-		return;
 	}
 }

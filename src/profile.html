@@ -5,7 +5,6 @@
                 
                 <script language="javascript">
 			function update(){
-				var flag = true;
 				var password = document.profileForm.password.value;
 				var repassword = document.profileForm.repassword.value;
 				var name = document.profileForm.Name.value;
@@ -19,12 +18,10 @@
 				xmlHttp.open('POST', url, true);
 				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				xmlHttp.onreadystatechange = function() {
-					if(xmlHttp.readyState == 4 && xmlHttp.status == 200 && flag) {
-					    flag = false;
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 					    alert("Success update your profile!", xmlHttp.responseText);
 					    location.replace("/myprofile");
-					} else if (xmlHttp.status == 404 && flag){
-					    flag = false;
+					} else if (xmlHttp.status == 404){
 					    alert("Error 500 not work");
 					}
 				}

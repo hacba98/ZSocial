@@ -8,12 +8,10 @@ and open the template in the editor.
 	<head>
                 <meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
                 <script>
                     var nextId = %d;
                     var nextPost = %d;
-		    
+
                     function loadmore(){
                         var params = "next.id=" + nextId + "&next.post=" + nextPost;
                         var url = "/newsFeed/loadmore-mywall";
@@ -36,71 +34,6 @@ and open the template in the editor.
                         }
                         xmlHttp.send(params);
                     }    
-		    
-    		    var nextFriendPos = 20;
-
-		    // function to load more friends data in the list
-		    function loadmore_friends(){
-			var params = "next=" + nextFriendPos;
-			var url = "/friend/loadmore";
-			
-			var http = new XMLHttpRequest();
-			http.open('POST', url, false);
-			http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
-                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                                // nextId = xmlHttp.getResponseHeader("next");
-                                nextPost = xmlHttp.getResponseHeader("next");
-                                let div = document.createElement('div');
-                                div.innerHTML = xmlHttp.getResponseHeader("data");
-
-                                document.getElementById("friends").appendChild(div);
-				
-                            } else if (xmlHttp.status == 404){
-                                alert("Error 404 not work");
-                            }
-                        }
-                        xmlHttp.send(params);
-		    }
-		    
-		    var socketURL = 'ws://localhost:8000/online';
-		    var socket = new WebSocket(socketURL);
-		    
-		    socket.addEventListener('open', function (event){
-			console.log('Open WS: ', socketURL);
-		    });
-		    
-		    socket.addEventListener('message', function (event){
-			console.log('Message receive', event.data);
-			if (event.data == "ping"){
-				socket.send("pong");
-			} else {
-				var data = event.data.split(":");
-				
-				if (data[0] == "online"){
-					var id = "#friend_" + data[1];
-					console.log(id);
-					$(id).css("background-color", "yellowgreen");
-				}
-				
-				if (data[0] == "offline"){
-					var id = "#friend_" + data[1];
-					console.log(id);
-					$(id).css("background-color", "burlywood");
-				}
-				
-				console.log(data);
-				socket.send("ok");
-			}
-		    });
-		    
-		    window.onbeforeunload = function (){
-			socket.onclose = function (){
-				console.log("web socket closing");
-			}
-			socket.close();
-		    }
-		    
                 </script>
 		<style>
 			body {
@@ -137,23 +70,24 @@ and open the template in the editor.
 				width: 20%%;
 				position: fixed;
 				z-index: 1;
-				top: 4.5%%;
+				top: 0;
 				overflow-x: hidden;
 				padding-top: 20px;
-			}
-
-			.right {
-				right: 0;
-				background-color: aqua;
+				top: 5%%;
 			}
 
 			.left {
 				left: 0;
-				background-color: seashell;
+				background-color: aqua;
+			}
+
+			.right {
+				right: 0;
+				background-color: red;
 			}
 			
 			.center {
-                                right: 0;
+                                left:0;
 				width: 80%%;
 				background-color: cornsilk;
 			}
@@ -209,24 +143,22 @@ and open the template in the editor.
                         .friend {
                             border: none;
                             outline: 0;
-			    padding: 5px;
+                            padding: 12px;
                             color: white;
                             
                             text-align: center;
                             cursor: pointer;
                             width: 100%%;
-                            font-size: 14px;
-			    margin: 15px;
-			    border-radius: 20px;
+                            font-size: 18px;
                         }
-                        .friend_offline {
+                        .friend:nth-child(odd) {
                             background-color: burlywood;
                         }
-                        .friend_online {
-                            background-color: yellowgreen;
+                        .friend:nth-child(even) {
+                            background-color:coral;
                         }
                         .friend:hover {
-                            background-color: steelblue;
+                            background-color: brown;
                         }
                         .loadmoreBTN {
                             border: white;
@@ -252,44 +184,30 @@ and open the template in the editor.
 			<a class="active" href="/dashboard">Wall</a>
 		</div>
 		
-		<div class="split center"  onscroll="scrolled_feeds(this)">
-			<div class="centered" id = "listfeed">
-				<div id="feeds">
-					<form method="POST" action="/newsFeed/create">
-						<p>What is in your mind?</p>
-						<textarea class="status_post" rows="4" name="content"></textarea><br>
-						<button type ="submit" class="post_button">Post</button>
-					</form>
-					<hr>
-					%s
+		<div class="split center">
+                <div class="centered" id = "listfeed">
+                    <div id="feeds">
+                        <form method="POST" action="/newsFeed/create">
+                            <p>What is in your mind?</p>
+                            <textarea class="status_post" rows="4" name="content"></textarea><br>
+                            <button type ="submit" class="post_button">Post</button>
+                        </form>
+                        <hr>
+                        %s
 
-				</div>
+                    </div>
 
-				<div>
-					<br><br>
-					<button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
-				</div>
-			</div>
+                    <div>
+                        <br>
+                        <br>
+                        <button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
+                    </div>
+                </div>
+
             </div>
-		<div class="split left" onscroll="scrolled_friends(this)" id="friends">
+            <div class="split right">
                 %s
             </div>
 		
-		<script>
-			function scrolled_feeds(o){
-				// check if reach end of page
-				if (o.offsetHeight + o.scrollTop == o.scrollHeight && nextId != -1){
-					loadmore();
-				}
-			}
-			
-			function scrolled_friends(o){
-				// check if reach end of page
-				if (o.offsetHeight + o.scrollTop == o.scrollHeight && nextFriendPos != -1){
-					loadmore_friends();
-				}
-			}
-		</script>
 	</body>
-	
 </html>

@@ -174,7 +174,6 @@ service ProfileServices {
 	// Login / Logout
 	loginResult Login(1:string username, 2:string password),
 	ErrorCode Logout(1:i32 userId), 
-	loginResult LoginById(1:i32 userId),
 
 	// Create new user
 	CreateUserResult CreateProfile(1:UserProfile profile),
@@ -234,6 +233,4 @@ service NewsFeedService {
     FeedResult          getFeed(       1: i32 id),
     FeedCountResult     getFeedCount(  1: i32 owner),
     ListFeedResult      getListFeed(   1: i32 owner,   2: Item post,       3: i32 count),
-    ListFeedResult      getListWall(   1: i32 owner,   2: Item post,       3: i32 count),
-    FeedCountResult     getWallCount(  1: i32 owner),
 }
