@@ -13,9 +13,10 @@
 				var name = document.profileForm.Name.value;
 				var phonenumber = document.profileForm.phonenumber.value;
 				var birth = document.profileForm.birth.value;
+                                var gender = document.profileForm.Gender.value;
 				var url = "/profile/update/";
-				var params = "&password=" + password+ "&repassword=" + repassword + "&name=" + name + "&birth=" + birth + "&phonenumber=" + phonenumber;
-				console.log(params);
+				var params = "&password=" + password+ "&repassword=" + repassword + "&name=" + name + "&birth=" + birth + "&phonenumber=" + phonenumber + "&gender=" + gender;
+				//console.log(params);
 				
 				var xmlHttp = new XMLHttpRequest();
 				xmlHttp.open('POST', url, true);
@@ -83,6 +84,16 @@
 			.topnav {
 				overflow: hidden;
 				background-color: #007acc;
+                                bottom: 4.5%%;
+			}
+                        
+                        .topnav p {
+				float: left;
+				color: #f2f2f2;
+				text-align: center;
+				
+				text-decoration: none;
+				font-size: 17px;
 			}
 
 			.topnav a {
@@ -105,15 +116,15 @@
 			}
 			
 			.split {
-				height: 95%%;
-				width: 20%%;
-				position: fixed;
-				z-index: 1;
-				top: 0;
-				overflow-x: hidden;
-				padding-top: 20px;
-				top: 5%%;
-			}
+                            height: 95%%;
+                            width: 20%%;
+                            position: fixed;
+                            z-index: 1;
+                            top: 0;
+                            overflow-x: hidden;
+                            padding-top: 20px;
+                            top: 4.5%%;;
+                        }
 
 			.left {
 				left: 0;
@@ -154,6 +165,7 @@
 	</head>
 	<body>
 		<div class="topnav">
+                        <p> %s </p>
 			<a href="/profile/logout">Logout</a>
 			<a id ="friend_link" href="/friend">%s</a>
 			<a href="/message">Contact</a>
@@ -176,7 +188,7 @@
                                                 <br>
 					
 						<b><font color="#000080">Gender:</font></b>
-						<p> %s </p>
+						<input type="text" name="Gender" size="20" value="%s" />
                                                 <br>
 					
 						<b><font color="#000080">Phone Number:</font></b>

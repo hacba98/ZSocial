@@ -25,38 +25,42 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
 	}
 	
 	// valid cookie: false -> redirect login
-	token token_;
+	SimpleProfile token_;
 	if (!ZRequestHandlerFactory::validCookie(token_, uid)) {
 		return res.redirect("/login");
 	}
 	
 	// serve load friend page first time
 	if (req.getMethod() == "GET" && (url == "/friend/page" || url == "/friend/" || url == "/friend")){
-		return handleLoadPage(req, res, token_.zuid, 0);
+		return handleLoadPage(req, res, token_, 0);
 	}
 	
 	// serve load friend page with click next button in render friend list
-	if (req.getMethod() == "GET" && (url == "/friend/next")){
+	if (req.getMethod() == "GET" && (url.find("/friend/next") == 0)){
 		if (paging_index == "-1"){
 			res.redirect("/friend");
 			return;
 		}
-		return handleLoadPage(req, res, token_.zuid, stoi(paging_index));
+		return handleLoadPage(req, res, token_, stoi(paging_index));
 	}
 	
 	// serve add friend request
 	if (req.getMethod() == "POST" && url == "/friend/add"){
-		return handleAddFriend(req, res, token_.zuid);
+		return handleAddFriend(req, res, token_.id);
 	} 
 	
 	// serve accept friend request
 	if (req.getMethod() == "GET" && url.find("/friend/acceptRequest") == 0){
-		return handleAcceptRequest(req, res, token_.zuid);
+		return handleAcceptRequest(req, res, token_.id);
 	}
 	
 	// serve loadmore data request
 	if (req.getMethod() == "POST" && url.find("/friend/loadmore") == 0){
-		return handleLoadmoreRequest(req, res, token_.zuid);
+		return handleLoadmoreRequest(req, res, token_.id);
+	}
+        
+        if (req.getMethod() == "POST" && url.find("/friend/unfriend") == 0){
+		return handleUnFriend(req, res, token_.id);
 	}
 	
 	// serve css file
@@ -73,7 +77,7 @@ void FriendRequestHandler::handleRequest(HTTPServerRequest& req, HTTPServerRespo
  * @param res
  * @param uid - userID getting from cookies
  */
-void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResponse& res, int uid, int paging_index){
+void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResponse& res, SimpleProfile uid, int paging_index){
 	string pendingHTMLCode; // code for render pending list
 	string friendListHTMLCode; // code for render friend list
 	string htmlCode; // code for return to render html page
@@ -82,7 +86,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 	try {
 		// connect to friend service
 		// get id from session management
-		int user_id = uid;
+		int user_id = uid.id;
 		
 		// check for pending requests
 		{
@@ -151,7 +155,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 							oss << "<p> Your friend's username: \"" <<  profile.name << "\"";
 							oss << (profile.gender ? ". He " : ". She ");
 							oss << (profile.last_active_time == -1 ? "is online." : "is offline.");
-							oss << "</p><br>";
+							oss << "</p> <button onclick=\"removeFriend('" + std::to_string(profile.id) + "')\"> Un - friend </button><br>";
 							
 							string eachFriendCode = oss.str();
 							friendListHTMLCode.append(eachFriendCode);
@@ -186,7 +190,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 		// read HTML file as string 
 		
 		// put render code into template string
-		Poco::format(htmlCode, ZRequestHandlerFactory::friendString, pendingHTMLCode, friendListHTMLCode);
+		Poco::format(htmlCode, ZRequestHandlerFactory::friendString,uid.name, pendingHTMLCode, friendListHTMLCode);
 //		char buf[512];
 //		snprintf(buf, htmlCode.size(), htmlCode.c_str(), 
 //			pendingHTMLCode.c_str(), friendListHTMLCode.c_str());
@@ -355,3 +359,34 @@ void FriendRequestHandler::handleLoadmoreRequest(Poco::Net::HTTPServerRequest& r
 		return;
 	}
 }
+
+void FriendRequestHandler::handleUnFriend(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res,int uid){
+    try {
+		istream& body_stream = req.stream();
+		HTMLForm form(req, body_stream);
+		string frId = form.get("friendId", "-1");
+		
+		// Mapping username to userid of friend
+		
+		int fr_id = atoi(frId.c_str());
+		
+		ErrorCode::type code = _conn->client()->removeFriend(uid, fr_id);//not working
+		
+		if(code == ErrorCode::SUCCESS){
+                        res.setStatus(HTTPResponse::HTTP_OK);
+                        
+                        FeedDeleteResult fdr;
+                        NewsFeedConnection *feedConn;
+                        while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100)));
+                        feedConn->client()->rmOldFriendWall(fdr,uid,fr_id);
+                        ZRequestHandlerFactory::newsfeedPool()->returnObject(feedConn);
+		} else if (code == ErrorCode::DUPLICATED_REQUEST){
+			res.setStatus(HTTPResponse::HTTP_PRECONDITION_FAILED);
+		}
+		
+		res.send().flush();
+	} catch (...){ // some thing wrong
+		Application::instance().logger().error("Error- Un-Friend Request");
+		return res.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+	}
+};

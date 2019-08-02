@@ -60,6 +60,11 @@ class NewsFeedServiceHandler : virtual public NewsFeedServiceIf {
     printf("getWallCount\n");
   }
 
+  void rmOldFriendWall(FeedDeleteResult& _return, const int32_t owner, const int32_t old_friend) {
+    // Your implementation goes here
+    printf("rmOldFriendWall\n");
+  }
+
 };
 
 int main(int argc, char **argv) {

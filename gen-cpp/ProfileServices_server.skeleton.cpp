@@ -30,6 +30,11 @@ class ProfileServicesHandler : virtual public ProfileServicesIf {
     printf("Logout\n");
   }
 
+  void LoginById(loginResult& _return, const int32_t userId) {
+    // Your implementation goes here
+    printf("LoginById\n");
+  }
+
   void CreateProfile(CreateUserResult& _return, const UserProfile& profile) {
     // Your implementation goes here
     printf("CreateProfile\n");

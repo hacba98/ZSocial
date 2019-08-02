@@ -127,6 +127,15 @@ and open the template in the editor.
 				overflow: hidden;
 				background-color: #007acc;
 			}
+                        
+                        .topnav p {
+				float: left;
+				color: #f2f2f2;
+				text-align: center;
+				
+				text-decoration: none;
+				font-size: 17px;
+			}
 
 			.topnav a {
 				float: right;
@@ -259,6 +268,7 @@ and open the template in the editor.
 	</head>
 	<body>
 		<div class="topnav">
+                        <p> %s </p>
 			<a href="/profile/logout">Logout</a>
 			<a id ="friend_link" href="/friend">%s</a>
 			<a href="/message">Contact</a>

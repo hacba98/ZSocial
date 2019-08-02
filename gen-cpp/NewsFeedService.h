@@ -29,6 +29,7 @@ class NewsFeedServiceIf {
   virtual void getListFeed(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count) = 0;
   virtual void getListWall(ListFeedResult& _return, const int32_t owner, const Item& post, const int32_t count) = 0;
   virtual void getWallCount(FeedCountResult& _return, const int32_t owner) = 0;
+  virtual void rmOldFriendWall(FeedDeleteResult& _return, const int32_t owner, const int32_t old_friend) = 0;
 };
 
 class NewsFeedServiceIfFactory {
@@ -80,6 +81,9 @@ class NewsFeedServiceNull : virtual public NewsFeedServiceIf {
     return;
   }
   void getWallCount(FeedCountResult& /* _return */, const int32_t /* owner */) {
+    return;
+  }
+  void rmOldFriendWall(FeedDeleteResult& /* _return */, const int32_t /* owner */, const int32_t /* old_friend */) {
     return;
   }
 };
@@ -979,6 +983,117 @@ class NewsFeedService_getWallCount_presult {
 
 };
 
+typedef struct _NewsFeedService_rmOldFriendWall_args__isset {
+  _NewsFeedService_rmOldFriendWall_args__isset() : owner(false), old_friend(false) {}
+  bool owner :1;
+  bool old_friend :1;
+} _NewsFeedService_rmOldFriendWall_args__isset;
+
+class NewsFeedService_rmOldFriendWall_args {
+ public:
+
+  NewsFeedService_rmOldFriendWall_args(const NewsFeedService_rmOldFriendWall_args&);
+  NewsFeedService_rmOldFriendWall_args& operator=(const NewsFeedService_rmOldFriendWall_args&);
+  NewsFeedService_rmOldFriendWall_args() : owner(0), old_friend(0) {
+  }
+
+  virtual ~NewsFeedService_rmOldFriendWall_args() throw();
+  int32_t owner;
+  int32_t old_friend;
+
+  _NewsFeedService_rmOldFriendWall_args__isset __isset;
+
+  void __set_owner(const int32_t val);
+
+  void __set_old_friend(const int32_t val);
+
+  bool operator == (const NewsFeedService_rmOldFriendWall_args & rhs) const
+  {
+    if (!(owner == rhs.owner))
+      return false;
+    if (!(old_friend == rhs.old_friend))
+      return false;
+    return true;
+  }
+  bool operator != (const NewsFeedService_rmOldFriendWall_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const NewsFeedService_rmOldFriendWall_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class NewsFeedService_rmOldFriendWall_pargs {
+ public:
+
+
+  virtual ~NewsFeedService_rmOldFriendWall_pargs() throw();
+  const int32_t* owner;
+  const int32_t* old_friend;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _NewsFeedService_rmOldFriendWall_result__isset {
+  _NewsFeedService_rmOldFriendWall_result__isset() : success(false) {}
+  bool success :1;
+} _NewsFeedService_rmOldFriendWall_result__isset;
+
+class NewsFeedService_rmOldFriendWall_result {
+ public:
+
+  NewsFeedService_rmOldFriendWall_result(const NewsFeedService_rmOldFriendWall_result&);
+  NewsFeedService_rmOldFriendWall_result& operator=(const NewsFeedService_rmOldFriendWall_result&);
+  NewsFeedService_rmOldFriendWall_result() {
+  }
+
+  virtual ~NewsFeedService_rmOldFriendWall_result() throw();
+  FeedDeleteResult success;
+
+  _NewsFeedService_rmOldFriendWall_result__isset __isset;
+
+  void __set_success(const FeedDeleteResult& val);
+
+  bool operator == (const NewsFeedService_rmOldFriendWall_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const NewsFeedService_rmOldFriendWall_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const NewsFeedService_rmOldFriendWall_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _NewsFeedService_rmOldFriendWall_presult__isset {
+  _NewsFeedService_rmOldFriendWall_presult__isset() : success(false) {}
+  bool success :1;
+} _NewsFeedService_rmOldFriendWall_presult__isset;
+
+class NewsFeedService_rmOldFriendWall_presult {
+ public:
+
+
+  virtual ~NewsFeedService_rmOldFriendWall_presult() throw();
+  FeedDeleteResult* success;
+
+  _NewsFeedService_rmOldFriendWall_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class NewsFeedServiceClient : virtual public NewsFeedServiceIf {
  public:
   NewsFeedServiceClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1028,6 +1143,9 @@ class NewsFeedServiceClient : virtual public NewsFeedServiceIf {
   void getWallCount(FeedCountResult& _return, const int32_t owner);
   void send_getWallCount(const int32_t owner);
   void recv_getWallCount(FeedCountResult& _return);
+  void rmOldFriendWall(FeedDeleteResult& _return, const int32_t owner, const int32_t old_friend);
+  void send_rmOldFriendWall(const int32_t owner, const int32_t old_friend);
+  void recv_rmOldFriendWall(FeedDeleteResult& _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1051,6 +1169,7 @@ class NewsFeedServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getListFeed(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getListWall(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getWallCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_rmOldFriendWall(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   NewsFeedServiceProcessor(boost::shared_ptr<NewsFeedServiceIf> iface) :
     iface_(iface) {
@@ -1062,6 +1181,7 @@ class NewsFeedServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getListFeed"] = &NewsFeedServiceProcessor::process_getListFeed;
     processMap_["getListWall"] = &NewsFeedServiceProcessor::process_getListWall;
     processMap_["getWallCount"] = &NewsFeedServiceProcessor::process_getWallCount;
+    processMap_["rmOldFriendWall"] = &NewsFeedServiceProcessor::process_rmOldFriendWall;
   }
 
   virtual ~NewsFeedServiceProcessor() {}
@@ -1170,6 +1290,16 @@ class NewsFeedServiceMultiface : virtual public NewsFeedServiceIf {
     return;
   }
 
+  void rmOldFriendWall(FeedDeleteResult& _return, const int32_t owner, const int32_t old_friend) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->rmOldFriendWall(_return, owner, old_friend);
+    }
+    ifaces_[i]->rmOldFriendWall(_return, owner, old_friend);
+    return;
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -1224,6 +1354,9 @@ class NewsFeedServiceConcurrentClient : virtual public NewsFeedServiceIf {
   void getWallCount(FeedCountResult& _return, const int32_t owner);
   int32_t send_getWallCount(const int32_t owner);
   void recv_getWallCount(FeedCountResult& _return, const int32_t seqid);
+  void rmOldFriendWall(FeedDeleteResult& _return, const int32_t owner, const int32_t old_friend);
+  int32_t send_rmOldFriendWall(const int32_t owner, const int32_t old_friend);
+  void recv_rmOldFriendWall(FeedDeleteResult& _return, const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

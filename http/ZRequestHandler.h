@@ -77,7 +77,7 @@ public:
         boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > pool_profiles(new Poco::ObjectPool<ProfileConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<FriendConnection> > pool_friends(new Poco::ObjectPool<FriendConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > pool_newsfeed(new Poco::ObjectPool<NewsFeedConnection>(poolCapacity, poolPeakCapacity));
-        boost::shared_ptr<Poco::ObjectPool<Converter<token> > > pool_convert_token(new Poco::ObjectPool<Converter<token> >(poolCapacity, poolPeakCapacity));
+        boost::shared_ptr<Poco::ObjectPool<Converter<SimpleProfile> > > pool_convert_token(new Poco::ObjectPool<Converter<SimpleProfile> >(poolCapacity, poolPeakCapacity));
 
 
         ZRequestHandlerFactory::_pool_profiles = pool_profiles;
@@ -116,7 +116,7 @@ public:
         return ZRequestHandlerFactory::_pool_newsfeed.get();
     }
     
-    static Poco::ObjectPool<Converter<token> > * converterPool(){
+    static Poco::ObjectPool<Converter<SimpleProfile> > * converterPool(){
 	    return ZRequestHandlerFactory::_pool_convert_token.get();
     }
     
@@ -136,10 +136,10 @@ public:
     static void onAddFriend(int fid);
     
     // generate string which payload and signature token from given data
-    static string genCookie(int zuid);
+    static string genCookie(SimpleProfile zuid);
     
     // valid cookie and return token object for retrievable information
-    static bool validCookie(token& token_, std::string cookie);
+    static bool validCookie(SimpleProfile& token_, std::string cookie);
     
     static string dashboardString;
     static string loginString;
@@ -163,7 +163,7 @@ private:
     static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
     static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
     static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
-    static boost::shared_ptr<Poco::ObjectPool<Converter<token> > > _pool_convert_token;
+    static boost::shared_ptr<Poco::ObjectPool<Converter<SimpleProfile> > > _pool_convert_token;
     
     // secret for token
     static std::string _secret;
@@ -179,9 +179,9 @@ public:
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     
-    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
-    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
-    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
+    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
+    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
 };
 
 class ProfileRequestHandler : public Poco::Net::HTTPRequestHandler {
@@ -244,7 +244,7 @@ public:
 	void handleLoadPage(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
-		int uid,
+		SimpleProfile uid,
 		int paging_index);
 	
 	void handleAcceptRequest(
@@ -259,6 +259,11 @@ public:
 		int requestId);
 	
 	void handleLoadmoreRequest(
+		Poco::Net::HTTPServerRequest &req,
+		Poco::Net::HTTPServerResponse &res,
+		int uid);
+        
+        void handleUnFriend(
 		Poco::Net::HTTPServerRequest &req,
 		Poco::Net::HTTPServerResponse &res,
 		int uid);
@@ -342,7 +347,7 @@ public:
 
     static void setProfile(UserProfile& profile, std::string name, std::string gender, int birth, long phoneNumber, std::string username, std::string password) {
         if (birth != 0) profile.__set_birth(birth);
-        if (gender != "") profile.__set_gender(gender == "Nam");
+        if (gender != "") profile.__set_gender((gender[0] == 'N' || gender[0] == 'n') &&(gender[1] == 'a' || gender[1] == 'A') &&(gender[2] == 'M' || gender[2] == 'm') && (gender.length() == 3));
         if (name != "No one will name like this") profile.__set_name(name);
         if (password != "") profile.__set_password(password);
         if (phoneNumber != 0l)profile.__set_phoneNumber(phoneNumber);

@@ -33,16 +33,16 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    token token_;
+    SimpleProfile token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
     if (!valid) // redirect to /login
 	    return res.redirect("/login");
     
-    int id = token_.zuid;
+    int id = token_.id;
     
     FeedCreateResult ret;
-    _conn->client()->createNewsFeed(ret,token_.zuid,content,0);//status is 0 because no IDEA what it do
+    _conn->client()->createNewsFeed(ret,id,content,0);//status is 0 because no IDEA what it do
     if (ret.exitCode == 0){
         res.setStatus(HTTPResponse::HTTP_OK);
         ZRequestHandlerFactory::onClientPostFeed(id);
@@ -81,16 +81,16 @@ void NewsFeedRequestHandler::handleDeleteRequest(Poco::Net::HTTPServerRequest &r
     string uid = nvc.get("zuid", "no_cookies");
     
     // token handle
-    token token_;
+    SimpleProfile token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
     if (!valid) // redirect to /login
 	    return res.redirect("/login");
     
-    int id = token_.zuid;
+    int id = token_.id;
     
     FeedDeleteResult ret;
-    _conn->client()->deleteNewsFeed(ret,f_id,token_.zuid);
+    _conn->client()->deleteNewsFeed(ret,f_id,id);
     if (ret.exitCode == 0){
         res.setStatus(HTTPResponse::HTTP_OK);
         res.set("valid", "true");
@@ -127,17 +127,17 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerR
     string uid = nvc.get("zuid", "no_cookies");
     
     // token handle
-    token token_;
+    SimpleProfile token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
     if (!valid) // redirect to /login
 	    return res.redirect("/login");
     
-    int id = token_.zuid;
+    int id = token_.id;
     
     ListFeedResult ret;
     
-    _conn->client()->getListFeed(ret,token_.zuid,item,2);
+    _conn->client()->getListFeed(ret,id,item,2);
     if (ret.exitCode == 0){
         string feedString;
         for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
@@ -189,17 +189,17 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
     string uid = nvc.get("zuid", "no_cookies");
     
     // token handle
-    token token_;
+    SimpleProfile token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
     
     if (!valid) // redirect to /login
 	    return res.redirect("/login");
     
-    int id = token_.zuid;
+    int id = token_.id;
     
     ListFeedResult ret;
     
-    _conn->client()->getListWall(ret,token_.zuid,item,2);
+    _conn->client()->getListWall(ret,id,item,2);
     if (ret.exitCode == 0){
         ProfileConnection *profileConn;
 	while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
@@ -207,6 +207,8 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
         string feedString;
         
         for (auto i = ret.result.feedlist.begin(); i != ret.result.feedlist.end(); ++i) {
+            if (i->edit_time == 0)
+		continue;
             int d, m, y, hh, pp;
                 TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
                 GetUserResult userRet;

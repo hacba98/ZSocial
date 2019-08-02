@@ -7,6 +7,24 @@
 		<link rel="stylesheet" type="text/css" href="friend/friend.css">
 		<script language="javascript">
                         var newfeed = 0;
+                        
+                        function removeFriend(id){
+                            var url = "/friend/unfriend";
+                            var params = "friendId=" + id;
+
+                            var xmlHttp = new XMLHttpRequest();
+                            xmlHttp.open('POST', url, true);
+                            xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                            xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                                if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                                    location.replace("/friend/");
+                                } else if (xmlHttp.status == 404){
+                                    alert("Error 500 not work");
+                                }
+                            }
+                            xmlHttp.send(params);
+                        }
+                        
 			function addFriend(){
 				var flag = true;
 				var friend_username = document.addfriendForm.friend_username.value;
@@ -79,6 +97,7 @@
 	</head>
 	<body>
 		<div class="topnav">
+                        <p> %s </p>
 			<a href="/profile/logout">Logout</a>
 			<a class="active" href="/friend">Friend</a>
 			<a href="/message">Contact</a>

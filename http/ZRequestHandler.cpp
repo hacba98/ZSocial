@@ -16,7 +16,7 @@
 boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
-boost::shared_ptr<Poco::ObjectPool<Converter<token> > > ZRequestHandlerFactory::_pool_convert_token;
+boost::shared_ptr<Poco::ObjectPool<Converter<SimpleProfile> > > ZRequestHandlerFactory::_pool_convert_token;
 
 std::string ZRequestHandlerFactory::_secret;
 map<int, list<Poco::Net::WebSocket*> *> ZRequestHandlerFactory::_clients;
@@ -62,14 +62,11 @@ Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(con
 	}
 }
 
-string ZRequestHandlerFactory::genCookie(int zuid){
-	// create new thrift token object and set required data
-	token token_;
-	token_.zuid = zuid;
+string ZRequestHandlerFactory::genCookie(SimpleProfile token_){
 	
 	// convert that to string
 	//Converter<token> borrowObj;
-	Converter<token> *borrowObj;
+	Converter<SimpleProfile> *borrowObj;
 	while (!(borrowObj = converterPool()->borrowObject(100))); // timeout 100 miliseconds
 	
 	string serialized_str;
@@ -94,7 +91,7 @@ string ZRequestHandlerFactory::genCookie(int zuid){
 	return (payload + "." + signature);
 }
 
-bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
+bool ZRequestHandlerFactory::validCookie(SimpleProfile& token_, std::string cookie){
 	// read the payload part and signature part from token string
 	string delimiter = ".";
 	string payload = cookie.substr(0, cookie.find(delimiter));
@@ -118,14 +115,12 @@ bool ZRequestHandlerFactory::validCookie(token& token_, std::string cookie){
 	string serialized_str = oss.str();
 
 	// invoke converter to deserialize string back to thrift object
-	token tmp;
 	//Converter<token> borrowObj;
-	Converter<token> *borrowObj;
+	Converter<SimpleProfile> *borrowObj;
 	while (!(borrowObj = converterPool()->borrowObject(100))); // timeout 100 miliseconds
 	
 	try {
-		borrowObj->deserialize(serialized_str, tmp);
-		token_ = tmp;
+		borrowObj->deserialize(serialized_str, token_);	
 	} catch (...){
 		Application::instance().logger().information("Debug");
 	}
@@ -158,6 +153,7 @@ void ZRequestHandlerFactory::onClientConnect(int zuid) {
 			}
 		}
 	}
+        ZRequestHandlerFactory::friendPool()->returnObject(borrowObj);
 }
 
 void ZRequestHandlerFactory::onClientDisconnect(int zuid){
@@ -183,6 +179,7 @@ void ZRequestHandlerFactory::onClientDisconnect(int zuid){
 			}
 		}
 	}
+        ZRequestHandlerFactory::friendPool()->returnObject(borrowObj);
 }
 
 void ZRequestHandlerFactory::onClientPostFeed(int zuid) {
@@ -211,6 +208,7 @@ void ZRequestHandlerFactory::onClientPostFeed(int zuid) {
                     }
             }
         }
+        ZRequestHandlerFactory::friendPool()->returnObject(borrowObj);
 }
 
 void ZRequestHandlerFactory::onAddFriend(int fid){

@@ -84,7 +84,7 @@ void ProfileRequestHandler::handleLogin(
 		HTTPCookie cookie;
 		cookie.setMaxAge(60 * 60 * 24); // 1 year(day :v) life time
 		cookie.setName("zuid");
-		cookie.setValue(ZRequestHandlerFactory::genCookie(loginRet.profile.id));
+		cookie.setValue(ZRequestHandlerFactory::genCookie(loginRet.profile));
 		cookie.setDomain("localhost");
 		cookie.setPath("/");
 		res.set(res.SET_COOKIE, cookie.toString());
@@ -110,15 +110,17 @@ void ProfileRequestHandler::handleUpdate(Poco::Net::HTTPServerRequest &req, Poco
 	if (uid == "no_cookies") {
 		res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
 		res.set("valid", "false");
-		res.send().flush();
+		res.redirect("/login");
+                res.send().flush();
 		return;
 	}
 
 	// valid cookie: false -> redirect login
-	token token_;
+	SimpleProfile token_;
 	if (!ZRequestHandlerFactory::validCookie(token_, uid)) {
 		res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
 		res.set("valid", "false");
+                res.redirect("/login");
 		res.send().flush();
 		return;
 	}
@@ -126,13 +128,13 @@ void ProfileRequestHandler::handleUpdate(Poco::Net::HTTPServerRequest &req, Poco
 	HTMLForm form(req, req.stream());
 
 	// get id from token
-	int id = token_.zuid;
+	int id = token_.id;
 	//int id = atoi(uid.c_str());
 	string name = form.get("name", "No one will name like this");
 	string gender = form.get("gender", "");
 
 	long phoneNumber = (long) atoi(form.get("phonenumber", "0").c_str());
-	;
+	
 	string username = form.get("username", "");
 	string password = form.get("password", "");
 	string repassword = form.get("repassword", "");
@@ -179,7 +181,7 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req, Poco
 	}
 
 	// valid cookie: false -> redirect login
-	token token_;
+	SimpleProfile token_;
 	if (!ZRequestHandlerFactory::validCookie(token_, uid)) {
 		res.setStatus(HTTPResponse::HTTP_NONAUTHORITATIVE);
 		res.set("valid", "false");
@@ -189,7 +191,7 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req, Poco
 	}
 
 	// get id from session management
-	int id = token_.zuid;
+	int id = token_.id;
 
 	ErrorCode::type ret;
 	if (id != -1) {

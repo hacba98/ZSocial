@@ -8,6 +8,15 @@ body {
 				background-color: #007acc;
 			}
 
+			.topnav p {
+				float: left;
+				color: #f2f2f2;
+				text-align: center;
+				
+				text-decoration: none;
+				font-size: 17px;
+			}
+
 			.topnav a {
 				float: right;
 				color: #f2f2f2;

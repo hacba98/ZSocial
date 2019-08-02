@@ -236,4 +236,5 @@ service NewsFeedService {
     ListFeedResult      getListFeed(   1: i32 owner,   2: Item post,       3: i32 count),
     ListFeedResult      getListWall(   1: i32 owner,   2: Item post,       3: i32 count),
     FeedCountResult     getWallCount(  1: i32 owner),
+    FeedDeleteResult    rmOldFriendWall(   1: i32 owner,   2: i32 old_friend),
 }
