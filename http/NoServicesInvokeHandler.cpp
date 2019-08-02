@@ -15,7 +15,7 @@ using namespace Poco::Net;
 
 void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerResponse &res) {
 	string url = req.getURI();
-	res.set("Cache-Control", "no-cache");
+
 	// check for cookie
 	NameValueCollection nvc;
 	req.getCookies(nvc);
@@ -42,13 +42,16 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		return;
 	}
 
-	
+	// Guard
+	if (uid == "no_cookies")
+		url = "/";
 	
 	// valid cookie 
 	SimpleProfile token_;
 	bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
 	
-	
+	if (!valid)
+		url = "/";
 
 	// serve login - entry page
 	if (url.empty() || url == "/" || url == "/login") {
@@ -62,7 +65,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		if (flag) {
 			res.setStatus(HTTPResponse::HTTP_OK);
 			res.setContentType("text/html");
-			//res.set("Cache-Control", "no cache");
+			res.set("Cache-Control", "no cache");
 
 			try {
 				url = "./src/index.html";
@@ -73,14 +76,6 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 			return;
 		}
 	}
-	
-	// Guard
-	if (uid == "no_cookies")
-		res.redirect("/login");
-	
-	if (!valid)
-		res.redirect("/login");
-	
 	if (url.find("/dashboard") == 0) {
 		dashBoard(req, res, token_);
 		return;
@@ -93,6 +88,7 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		myProfile(req, res, token_);
 		return;
 	}
+       
 	// serve add friend page
 	if (url == "/friend") {
 		res.setStatus(HTTPResponse::HTTP_OK);
@@ -104,12 +100,10 @@ void NoServicesInvokeHandler::handleRequest(HTTPServerRequest &req, HTTPServerRe
 		} catch (Exception e) {
 			cout << e.message() << endl;
 		}
-		return;
 	}
 
 	// serve unknow path
 	res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-	res.redirect("/");
 	return;
 }
 
@@ -138,8 +132,10 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 		NewsFeedConnection *feedConn;
 		while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 
+
 		// user data
 		ProfileConnection *profileConn;
+		GetUserResult userRet;
 		while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
                 ListProfileResult listFriend;
                 profileConn->client()->getList(listFriend,friRet.friendList);
@@ -254,7 +250,7 @@ void NoServicesInvokeHandler::myFeed(Poco::Net::HTTPServerRequest &req, Poco::Ne
 		NewsFeedConnection *feedConn;
 		while (!(feedConn = ZRequestHandlerFactory::newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
 		feedConn->client()->getFeedCount(feedRet, user_id);
-		feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 3);
+		feedConn->client()->getListFeed(listFeed, user_id, feedRet.result, 1);
 
 		string result, feedString;
 		if (listFeed.exitCode == 0) {

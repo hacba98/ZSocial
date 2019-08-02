@@ -164,7 +164,7 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyFeed(Poco::Net::HTTPServerR
 };
 
 void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){
-    Poco::Util::Application::instance().logger().information("Load more wall FEED Request from " + req.clientAddress().toString());
+    Poco::Util::Application::instance().logger().information("Load more owner FEED Request from " + req.clientAddress().toString());
     istream& body_stream = req.stream();
     HTMLForm form(req, body_stream);
     Item item;
@@ -179,7 +179,7 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
         res.set("next.post", std::to_string(-1));
         res.set("data" , "<p> no more feed ... </p>");
         res.set("valid", "true");
-        
+      
         res.send().flush();
         return;
     }
@@ -201,8 +201,6 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
     
     _conn->client()->getListWall(ret,id,item,2);
     if (ret.exitCode == 0){
-        ProfileConnection *profileConn;
-	while (!(profileConn = ZRequestHandlerFactory::profilePool()->borrowObject(100)));
         
         string feedString;
         
@@ -210,21 +208,14 @@ void NewsFeedRequestHandler::handleLoadMoreRequest_MyWall(Poco::Net::HTTPServerR
             if (i->edit_time == 0)
 		continue;
             int d, m, y, hh, pp;
-                TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
-                GetUserResult userRet;
-                profileConn->client()->GetProfile(userRet,i->owner);
-                string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
-                        + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
-                
-                string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
-                        "<p class=\"price\">" + date + "</p>" +
-                        "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
-                for(auto it = feed.begin() ; it != feed.end() ; ++it){
-                    if (*it == '\n' || *it == '\r') *it = '-';
-                }
-                feedString.append(feed);
+            TOOL::getDMY(i->edit_time, d, m, y, hh, pp);
+            string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
+                    + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
+            string feed = "<div class=\"card\"> <h1> </h1> <p class=\"price\">" + date + "</p>" +
+                            "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+            feedString.append(feed);
         }
-        ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
+        
         res.set("next.id", std::to_string(ret.result.nex.id));
         res.set("next.post", std::to_string(ret.result.nex.post));
         res.set("data" , feedString);

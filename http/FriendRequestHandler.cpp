@@ -125,6 +125,7 @@ void FriendRequestHandler::handleLoadPage(HTTPServerRequest& req, HTTPServerResp
 		}
 		
 		
+		// TODO - add code for friend list
 		// render friend list
 		{
 			// retreive session cookie for paging current index

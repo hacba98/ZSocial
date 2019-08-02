@@ -34,32 +34,35 @@ string ZRequestHandlerFactory::registerString;
 string ZRequestHandlerFactory::profileString;
 string ZRequestHandlerFactory::friendString;
 string ZRequestHandlerFactory::myfeedString;
+string ZRequestHandlerFactory::messageString;
 
 Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &req) {
     Application::instance().logger().information(req.getURI());
-	std::string url = req.getURI();
-
-	if (url.find("/profile") == 0) {
-		ProfileConnection *borrowObj;
-		while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
-		return new ProfileRequestHandler(borrowObj);
-	} else if (url.find("/friend") == 0) {
-		FriendConnection *borrowObj;
-		while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
-		return new FriendRequestHandler(borrowObj);
-	} else if (url.find("/newsFeed") == 0) {
-		NewsFeedConnection *borrowObj;
-		while (!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
-		return new NewsFeedRequestHandler(borrowObj);
-	} else {
-		// handle socket connection
-		if (req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0) {
-			return new WebSocketHandler;
-		}
-
-		// if not web-socket -> return page load handler
-		return new NoServicesInvokeHandler;
-	}
+    std::string url = req.getURI();
+    if(req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0)
+	return new WebSocketRequestHandler;
+    if (url.find("/profile") == 0) {
+        ProfileConnection *borrowObj;
+        while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
+        return new ProfileRequestHandler(borrowObj);
+    } else if (url.find("/friend") == 0) {
+        FriendConnection *borrowObj;
+        while (!(borrowObj = friendPool()->borrowObject(100))); // timeout 100 miliseconds
+        return new FriendRequestHandler(borrowObj);
+    } else if (url.find("/newsFeed") == 0) {
+        NewsFeedConnection *borrowObj;
+        while (!(borrowObj = newsfeedPool()->borrowObject(100))); // timeout 100 miliseconds
+        return new NewsFeedRequestHandler(borrowObj);
+    } else if (url.find("/message") == 0){
+        MessageConnection *borrowObj;
+        while (!(borrowObj = messagePool()->borrowObject(100))); // timeout 100 miliseconds
+        return new MessageRequestHandler(borrowObj);
+//        MessageConnection *borrowObj = new MessageConnection();
+//        return new MessageRequestHandler(borrowObj);
+    }
+    else {
+        return new NoServicesInvokeHandler;
+    }
 }
 
 string ZRequestHandlerFactory::genCookie(SimpleProfile token_){
@@ -106,13 +109,11 @@ bool ZRequestHandlerFactory::validCookie(SimpleProfile& token_, std::string cook
 	}
 	
 	// signature is correct -> get data from payload and put into token
-	stringstream iss, oss;
+	stringstream iss;
 	iss << payload;
 	Poco::Base64Decoder b64decode(iss);
-	copy(std::istreambuf_iterator<char>(b64decode),
-		std::istreambuf_iterator<char>(),
-		std::ostreambuf_iterator<char>(oss));
-	string serialized_str = oss.str();
+	string serialized_str;
+	b64decode >> serialized_str;
 
 	// invoke converter to deserialize string back to thrift object
 	//Converter<token> borrowObj;

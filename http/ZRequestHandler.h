@@ -20,10 +20,13 @@
 #include "Poco/Net/HTTPRequestHandler.h"
 #include "Poco/Net/HTTPServerRequest.h"
 #include "Poco/Net/HTTPServerResponse.h"
+#include "Poco/Net/HTTPServerParams.h"
 #include "Poco/Net/HTMLForm.h"
+#include "Poco/Net/ServerSocket.h"
+#include "Poco/Net/WebSocket.h"
 #include "Poco/Net/NameValueCollection.h"
 #include "Poco/Net/HTTPCookie.h"
-#include "Poco/Net/WebSocket.h"
+#include "Poco/Net/NetException.h"
 #include "Poco/ObjectPool.h"
 #include "Poco/Util/Application.h"
 #include "Poco/Net/HTMLForm.h"
@@ -43,7 +46,8 @@
 #include "Poco/Base64Decoder.h"
 #include "Poco/Base64Encoder.h"
 #include "Poco/StreamCopier.h"
-#include "Poco/String.h"
+#include "Poco/JSON/Parser.h"
+#include "Poco/JSON/Object.h"
 
 #include "thrift/TToString.h"
 #include "thrift/protocol/TBase64Utils.h"
@@ -51,6 +55,7 @@
 #include "../gen-cpp/ProfileServices.h"
 #include "../gen-cpp/FriendServices.h"
 #include "../gen-cpp/NewsFeedService.h"
+#include "../gen-cpp/MessageService.h"
 #include "../gen-cpp/token_types.h"
 
 #include "../util/Converter.h"
@@ -67,6 +72,9 @@ using namespace std;
 using namespace Poco;
 using namespace Poco::Util;
 using namespace Poco::Net;
+using namespace JSON;
+using namespace Dynamic;
+
 class ZRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
 public:
 
@@ -83,6 +91,7 @@ public:
         ZRequestHandlerFactory::_pool_profiles = pool_profiles;
         ZRequestHandlerFactory::_pool_friends = pool_friends;
         ZRequestHandlerFactory::_pool_newsfeed = pool_newsfeed;
+        ZRequestHandlerFactory::_pool_message = pool_message;
 	ZRequestHandlerFactory::_pool_convert_token = pool_convert_token;
         
         loadString(dashboardString,"./src/dashboard.html");
@@ -91,7 +100,8 @@ public:
         loadString(profileString,"./src/profile.html");
         loadString(friendString,"./src/friend.html");
         loadString(myfeedString,"./src/myfeed.html");
-	
+	loadString(messageString,"./src/message.html");
+   
 	// load secret key and set to a running variable of server
 	ZRequestHandlerFactory::_secret = Poco::Util::Application::instance().config().getString("token.secret", "this is a secret");
 	ZRequestHandlerFactory::_secret.append(ZRequestHandlerFactory::_secret);
@@ -110,6 +120,9 @@ public:
 
     static Poco::ObjectPool<FriendConnection> * friendPool() {
         return ZRequestHandlerFactory::_pool_friends.get();
+    }
+    static Poco::ObjectPool<MessageConnection> * messagePool() {
+        return ZRequestHandlerFactory::_pool_message.get();
     }
 
     static Poco::ObjectPool<NewsFeedConnection> * newsfeedPool() {
@@ -147,6 +160,13 @@ public:
     static string profileString;
     static string friendString;
     static string myfeedString;
+    static string messageString;
+private:
+    static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
+    static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
+    static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
+    static boost::shared_ptr<Poco::ObjectPool<MessageConnection> > _pool_message;
+    static boost::shared_ptr<Poco::ObjectPool<Converter<token> > > _pool_convert_token;
     
     static void loadString(string& result, string path) {
         Poco::FileInputStream htmlFile(path);
@@ -179,9 +199,10 @@ public:
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     
-    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
-    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
-    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
+    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void myMsg(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
 };
 
 class ProfileRequestHandler : public Poco::Net::HTTPRequestHandler {
@@ -299,18 +320,44 @@ private:
     NewsFeedConnection *_conn;
 };
 
-///////////////////
-// Web Socket Handler
-///////////////////
-// handle websocket connection
-// using for friend online/offline mode
-class WebSocketHandler : public Poco::Net::HTTPRequestHandler {
+class MessageRequestHandler : public Poco::Net::HTTPRequestHandler {
 public:
-	void handleRequest(
-		Poco::Net::HTTPServerRequest& req, 
-		Poco::Net::HTTPServerResponse& res);
-};
 
+    MessageRequestHandler(MessageConnection *borrow) : _conn(borrow) {
+    }
+
+    ~MessageRequestHandler() {
+        ZRequestHandlerFactory::messagePool()->returnObject(_conn);
+    }
+
+    void handleRequest(
+            Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res);
+    void handleLoadPage(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res, int uid);
+    void handleSendMsg(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res, int uid);
+    void handleLongPolling(Poco::Net::HTTPServerRequest &req,
+            Poco::Net::HTTPServerResponse &res, int uid);
+    bool checkin(string key, int id);
+    
+    
+private:
+    MessageConnection *_conn;
+    int uid;
+    int flag;
+    Poco::JSON::Object::Ptr data;
+};
+static vector<MessageRequestHandler*> longPolling;
+class WebSocketRequestHandler: public HTTPRequestHandler
+	/// Handle a WebSocket connection.
+{
+public:
+	void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response);
+        int uid;
+        WebSocket* ws;
+};
+static vector<WebSocketRequestHandler*> connectedSocket;
 class TOOL {
 public:
 
