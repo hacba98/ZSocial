@@ -85,6 +85,7 @@ public:
         boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > pool_profiles(new Poco::ObjectPool<ProfileConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<FriendConnection> > pool_friends(new Poco::ObjectPool<FriendConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > pool_newsfeed(new Poco::ObjectPool<NewsFeedConnection>(poolCapacity, poolPeakCapacity));
+        boost::shared_ptr<Poco::ObjectPool<MessageConnection> > pool_message(new Poco::ObjectPool<MessageConnection>(poolCapacity, poolPeakCapacity));
         boost::shared_ptr<Poco::ObjectPool<Converter<SimpleProfile> > > pool_convert_token(new Poco::ObjectPool<Converter<SimpleProfile> >(poolCapacity, poolPeakCapacity));
 
 
@@ -161,12 +162,6 @@ public:
     static string friendString;
     static string myfeedString;
     static string messageString;
-private:
-    static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
-    static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
-    static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
-    static boost::shared_ptr<Poco::ObjectPool<MessageConnection> > _pool_message;
-    static boost::shared_ptr<Poco::ObjectPool<Converter<token> > > _pool_convert_token;
     
     static void loadString(string& result, string path) {
         Poco::FileInputStream htmlFile(path);
@@ -183,6 +178,7 @@ private:
     static boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > _pool_profiles;
     static boost::shared_ptr<Poco::ObjectPool<FriendConnection> > _pool_friends;
     static boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > _pool_newsfeed;
+    static boost::shared_ptr<Poco::ObjectPool<MessageConnection> > _pool_message;
     static boost::shared_ptr<Poco::ObjectPool<Converter<SimpleProfile> > > _pool_convert_token;
     
     // secret for token
@@ -199,9 +195,9 @@ public:
             Poco::Net::HTTPServerRequest &req,
             Poco::Net::HTTPServerResponse &res);
     
-    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
-    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
-    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
+    void dashBoard(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
+    void myProfile(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
+    void myFeed(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, SimpleProfile uid);
     void myMsg(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res, int uid);
 };
 
@@ -318,6 +314,18 @@ public:
             Poco::Net::HTTPServerResponse &res);
 private:
     NewsFeedConnection *_conn;
+};
+
+///////////////////
+// Web Socket Handler
+///////////////////
+// handle websocket connection
+// using for friend online/offline mode
+class WebSocketHandler : public Poco::Net::HTTPRequestHandler {
+public:
+	void handleRequest(
+		Poco::Net::HTTPServerRequest& req, 
+		Poco::Net::HTTPServerResponse& res);
 };
 
 class MessageRequestHandler : public Poco::Net::HTTPRequestHandler {

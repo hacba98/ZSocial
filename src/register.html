@@ -11,6 +11,13 @@ and open the template in the editor.
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<script language="javascript">
+			addEventListener("keyup", function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					document.getElementById("registerBtn").click();
+				}
+			});
+			
 			function register(){
 				var username = document.registerForm.username.value;
 				var password = document.registerForm.password.value;
@@ -19,9 +26,22 @@ and open the template in the editor.
 				var gender = document.registerForm.gender.value;
 				var phonenumber = document.registerForm.phonenumber.value;
 				var birth = document.registerForm.birth.value;
+				
+				// filter empty params
+				if(!username || !password || !repassword || !name || !gender || !phonenumber || !birth){
+					alert("You need to fill in all data");
+					return;
+				}
+				
+				// filter password and re-password not matches
+				if (password !== repassword){
+					alert("Your confirm password did not match with your password");
+					return;
+				}
+				
+				var flag = true;
 				var url = "/profile/register/";
 				var params = "username=" + username + "&password=" + password+ "&repassword=" + repassword + "&name=" + name + "&birth=" + birth + "&gender=" + gender + "&phonenumber=" + phonenumber;
-				console.log(params);
 				
 				var xmlHttp = new XMLHttpRequest();
 				xmlHttp.open('POST', url, true);
@@ -30,7 +50,8 @@ and open the template in the editor.
 					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 					    alert("Your accout is create ,please Login!", xmlHttp.responseText);
 					    location.replace("/");
-					} else if (xmlHttp.status == 404){
+					} else if (xmlHttp.status == 404 && flag){
+					    flag = false;
 					    alert("Error 500 not work");
 					}
 				}
@@ -75,7 +96,7 @@ and open the template in the editor.
 						<td width="200"><input type="date" name="birth" size="15" value="" /></td>
 					</tr>
 					<tr>
-						<td colspan="2" align="center" width="275"><input type="button" name="a1" value="Register" onclick="register()"></td>
+						<td colspan="2" align="center" width="275"><input type="button" id="registerBtn" name="a1" value="Register" onclick="register()"></td>
 					</tr>
 					
 				</table>

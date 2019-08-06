@@ -8,6 +8,8 @@ and open the template in the editor.
 	<head>
                 <meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
                 <script>
                     var nextId = %d;
                     var nextPost = %d;
@@ -159,24 +161,23 @@ and open the template in the editor.
 				width: 20%%;
 				position: fixed;
 				z-index: 1;
-				top: 0;
+				top: 4.5%%;
 				overflow-x: hidden;
 				padding-top: 20px;
-				top: 5%%;
-			}
-
-			.left {
-				left: 0;
-				background-color: aqua;
 			}
 
 			.right {
 				right: 0;
-				background-color: red;
+				background-color: aqua;
+			}
+
+			.left {
+				left: 0;
+				background-color: seashell;
 			}
 			
 			.center {
-                                left:0;
+                                right: 0;
 				width: 80%%;
 				background-color: cornsilk;
 			}
@@ -232,7 +233,7 @@ and open the template in the editor.
                         .friend {
                             border: none;
                             outline: 0;
-                            padding: 12px;
+			    padding: 5px;
                             color: white;
                             
                             text-align: center;
@@ -242,14 +243,14 @@ and open the template in the editor.
 			    margin: 15px;
 			    border-radius: 20px;
                         }
-                        .friend:nth-child(odd) {
+                        .friend_offline {
                             background-color: burlywood;
                         }
-                        .friend:nth-child(even) {
-                            background-color:coral;
+                        .friend_online {
+                            background-color: yellowgreen;
                         }
                         .friend:hover {
-                            background-color: brown;
+                            background-color: steelblue;
                         }
                         .loadmoreBTN {
                             border: white;
@@ -290,12 +291,10 @@ and open the template in the editor.
                     </div>
 
                     <div>
-                        <br>
-                        <br>
+					<br><br>
                         <button class="loadmoreBTN" onclick="loadmore()"> load more...</button>
                     </div>
                 </div>
-
             </div>
 	    <div class="split left" onscroll="scrolled_friends(this)" id="friends">
                 %s
@@ -317,4 +316,5 @@ and open the template in the editor.
 			}
 		</script>
 	</body>
+	
 </html>

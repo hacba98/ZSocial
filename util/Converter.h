@@ -55,6 +55,7 @@ public:
 		Mutex::ScopedLock lock(_m);
 		_trans->resetBuffer((uint8_t*) value.data(), static_cast<uint32_t> (value.length()));
 		o.read(_prot.get());
+                _trans->resetBuffer(_BUFFER_SIZE_);
 	};
 private:
 	boost::shared_ptr<apache::thrift::transport::TMemoryBuffer> _trans;

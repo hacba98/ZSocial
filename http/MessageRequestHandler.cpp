@@ -12,7 +12,7 @@ void MessageRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &req, Poc
     NameValueCollection nvc;
     req.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    token token_;
+    SimpleProfile token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
 
     if (!valid) {// redirect to /login
@@ -20,23 +20,25 @@ void MessageRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &req, Poc
         return;
     }
 
-    int id = token_.zuid;
+    int id = token_.id;
 
-    if (url == "/message")
-        return handleLoadPage(req, res, id);
-    else if (url.find("/message/sendmsg") == 0)
+    if (url.find("/message/sendmsg") == 0)
         return handleSendMsg(req, res, id);
     else if (url.find("/message/longpolling") == 0)
         return handleLongPolling(req, res, id);
     else {
-        res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-        res.send().flush();
+        return handleLoadPage(req, res, id);
     }
 };
 
 void MessageRequestHandler::handleLoadPage(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, int uid) {
     res.setChunkedTransferEncoding(true);
     res.setContentType("text/html");
+    
+    HTMLForm form(req, req.stream());
+
+    string _key = form.get("key", "-1");
+    
     std::ostream& ostr = res.send();
     string result, frid = "", msg = "";
     FriendConnection * friendConn;
@@ -77,12 +79,23 @@ void MessageRequestHandler::handleLoadPage(Poco::Net::HTTPServerRequest &req, Po
     }
     string mmm;
     stringstream ss;
+    string setOpenCity ="";
+    if (_key != "-1") {
+        if(stoi(_key) > uid){
+            _key= to_string(uid) + "_" + _key;
+        }else{
+            _key= _key + "_" + to_string(uid);
+        }
+        setOpenCity ="$(k"+_key+").click()";
+    };
     root->stringify(ss);
     mmm = ss.str();
-    Poco::format(result, ZRequestHandlerFactory::messageString, frid, msg, mmm, uid);
+    Poco::format(result, ZRequestHandlerFactory::messageString, frid, msg, mmm, uid,setOpenCity);
     ostr << result;
     ostr.flush();
-
+    ZRequestHandlerFactory::messagePool()->returnObject(msgConn);
+    ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
+    ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
 }
 
 bool MessageRequestHandler::checkin(string key, int id) {
@@ -138,6 +151,7 @@ void MessageRequestHandler::handleSendMsg(Poco::Net::HTTPServerRequest &req, Poc
 
     res.setStatus(HTTPResponse::HTTP_OK);
     res.send().flush();
+    ZRequestHandlerFactory::messagePool()->returnObject(msgConn);
 }
 
 void MessageRequestHandler::handleLongPolling(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res, int uid) {
@@ -229,21 +243,23 @@ void MessageRequestHandler::handleLongPolling(Poco::Net::HTTPServerRequest &req,
             break;
         }
     }
-
+    ZRequestHandlerFactory::messagePool()->returnObject(msgConn);
+    ZRequestHandlerFactory::friendPool()->returnObject(friendConn);
+    ZRequestHandlerFactory::profilePool()->returnObject(profileConn);
 }
 
 void WebSocketRequestHandler::handleRequest(HTTPServerRequest& request, HTTPServerResponse& response) {
     NameValueCollection nvc;
     request.getCookies(nvc);
     string uid = nvc.get("zuid", "no_cookies");
-    token token_;
+    SimpleProfile token_;
     bool valid = ZRequestHandlerFactory::validCookie(token_, uid);
 
     if (!valid) {// redirect to /login
         response.redirect("/login");
         return;
     }
-    this->uid = token_.zuid;
+    this->uid = token_.id;
 
     try {
         ws = new WebSocket(request, response);

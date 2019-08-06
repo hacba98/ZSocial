@@ -16,6 +16,7 @@
 boost::shared_ptr<Poco::ObjectPool<ProfileConnection> > ZRequestHandlerFactory::_pool_profiles;
 boost::shared_ptr<Poco::ObjectPool<FriendConnection> > ZRequestHandlerFactory::_pool_friends;
 boost::shared_ptr<Poco::ObjectPool<NewsFeedConnection> > ZRequestHandlerFactory::_pool_newsfeed;
+boost::shared_ptr<Poco::ObjectPool<MessageConnection> > ZRequestHandlerFactory::_pool_message;
 boost::shared_ptr<Poco::ObjectPool<Converter<SimpleProfile> > > ZRequestHandlerFactory::_pool_convert_token;
 
 std::string ZRequestHandlerFactory::_secret;
@@ -39,8 +40,12 @@ string ZRequestHandlerFactory::messageString;
 Poco::Net::HTTPRequestHandler * ZRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &req) {
     Application::instance().logger().information(req.getURI());
     std::string url = req.getURI();
-    if(req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0)
-	return new WebSocketRequestHandler;
+    if(req.find("Upgrade") != req.end() && Poco::icompare(req["Upgrade"], "websocket") == 0){
+        if(url.find("/online")==0)	
+            return new WebSocketHandler;
+        else
+            return new WebSocketRequestHandler;
+    }
     if (url.find("/profile") == 0) {
         ProfileConnection *borrowObj;
         while (!(borrowObj = profilePool()->borrowObject(100))); // timeout 100 miliseconds
@@ -74,8 +79,8 @@ string ZRequestHandlerFactory::genCookie(SimpleProfile token_){
 	
 	string serialized_str;
 	borrowObj->serialize(token_, serialized_str);
-        //token tmp;
-        //borrowObj->deserialize(serialized_str, tmp);
+        SimpleProfile tmp;
+        borrowObj->deserialize(serialized_str, tmp);
 	converterPool()->returnObject(borrowObj);
 	
 	// need to turn string from serialized obj to base64 encode for transferable 
@@ -109,11 +114,13 @@ bool ZRequestHandlerFactory::validCookie(SimpleProfile& token_, std::string cook
 	}
 	
 	// signature is correct -> get data from payload and put into token
-	stringstream iss;
+	stringstream iss, oss;
 	iss << payload;
 	Poco::Base64Decoder b64decode(iss);
-	string serialized_str;
-	b64decode >> serialized_str;
+	copy(std::istreambuf_iterator<char>(b64decode),
+		std::istreambuf_iterator<char>(),
+		std::ostreambuf_iterator<char>(oss));
+	string serialized_str = oss.str();
 
 	// invoke converter to deserialize string back to thrift object
 	//Converter<token> borrowObj;
