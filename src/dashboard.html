@@ -63,6 +63,46 @@ and open the template in the editor.
                         }
                         xmlHttp.send(params);
                     }
+                    
+                    function updateFeed(name){
+                
+                        var x = document.getElementsByName('feed_no_'+ name)[0];
+                        var content = x.content.value;
+                        var url = "/newsFeed/update";
+                        var params = "id=" + name + "&content=" + content;
+
+                        var xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open('POST', url, true);
+                        xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                            
+                            } else if (xmlHttp.status == 404){
+                            alert("Error 500 not work");
+                            }
+                        }
+                        xmlHttp.send(params);
+                    }
+
+                    function removeFeed(name){
+                        console.log(name);
+
+                        var url = "/newsFeed/delete";
+                        var params = "id=" + name;
+                        console.log(params);
+
+                        var xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open('POST', url, true);
+                        xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                            
+                            } else if (xmlHttp.status == 404){
+                                alert("Error 500 not work");
+                            }
+                        }
+                        xmlHttp.send(params);
+                    }
 		    
     		    var nextFriendPos = 10;
 
@@ -288,6 +328,39 @@ and open the template in the editor.
                             font-size: 18px;
                         }
                         .loadmoreBTN:hover {
+                            background-color: #1a64d9;
+                        }
+                        
+                        .updateBTN {
+                            border: white;
+                            outline: 0;
+                            padding: 12px;
+                            color: white;
+                            background-color: #2479ff;
+                            text-align: center;
+                            cursor: pointer;
+                            width: 50%%;
+                            font-size: 18px;
+                            left : 0;
+                            position: fixed;
+                        }
+                        .deleteBTN {
+                            border: white;
+                            outline: 0;
+                            padding: 12px;
+                            color: white;
+                            background-color: blue;
+                            text-align: center;
+                            cursor: pointer;
+                            width: 50%%;
+                            font-size: 18px;
+                            right: 0;
+                            position: fixed;
+                        }
+                        .updateBTN:hover {
+                            background-color: #1a64d9;
+                        }
+                        .deleteBTN:hover {
                             background-color: #1a64d9;
                         }
 		</style>

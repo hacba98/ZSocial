@@ -173,9 +173,19 @@ void NoServicesInvokeHandler::dashBoard(Poco::Net::HTTPServerRequest &req, Poco:
 			    
                             string date = Poco::NumberFormatter::format(y) + "-" + Poco::NumberFormatter::format0(m, 2) + "-" + Poco::NumberFormatter::format0(d, 2)
                                     + "  " + Poco::NumberFormatter::format0(hh, 2) + ":" + Poco::NumberFormatter::format0(pp, 2);
-                            string feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" +
-                                    "<p class=\"price\">" + date + "</p>" +
-                                    "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+                            string feed;
+                            if (i->owner == user_id){
+                                feed = "<form class=\"card\" name=\"feed_no_" + std::to_string(i->id) + "\" onsubmit=\"updateFeed('" + std::to_string(i->id) + "')\">" +
+                                "<h1>" + userRet.profile.name + "</h1>" +
+                                "<p class=\"price\"> Date:" + date + "</p>" +
+                                "<textarea class=\"status_post\" rows=\"4\" name=\"content\">" + i->content + "</textarea><br>" +
+                                "<input type =\"button\" class=\"updateBTN\" onClick=\"updateFeed('" + std::to_string(i->id) + "')\" value=\"UPDATE\">" +
+                                "<input type =\"button\" class=\"deleteBTN\" onClick=\"removeFeed('" + std::to_string(i->id) + "')\" value=\"REMOVE\">" +
+                                "</form> <hr><br><br>";
+                            }else{
+                                feed = "<div class=\"card\"> <h1>" + userRet.profile.name + "</h1>" + "<p class=\"price\">" + date + "</p>" +
+                                        "<p>" + i->content + "</p><p><button>Like</button></p></div><br><br>";
+                            }
                             
                             feedString.append(feed);
                         }
