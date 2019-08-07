@@ -18,7 +18,7 @@ and open the template in the editor.
                     function loadmore(){
                         var params = "next.id=" + nextId + "&next.post=" + nextPost;
                         var url = "/newsFeed/loadmore-mywall";
-                        console.log(params);
+                        //console.log(params);
 
                         var xmlHttp = new XMLHttpRequest();
                         xmlHttp.open('POST', url, false);
@@ -32,11 +32,37 @@ and open the template in the editor.
 
                                 document.getElementById("feeds").appendChild(div);
                             } else if (xmlHttp.status == 404){
-                                alert("Error 404 not work");
+                                alert("NO MORE FEED!");
                             }
                         }
                         xmlHttp.send(params);
                     }    
+                    
+                    function postfeed(){
+                        var content = document.getElementsByName("content")[0].value;
+			
+                        var params = "content=" + content;
+                        var url = "/newsFeed/create";
+                        console.log(params);
+
+                        var xmlHttp = new XMLHttpRequest();
+                        xmlHttp.open('POST', url, false);
+                        xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+                            if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                                let append_content = "<h1>" + document.getElementById("user_name").textContent + "</h1> <p class='price'>date: __/__/____</p>" +
+                                                    "<p>" + content + "</p><p><button>Like</button></p><br><br>";
+                                let div = document.createElement('div');
+                                div.className = 'card';
+                                div.innerHTML = append_content;
+                                document.getElementById("feeds").prepend(div);
+                                
+                            } else if (xmlHttp.status == 404){
+                                alert("post feed not susscess!!");
+                            }
+                        }
+                        xmlHttp.send(params);
+                    }
 		    
     		    var nextFriendPos = 10;
 
@@ -58,7 +84,7 @@ and open the template in the editor.
                                 document.getElementById("friends").appendChild(div);
 				
                             } else if (http.status == 404){
-                                alert("Error 404 not work");
+                                alert("NO MORE FRIEND!");
                             }
                         }
                         http.send(params);
@@ -268,7 +294,7 @@ and open the template in the editor.
 	</head>
 	<body>
 		<div class="topnav">
-                        <p> %s </p>
+                        <p id="user_name"> %s </p>
 			<a href="/profile/logout">Logout</a>
 			<a id ="friend_link" href="/friend">%s</a>
 			<a href="/message">Contact</a>
@@ -279,13 +305,14 @@ and open the template in the editor.
 		
 		<div class="split center" onscroll="scrolled_feeds(this)">
 			<div class="centered" id = "listfeed">
-				<div id="feeds">
-					<form method="POST" action="/newsFeed/create">
-						<p>What is in your mind?</p>
-						<textarea class="status_post" rows="4" name="content"></textarea><br>
-						<button type ="submit" class="post_button">Post</button>
-					</form>
-					<hr>
+                            <div id="registerForm">
+                                <p>What is in your mind?</p>
+                                <textarea class="status_post" rows="4" name="content"></textarea><br>
+                                <button class="post_button" onclick="postfeed()">Post</button>
+                            </div>
+                            <hr>
+                            <div id="feeds">
+					
 					%s
 
                     </div>

@@ -347,7 +347,7 @@ void FriendRequestHandler::handleLoadmoreRequest(Poco::Net::HTTPServerRequest& r
 			profileConn->client()->GetProfile(userRet, fr_id);
 			bool online = userRet.profile.last_active_time == -1;
 			string stt = online ? "online" : "offline";
-			string friends = "<div id=\"friend_" + to_string(userRet.profile.id) + "\" class=\"friend friend_" + stt + "\"> <h2> " + userRet.profile.name + "</h2></div>";
+			string friends = "<a  href=\"/message?key="+ to_string(userRet.profile.id) + "\"> <div id=\"friend_" + to_string(userRet.profile.id) + "\" class=\"friend friend_" + stt + "\"> <h2> " + userRet.profile.name + "</h2></div></a>";
 			data.append(friends);
 		}
 		res.set("data", data);

@@ -49,7 +49,7 @@ void NewsFeedRequestHandler::handleCreateRequest(Poco::Net::HTTPServerRequest &r
     }else{
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
     }
-    res.redirect("/feed");
+    res.send().flush();
 };
 
 void NewsFeedRequestHandler::handleUpdateRequest(Poco::Net::HTTPServerRequest &req,Poco::Net::HTTPServerResponse &res){

@@ -54,10 +54,26 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest& req, Po
 
     if (ret.errorCode == ErrorCode::SUCCESS && ok) { // valid case need to response token
         res.setStatus(HTTPResponse::HTTP_OK);
-        res.set("valid", "true");
+        
+        loginResult loginRet;
+        _conn->client()->LoginById(loginRet,ret.id);
+        
+        if (loginRet.code != ErrorCode::SUCCESS){
+            res.set("valid", "login_fail");
+            res.send().flush();
+            return;
+        }
+        
+        HTTPCookie cookie;
+        cookie.setMaxAge(60*60*24);
+        cookie.setName("zuid");
+        cookie.setValue(ZRequestHandlerFactory::genCookie(loginRet.profile));
+        cookie.setDomain("localhost");
+        cookie.setPath("/");
+        res.set(res.SET_COOKIE, cookie.toString());
     } else {
         res.setStatus(HTTPResponse::HTTP_NOT_FOUND);
-        res.set("valid", "false");
+        res.set("valid", "duplicate_username");
     }
 
     res.send().flush();
