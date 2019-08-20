@@ -26,7 +26,8 @@ class ProfileConnection {
 public:
 	ProfileConnection(){
 		int profile_services_port = Poco::Util::Application::instance().config().getInt("services.profile.port", 2020);
-		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", profile_services_port));
+		//boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("10.40.30.214", profile_services_port));
+		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("10.40.30.214", profile_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
 		try{
@@ -54,7 +55,7 @@ class FriendConnection {
 public:
 	FriendConnection(){
 		int profile_services_port = Poco::Util::Application::instance().config().getInt("services.friend.port", 3030);
-		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", profile_services_port));
+		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("10.40.30.214", profile_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
 		
@@ -79,7 +80,7 @@ class NewsFeedConnection{
 public:
 	NewsFeedConnection(){
 		int newsfeed_services_port = Poco::Util::Application::instance().config().getInt("services.feed.port", 4040);
-		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", newsfeed_services_port));
+		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("10.40.30.214", newsfeed_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
 		
@@ -107,7 +108,7 @@ class MessageConnection{
 public:
 	MessageConnection(){
 		int message_services_port = Poco::Util::Application::instance().config().getInt("services.message.port", 5050);
-		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("localhost", message_services_port));
+		boost::shared_ptr<apache::thrift::transport::TTransport> socket(new apache::thrift::transport::TSocket("10.40.30.214", message_services_port));
 		boost::shared_ptr<apache::thrift::transport::TTransport> transport(new apache::thrift::transport::TFramedTransport(socket)); 
 		boost::shared_ptr<apache::thrift::protocol::TProtocol> protocol(new apache::thrift::protocol::TBinaryProtocol(transport));
 		

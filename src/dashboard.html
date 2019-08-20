@@ -43,17 +43,25 @@ and open the template in the editor.
 			
                         var params = "content=" + content;
                         var url = "/newsFeed/create";
-                        console.log(params);
+                        //console.log(params);
 
                         var xmlHttp = new XMLHttpRequest();
                         xmlHttp.open('POST', url, false);
                         xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                         xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
                             if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                                let append_content = "<h1>" + document.getElementById("user_name").textContent + "</h1> <p class='price'>date: __/__/____</p>" +
-                                                    "<p>" + content + "</p><p><button>Like</button></p><br><br>";
+                                let the_id = xmlHttp.getResponseHeader("new_feed_id");
+                                let now = new Date();
+                                let append_content = "<form class='card' name='feed_no_" + the_id + "' onsubmit='updateFeed('" + the_id + "')'>" +
+                                    "<h1>" + document.getElementById("user_name").textContent + "</h1>" +
+                                    "<p class='price'> Date:" + now.toLocaleString() + "</p>" +
+                                    "<textarea class='status_post' rows='4' name='content'>" + content + "</textarea><br>" +
+                                    "<input type ='button' class='updateBTN' onClick='updateFeed(" +'"' + the_id +'"' +  ")' value='UPDATE'>" +
+                                    "<input type ='button' class='deleteBTN' onClick='removeFeed(" +'"' + the_id +'"' + ")' value='REMOVE'>" +
+                                    "</form> <hr><br><br>";
+                                //console.log(append_content);
                                 let div = document.createElement('div');
-                                div.className = 'card';
+                                
                                 div.innerHTML = append_content;
                                 document.getElementById("feeds").prepend(div);
                                 
@@ -130,7 +138,7 @@ and open the template in the editor.
                         http.send(params);
 		    }
 		    
-		    var socketURL = 'ws://localhost:8000/online';
+		    var socketURL = 'ws://10.40.30.214:8000/online';
 		    var socket = new WebSocket(socketURL);
 		    
 		    socket.addEventListener('open', function (event){

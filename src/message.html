@@ -168,11 +168,11 @@ and open the template in the editor.
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <div class="topnav">
             <a href="/profile/logout">Logout</a>
-            <a href="/friend">Friend</a>
+            <a id="friend_link" href="/friend">Friend</a>
             <a class="active" href="/message">Message</a>
             <a href="/myprofile">Profile</a>
             <a href="/feed">My Feed</a>
-            <a href="/dashboard">Wall</a>
+            <a id= "wall" href="/dashboard">Wall</a>
         </div>
         <div class="split left">
             <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
@@ -199,7 +199,7 @@ and open the template in the editor.
         </div>
 
         <script>
-
+            var newfeed = 0;
             var boxinfo = %s;
             var uid = %d;
             console.log(boxinfo);
@@ -305,6 +305,43 @@ and open the template in the editor.
                 request.send(params);
 
             }
+            
+            var socketURL = 'ws://10.40.30.214:8000/online';
+            var socket = new WebSocket(socketURL);
+
+            socket.addEventListener('open', function (event){
+                console.log('Open WS: ', socketURL);
+            });
+
+            socket.addEventListener('message', function (event){
+                console.log('Message receive', event.data);
+                if (event.data == "ping"){
+                        socket.send("pong");
+                } else {
+                        var data = event.data.split(":");
+
+                        if (data[0] == "new_feed_come"){
+                            newfeed = newfeed + 1;
+                            $("#wall").css("background-color", "gold");
+                            $("#wall").text("Wall(" + newfeed + ")");
+                        }
+                        
+                        if (data[0] == "new_friend_come"){
+                            $("#friend_link").text("Friend( )");
+                        }
+
+                        console.log(data);
+                        socket.send("ok");
+                }
+            });
+
+            window.onbeforeunload = function (){
+                socket.onclose = function (){
+                        console.log("web socket closing");
+                }
+                socket.close();
+            }
+            
             %s
             foo();
 

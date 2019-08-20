@@ -17,14 +17,15 @@ and open the template in the editor.
 				var url = "/profile/login/";
 				var params = "username=" + username + "&password=" + password;
 				console.log(params);
-				
+				var flag = true;
 				var xmlHttp = new XMLHttpRequest();
 				xmlHttp.open('POST', url, true);
 				xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                                 xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
 					if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
 					    location.replace("/dashboard");
-					} else if (xmlHttp.status == 404){
+					} else if (xmlHttp.status == 404 && flag){
+                                            flag = false;
 					    alert("Username or password is not correct.");
 					}
 				}

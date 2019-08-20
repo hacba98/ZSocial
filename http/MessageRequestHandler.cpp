@@ -192,7 +192,7 @@ void MessageRequestHandler::handleLongPolling(Poco::Net::HTTPServerRequest &req,
         IB_Info boxinfo;
         msgConn->client()->getBoxinfo(boxinfo, key.key);
         info->set(boxinfo._id, boxinfo.count);
-        if (object->get(key.key)) {
+        if (object->has(key.key)) {
             Var box = object->get(key.key);
             int value = box.convert<int>();
             if (value < boxinfo.count) {

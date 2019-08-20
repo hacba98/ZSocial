@@ -68,7 +68,7 @@ void ProfileRequestHandler::handleRegister(Poco::Net::HTTPServerRequest& req, Po
         cookie.setMaxAge(60*60*24);
         cookie.setName("zuid");
         cookie.setValue(ZRequestHandlerFactory::genCookie(loginRet.profile));
-        cookie.setDomain("localhost");
+        cookie.setDomain("10.40.30.214");
         cookie.setPath("/");
         res.set(res.SET_COOKIE, cookie.toString());
     } else {
@@ -101,7 +101,8 @@ void ProfileRequestHandler::handleLogin(
 		cookie.setMaxAge(60*60*24); // 1 year(day :v) life time
 		cookie.setName("zuid");
 		cookie.setValue(ZRequestHandlerFactory::genCookie(loginRet.profile));
-		cookie.setDomain("localhost");
+		cookie.setDomain("10.40.30.214");
+                
 		cookie.setPath("/");
 		res.set(res.SET_COOKIE, cookie.toString());
 		
@@ -218,7 +219,8 @@ void ProfileRequestHandler::handleLogout(Poco::Net::HTTPServerRequest &req, Poco
 	cookie.setMaxAge(0);
 	cookie.setName("zuid");
 	cookie.setValue("0");
-	cookie.setDomain("localhost");
+	cookie.setDomain("10.40.30.214");
+        //cookie.setDomain("localhost");
 	cookie.setPath("/");
 	res.set(res.SET_COOKIE, cookie.toString());
 
